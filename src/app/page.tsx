@@ -11,16 +11,12 @@ const mapsUrl =
 const whatsappUrl = (message: string) =>
   `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-const stockWhatsappUrl = whatsappUrl(
-  "Halo AYT Agro Farm, saya melihat website dan ingin mengecek stok kambing atau domba. Kebutuhan saya untuk breeding, fattening, trading, qurban, atau aqiqah."
+const livestockWhatsappUrl = whatsappUrl(
+  "Halo AYT Agro Farm, saya sedang mencari kambing atau domba. Mohon bantu informasikan ternak yang sesuai dengan kebutuhan saya."
 );
 
-const offerWhatsappUrl = whatsappUrl(
-  "Halo AYT Agro Farm, saya ingin menawarkan kambing atau domba. Saya akan mengirimkan jenis ternak, jumlah, perkiraan bobot, lokasi, serta foto atau video."
-);
-
-const partnerWhatsappUrl = whatsappUrl(
-  "Halo AYT Agro Farm, saya tertarik berdiskusi mengenai kemitraan breeding, fattening, atau trading kambing dan domba."
+const consultationWhatsappUrl = whatsappUrl(
+  "Halo AYT Agro Farm, saya ingin berkonsultasi mengenai kebutuhan kambing atau domba."
 );
 
 type IconName =
@@ -33,7 +29,6 @@ type IconName =
   | "handshake"
   | "pin"
   | "phone"
-  | "clipboard"
   | "check"
   | "instagram"
   | "whatsapp"
@@ -42,6 +37,7 @@ type IconName =
   | "camera"
   | "building"
   | "users"
+  | "book"
   | "chevronLeft"
   | "chevronRight";
 
@@ -106,8 +102,6 @@ function Icon({ name, size = 24 }: { name: IconName; size?: number }) {
         <path d="m3 7 4 4" />
         <path d="m2 8 5-5 3 3-5 5Z" />
         <path d="m21 8-5-5-3 3 5 5Z" />
-        <path d="m8 16 2 2" />
-        <path d="m6 18 2 2" />
       </>
     ),
     pin: (
@@ -119,13 +113,6 @@ function Icon({ name, size = 24 }: { name: IconName; size?: number }) {
     phone: (
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92Z" />
     ),
-    clipboard: (
-      <>
-        <rect x="5" y="4" width="14" height="17" rx="2" />
-        <path d="M9 4.5V3h6v1.5" />
-        <path d="m9 12 2 2 4-4" />
-      </>
-    ),
     check: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -136,7 +123,13 @@ function Icon({ name, size = 24 }: { name: IconName; size?: number }) {
       <>
         <rect x="3" y="3" width="18" height="18" rx="5" />
         <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r=".7" fill="currentColor" stroke="none" />
+        <circle
+          cx="17.5"
+          cy="6.5"
+          r=".7"
+          fill="currentColor"
+          stroke="none"
+        />
       </>
     ),
     whatsapp: (
@@ -179,6 +172,12 @@ function Icon({ name, size = 24 }: { name: IconName; size?: number }) {
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
       </>
     ),
+    book: (
+      <>
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+      </>
+    ),
     chevronLeft: <path d="m15 18-6-6 6-6" />,
     chevronRight: <path d="m9 18 6-6-6-6" />,
   };
@@ -186,123 +185,161 @@ function Icon({ name, size = 24 }: { name: IconName; size?: number }) {
   return <svg {...common}>{paths[name]}</svg>;
 }
 
-const services = [
+const livestockNeeds = [
   {
     number: "01",
     icon: "breeding" as const,
-    title: "Breeding",
-    text: "Pemilihan bibit, indukan, dan pejantan untuk mendukung pengembangan populasi ternak.",
-    link: stockWhatsappUrl,
+    title: "Bibit & Indukan",
+    text: "Membantu mencarikan bibit, indukan, maupun pejantan kambing dan domba sesuai kebutuhan peternakan.",
+    link: whatsappUrl(
+      "Halo AYT Agro Farm, saya sedang mencari bibit, indukan, atau pejantan kambing dan domba."
+    ),
   },
   {
     number: "02",
     icon: "fattening" as const,
-    title: "Fattening",
-    text: "Bakalan serta pengelolaan penggemukan berdasarkan usia, kondisi, bobot, dan target usaha.",
-    link: stockWhatsappUrl,
+    title: "Bakalan Penggemukan",
+    text: "Membantu kebutuhan bakalan kambing dan domba berdasarkan jenis, usia, bobot, jumlah, dan anggaran.",
+    link: whatsappUrl(
+      "Halo AYT Agro Farm, saya sedang mencari bakalan kambing atau domba untuk kebutuhan penggemukan."
+    ),
   },
   {
     number: "03",
     icon: "trading" as const,
-    title: "Trading",
-    text: "Jual beli kambing dan domba untuk peternak, pedagang, pengepul, supplier, dan mitra usaha.",
-    link: offerWhatsappUrl,
+    title: "Berbagai Kebutuhan",
+    text: "Melayani kebutuhan ternak satuan maupun partai untuk usaha, perdagangan, aqiqah, kurban, dan lainnya.",
+    link: livestockWhatsappUrl,
   },
 ];
 
 const benefits = [
   {
     icon: "shield" as const,
-    title: "Perawatan Ternak",
-    text: "Pemeliharaan terarah dengan perhatian pada kondisi, kebersihan, dan kebutuhan ternak.",
+    title: "Kebutuhan Terarah",
+    text: "Pencarian ternak disesuaikan dengan jenis, jumlah, bobot, tujuan pemeliharaan, dan anggaran.",
   },
   {
     icon: "leaf" as const,
-    title: "Manajemen Pakan",
-    text: "Pakan disesuaikan dengan fase breeding maupun fattening untuk mendukung target pemeliharaan.",
+    title: "Pengetahuan Praktis",
+    text: "Berbagi tips sederhana mengenai breeding, fattening, pakan, kesehatan, dan perawatan ternak.",
   },
   {
     icon: "handshake" as const,
-    title: "Mitra Amanah",
-    text: "Komunikasi terbuka mengenai spesifikasi, ketersediaan, harga, dan proses transaksi.",
+    title: "Komunikasi Terbuka",
+    text: "Informasi mengenai kondisi, ketersediaan, harga, lokasi, dan proses transaksi dibicarakan dengan jelas.",
   },
   {
     icon: "pin" as const,
-    title: "Jangkauan Jabodetabek",
-    text: "Melayani kebutuhan peternak dan pelaku usaha di Jabodetabek dan wilayah sekitarnya.",
+    title: "Berbasis di Bogor",
+    text: "Melayani kebutuhan peternak, masyarakat, dan pelaku usaha di Bogor, Jabodetabek, dan sekitarnya.",
+  },
+];
+
+const knowledgePosts = [
+  {
+    image: "/images/gallery-ternak.jpg",
+    category: "Tips Peternakan",
+    title: "Tips Memilih Kambing dan Domba yang Sehat",
+    summary:
+      "Kenali kondisi fisik, aktivitas, nafsu makan, mata, bulu, kaki, dan pernapasan sebelum memilih ternak.",
+  },
+  {
+    image: "/images/gallery-pakan.jpg",
+    category: "Fattening",
+    title: "Hal Penting Saat Memilih Bakalan Penggemukan",
+    summary:
+      "Pemilihan bakalan yang tepat membantu proses penggemukan berjalan lebih terarah dan sesuai target usaha.",
+  },
+  {
+    image: "/images/gallery-kandang.jpg",
+    category: "Perawatan",
+    title: "Menjaga Kandang Tetap Bersih dan Nyaman",
+    summary:
+      "Kebersihan, sirkulasi udara, tempat pakan, dan kepadatan ternak perlu diperhatikan secara rutin.",
   },
 ];
 
 const galleryItems = [
   {
     src: "/images/gallery-ternak.jpg",
-    title: "Pilihan Ternak",
-    text: "Kambing dan domba untuk kebutuhan breeding, fattening, dan trading.",
+    title: "Kambing & Domba",
+    text: "Penyediaan ternak disesuaikan dengan kebutuhan pembeli dan kondisi ketersediaan.",
   },
   {
     src: "/images/gallery-lahan.jpg",
     title: "Lingkungan Peternakan",
-    text: "Visual konsep suasana peternakan tropis yang dekat dengan karakter AYT Agro Farm.",
+    text: "Lingkungan peternakan menjadi bagian penting dalam aktivitas dan pemeliharaan ternak.",
   },
   {
     src: "/images/gallery-kandang.jpg",
-    title: "Kandang & Pemeliharaan",
-    text: "Area kandang sebagai pusat perawatan dan aktivitas ternak.",
+    title: "Kandang & Perawatan",
+    text: "Kandang digunakan sebagai pusat perawatan, pemantauan, dan aktivitas ternak.",
   },
   {
     src: "/images/gallery-pakan.jpg",
-    title: "Pakan & Penggemukan",
-    text: "Pemberian pakan dan pengelolaan ternak sesuai fase pemeliharaan.",
+    title: "Pakan Ternak",
+    text: "Pemberian pakan disesuaikan dengan kondisi dan tahap pemeliharaan kambing atau domba.",
   },
 ];
 
-const steps = [
-  {
-    icon: "phone" as const,
-    title: "Hubungi Kami",
-    text: "Sampaikan kebutuhan atau penawaran ternak melalui WhatsApp.",
-  },
-  {
-    icon: "clipboard" as const,
-    title: "Pilih Kebutuhan",
-    text: "Diskusikan jenis, jumlah, bobot, tujuan, lokasi, dan anggaran.",
-  },
-  {
-    icon: "handshake" as const,
-    title: "Proses Transaksi",
-    text: "Konfirmasi kesepakatan, jadwal kunjungan, pembayaran, atau pengiriman.",
-  },
-];
+type HpdkiSlide = {
+  label: string;
+  title: string;
+  text: string;
+  points?: string[];
+  showRegistration?: boolean;
+};
 
-const faqs = [
+const hpdkiSlides: HpdkiSlide[] = [
   {
-    q: "Apakah melayani pembelian satuan dan partai?",
-    a: "Kebutuhan satuan maupun jumlah tertentu dapat dibicarakan berdasarkan jenis dan stok ternak yang tersedia.",
+    label: "Mengenal HPDKI",
+    title: "Apa Itu HPDKI?",
+    text: "HPDKI adalah Himpunan Peternak Domba Kambing Indonesia, sebuah wadah bagi peternak dan pelaku usaha untuk membangun jaringan, bertukar informasi, serta mengembangkan peternakan domba dan kambing.",
   },
   {
-    q: "Apakah saya bisa menawarkan ternak untuk dijual?",
-    a: "Bisa. Kirimkan jenis ternak, jumlah, perkiraan bobot, lokasi, serta foto atau video melalui WhatsApp.",
+    label: "Arah Organisasi",
+    title: "Visi HPDKI",
+    text: "Mendorong kemajuan peternak domba dan kambing Indonesia melalui kebersamaan, peningkatan kapasitas, penguatan jaringan, dan pengembangan usaha yang berkelanjutan.",
   },
   {
-    q: "Apakah bisa memilih berdasarkan bobot dan tujuan pemeliharaan?",
-    a: "Bisa. Kebutuhan breeding, fattening, trading, qurban, atau aqiqah dapat dikonsultasikan lebih dahulu.",
+    label: "Peran Organisasi",
+    title: "Misi HPDKI",
+    text: "Membangun komunikasi antarpeternak, meningkatkan pengetahuan, memperluas jaringan usaha, dan mendorong kolaborasi dalam pengembangan peternakan.",
   },
   {
-    q: "Bagaimana cara berkunjung ke kandang?",
-    a: "Hubungi AYT Agro Farm terlebih dahulu untuk mengonfirmasi jadwal dan petunjuk menuju lokasi kandang di Dramaga, Bogor.",
+    label: "Keanggotaan",
+    title: "Manfaat Menjadi Anggota",
+    text: "Keanggotaan membantu peternak untuk lebih terhubung dengan komunitas, kegiatan, informasi, dan peluang kolaborasi.",
+    points: [
+      "Memperluas jaringan sesama peternak",
+      "Mendapatkan informasi kegiatan dan edukasi",
+      "Berbagi pengalaman serta pengetahuan",
+      "Membuka peluang kolaborasi usaha",
+    ],
+  },
+  {
+    label: "Pendaftaran",
+    title: "Bergabung Menjadi Anggota HPDKI",
+    text: "AYT Agro Farm membantu proses pengumpulan dan pemeriksaan awal data calon anggota. Setelah formulir dikirim, admin akan memeriksa data dan menghubungi calon anggota melalui WhatsApp.",
+    showRegistration: true,
   },
 ];
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeHpdkiSlide, setActiveHpdkiSlide] = useState(0);
   const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
     };
 
     document.body.style.overflow = "hidden";
@@ -314,6 +351,16 @@ export default function Home() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveHpdkiSlide(
+        (current) => (current + 1) % hpdkiSlides.length
+      );
+    }, 6500);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
   const scrollGallery = (direction: "left" | "right") => {
     galleryRef.current?.scrollBy({
       left: direction === "right" ? 340 : -340,
@@ -321,11 +368,31 @@ export default function Home() {
     });
   };
 
+  const showPreviousHpdkiSlide = () => {
+    setActiveHpdkiSlide(
+      (current) =>
+        (current - 1 + hpdkiSlides.length) % hpdkiSlides.length
+    );
+  };
+
+  const showNextHpdkiSlide = () => {
+    setActiveHpdkiSlide(
+      (current) => (current + 1) % hpdkiSlides.length
+    );
+  };
+
+  const currentHpdkiSlide = hpdkiSlides[activeHpdkiSlide];
+
   return (
     <main>
       <header className="site-header">
         <div className="container nav-shell">
-          <a className="brand" href="#home" aria-label="AYT Agro Farm beranda" onClick={() => setMenuOpen(false)}>
+          <a
+            className="brand"
+            href="#home"
+            aria-label="AYT Agro Farm beranda"
+            onClick={() => setMenuOpen(false)}
+          >
             <span className="brand-logo">
               <Image
                 src="/images/ayt-logo-mark.png"
@@ -335,19 +402,44 @@ export default function Home() {
                 priority
               />
             </span>
+
             <span className="brand-text">
-              <strong>AYT <em>AGRO FARM</em></strong>
-              <small>Breeding • Fattening • Trading</small>
+              <strong>
+                AYT <em>AGRO FARM</em>
+              </strong>
+              <small>Penyedia Kambing &amp; Domba</small>
             </span>
           </a>
 
-          <nav id="primary-navigation" className={`nav-links ${menuOpen ? "is-open" : ""}`} aria-label="Navigasi utama">
-            <a href="#tentang" onClick={() => setMenuOpen(false)}>Tentang</a>
-            <a href="#layanan" onClick={() => setMenuOpen(false)}>Layanan</a>
-            <a href="#kemitraan" onClick={() => setMenuOpen(false)}>Kemitraan</a>
-            <a href="#galeri" onClick={() => setMenuOpen(false)}>Galeri</a>
-            <a href="#kontak" onClick={() => setMenuOpen(false)}>Kontak</a>
-            <a className="nav-cta" href={stockWhatsappUrl} target="_blank" rel="noreferrer" onClick={() => setMenuOpen(false)}>Cek Stok</a>
+          <nav
+            id="primary-navigation"
+            className={`nav-links ${menuOpen ? "is-open" : ""}`}
+            aria-label="Navigasi utama"
+          >
+            <a href="#tentang" onClick={() => setMenuOpen(false)}>
+              Tentang
+            </a>
+            <a href="#pengetahuan" onClick={() => setMenuOpen(false)}>
+              Pengetahuan
+            </a>
+            <a href="#hpdki" onClick={() => setMenuOpen(false)}>
+              HPDKI
+            </a>
+            <a href="#galeri" onClick={() => setMenuOpen(false)}>
+              Galeri
+            </a>
+            <a href="#kontak" onClick={() => setMenuOpen(false)}>
+              Kontak
+            </a>
+            <a
+              className="nav-cta"
+              href={livestockWhatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setMenuOpen(false)}
+            >
+              Cari Kambing & Domba
+            </a>
           </nav>
 
           <button
@@ -375,40 +467,76 @@ export default function Home() {
       <section className="hero" id="home">
         <div className="hero-decoration hero-decoration-one" />
         <div className="hero-decoration hero-decoration-two" />
+
         <div className="container hero-grid">
           <div className="hero-copy">
-            <div className="eyebrow"><Icon name="breeding" size={15} /> Mitra usaha peternakan</div>
+            <div className="eyebrow">
+              <Icon name="leaf" size={15} />
+              Penyedia Kambing &amp; Domba
+            </div>
+
             <h1>
-              Mitra Breeding,
-              <span>Fattening &amp; Trading</span>
-              <em>Kambing &amp; Domba</em>
+              Temukan Kambing &amp; Domba
+              <em>Sesuai Kebutuhan Anda</em>
             </h1>
+
             <p>
-              Menyediakan bibit, indukan, bakalan, dan ternak siap jual untuk peternak,
-              pedagang, pengepul, supplier, serta mitra usaha di Jabodetabek dan sekitarnya.
+              AYT Agro Farm membantu menyediakan kambing dan domba untuk
+              kebutuhan pembibitan, penggemukan, perdagangan, aqiqah, kurban,
+              maupun kebutuhan lainnya.
             </p>
 
             <div className="hero-actions">
-              <a className="button button-primary" href={stockWhatsappUrl} target="_blank" rel="noreferrer">
-                <Icon name="whatsapp" size={20} /> Cek Stok Ternak <Icon name="arrow" size={18} />
+              <a
+                className="button button-primary"
+                href={livestockWhatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Icon name="whatsapp" size={20} />
+                Cari Kambing & Domba
+                <Icon name="arrow" size={18} />
               </a>
-              <a className="button button-outline" href={offerWhatsappUrl} target="_blank" rel="noreferrer">
-                Tawarkan Ternak
+
+              <a
+                className="button button-outline"
+                href={consultationWhatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Konsultasi via WhatsApp
               </a>
             </div>
 
             <div className="trust-strip" aria-label="Informasi layanan">
               <div>
-                <span className="trust-icon"><Icon name="pin" /></span>
-                <span><strong>Bogor</strong><small>Basis operasional</small></span>
+                <span className="trust-icon">
+                  <Icon name="pin" />
+                </span>
+                <span>
+                  <strong>Bogor</strong>
+                  <small>Basis operasional</small>
+                </span>
               </div>
+
               <div>
-                <span className="trust-icon"><Icon name="building" /></span>
-                <span><strong>Jabodetabek</strong><small>Area pelayanan</small></span>
+                <span className="trust-icon">
+                  <Icon name="building" />
+                </span>
+                <span>
+                  <strong>Jabodetabek</strong>
+                  <small>Area pelayanan</small>
+                </span>
               </div>
+
               <div>
-                <span className="trust-icon"><Icon name="users" /></span>
-                <span><strong>B2B &amp; Retail</strong><small>Model kebutuhan</small></span>
+                <span className="trust-icon">
+                  <Icon name="users" />
+                </span>
+                <span>
+                  <strong>Satuan &amp; Partai</strong>
+                  <small>Berbagai kebutuhan</small>
+                </span>
               </div>
             </div>
           </div>
@@ -417,7 +545,7 @@ export default function Home() {
             <div className="hero-image-frame">
               <Image
                 src="/images/hero-ayt-agro-farm.jpg"
-                alt="Ilustrasi AYT Agro Farm dengan kandang, kambing, dan domba"
+                alt="AYT Agro Farm dengan kandang, kambing, dan domba"
                 fill
                 priority
                 sizes="(max-width: 980px) 100vw, 56vw"
@@ -428,18 +556,23 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="service-overlap" id="layanan">
+      <section className="service-overlap" aria-label="Kebutuhan ternak">
         <div className="container service-grid">
-          {services.map((service) => (
-            <article className="service-card" key={service.title}>
+          {livestockNeeds.map((item) => (
+            <article className="service-card" key={item.title}>
               <div className="service-head">
-                <span className="service-icon"><Icon name={service.icon} /></span>
-                <span className="service-number">{service.number}</span>
+                <span className="service-icon">
+                  <Icon name={item.icon} />
+                </span>
+                <span className="service-number">{item.number}</span>
               </div>
-              <h2>{service.title}</h2>
-              <p>{service.text}</p>
-              <a href={service.link} target="_blank" rel="noreferrer">
-                Selengkapnya <Icon name="arrow" size={16} />
+
+              <h2>{item.title}</h2>
+              <p>{item.text}</p>
+
+              <a href={item.link} target="_blank" rel="noreferrer">
+                Tanya via WhatsApp
+                <Icon name="arrow" size={16} />
               </a>
             </article>
           ))}
@@ -449,22 +582,84 @@ export default function Home() {
       <section className="benefits section" id="tentang">
         <div className="leaf-decoration leaf-left" />
         <div className="leaf-decoration leaf-right" />
+
         <div className="container">
           <div className="section-heading centered">
-            <span className="section-kicker"><Icon name="leaf" size={15} /> Keunggulan kami</span>
-            <h2>Mengapa <em>AYT Agro Farm?</em></h2>
+            <span className="section-kicker">
+              <Icon name="leaf" size={15} />
+              Tentang kami
+            </span>
+
+            <h2>
+              Mengapa <em>AYT Agro Farm?</em>
+            </h2>
+
             <p>
-              Pendekatan usaha yang menggabungkan pemeliharaan ternak, komunikasi terbuka,
-              dan jaringan perdagangan untuk kebutuhan peternak maupun pelaku usaha.
+              AYT Agro Farm menjadi wadah untuk membantu masyarakat, peternak,
+              dan pelaku usaha menemukan kambing atau domba berdasarkan
+              kebutuhan yang disampaikan.
             </p>
           </div>
 
           <div className="benefit-grid">
             {benefits.map((benefit) => (
               <article key={benefit.title}>
-                <span className="benefit-icon"><Icon name={benefit.icon} size={30} /></span>
+                <span className="benefit-icon">
+                  <Icon name={benefit.icon} size={30} />
+                </span>
                 <h3>{benefit.title}</h3>
                 <p>{benefit.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="knowledge section" id="pengetahuan">
+        <div className="container">
+          <div className="knowledge-heading">
+            <div className="section-heading">
+              <span className="section-kicker">
+                <Icon name="book" size={16} />
+                Pengetahuan peternakan
+              </span>
+
+              <h2>
+                Tips Praktis untuk <em>Peternak</em>
+              </h2>
+
+              <p>
+                Informasi sederhana mengenai pemilihan ternak, breeding,
+                fattening, pakan, kandang, kesehatan, dan perawatan kambing
+                serta domba.
+              </p>
+            </div>
+
+            <span className="knowledge-note">
+              Artikel terbaru akan diperbarui melalui dashboard admin.
+            </span>
+          </div>
+
+          <div className="knowledge-grid">
+            {knowledgePosts.map((post) => (
+              <article className="knowledge-card" key={post.title}>
+                <div className="knowledge-image">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 760px) 100vw, 33vw"
+                  />
+                </div>
+
+                <div className="knowledge-content">
+                  <span className="knowledge-category">{post.category}</span>
+                  <h3>{post.title}</h3>
+                  <p>{post.summary}</p>
+                  <span className="knowledge-coming">
+                    Artikel lengkap segera tersedia
+                  </span>
+                </div>
               </article>
             ))}
           </div>
@@ -475,17 +670,33 @@ export default function Home() {
         <div className="container">
           <div className="gallery-title-row">
             <div className="section-heading">
-              <span className="section-kicker"><Icon name="camera" size={16} /> Dokumentasi</span>
+              <span className="section-kicker">
+                <Icon name="camera" size={16} />
+                Dokumentasi
+              </span>
+
               <h2>Galeri &amp; Aktivitas</h2>
+
               <p>
-                Visual ilustratif mengikuti karakter ternak, kandang, dan materi edukasi AYT Farm.
+                Dokumentasi kegiatan, lingkungan peternakan, ternak, kandang,
+                pakan, dan aktivitas AYT Agro Farm.
               </p>
             </div>
+
             <div className="gallery-controls" aria-label="Kontrol galeri">
-              <button type="button" onClick={() => scrollGallery("left")} aria-label="Geser galeri ke kiri">
+              <button
+                type="button"
+                onClick={() => scrollGallery("left")}
+                aria-label="Geser galeri ke kiri"
+              >
                 <Icon name="chevronLeft" />
               </button>
-              <button type="button" onClick={() => scrollGallery("right")} aria-label="Geser galeri ke kanan">
+
+              <button
+                type="button"
+                onClick={() => scrollGallery("right")}
+                aria-label="Geser galeri ke kanan"
+              >
                 <Icon name="chevronRight" />
               </button>
             </div>
@@ -495,68 +706,112 @@ export default function Home() {
             {galleryItems.map((item) => (
               <article className="gallery-card" key={item.title}>
                 <div className="gallery-image">
-                  <Image src={item.src} alt={item.title} fill sizes="(max-width: 700px) 84vw, 320px" />
+                  <Image
+                    src={item.src}
+                    alt={item.title}
+                    fill
+                    sizes="(max-width: 700px) 100vw, 320px"
+                  />
                 </div>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </article>
             ))}
           </div>
-          <p className="gallery-disclaimer">
-            Visual ilustratif disusun berdasarkan referensi karakter AYT Farm. Dokumentasi asli dapat menggantikan visual ini pada pembaruan berikutnya.
-          </p>
         </div>
       </section>
 
-      <section className="partnership section" id="kemitraan">
-        <div className="container partnership-shell">
-          <div className="section-heading centered compact">
-            <span className="section-kicker"><Icon name="handshake" size={16} /> Cara bermitra</span>
-            <h2>Mudah, Cepat &amp; Terarah</h2>
-            <p>Mulai percakapan, jelaskan kebutuhan, lalu sepakati proses yang paling sesuai.</p>
-          </div>
+      <section
+        className="hpdki-section section"
+        id="hpdki"
+        aria-label="Informasi HPDKI"
+      >
+        <div className="container hpdki-shell">
+          <div className="hpdki-heading">
+            <span className="section-kicker">
+              <Icon name="users" size={16} />
+              Informasi tambahan
+            </span>
 
-          <div className="step-grid">
-            {steps.map((step, index) => (
-              <article className="step-card" key={step.title}>
-                <span className="step-number">{index + 1}</span>
-                <span className="step-icon"><Icon name={step.icon} size={36} /></span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-              </article>
-            ))}
-          </div>
+            <h2>Mengenal HPDKI</h2>
 
-          <div className="partner-actions">
-            <a className="button button-primary" href={partnerWhatsappUrl} target="_blank" rel="noreferrer">
-              Diskusi Kemitraan <Icon name="arrow" size={18} />
-            </a>
-            <a className="text-link" href={instagramUrl} target="_blank" rel="noreferrer">
-              <Icon name="instagram" size={19} /> Lihat aktivitas di Instagram
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="faq section">
-        <div className="container faq-grid">
-          <div className="faq-intro">
-            <span className="section-kicker"><Icon name="check" size={16} /> Informasi awal</span>
-            <h2>Pertanyaan yang sering disampaikan</h2>
             <p>
-              Detail stok, harga, berat, jadwal kunjungan, dan pengiriman mengikuti kondisi aktual saat Anda menghubungi tim.
+              Informasi singkat mengenai Himpunan Peternak Domba Kambing
+              Indonesia dan layanan pendaftaran anggota melalui AYT Agro Farm.
             </p>
-            <a className="button button-outline" href={stockWhatsappUrl} target="_blank" rel="noreferrer">
-              Tanya via WhatsApp
-            </a>
           </div>
-          <div className="faq-list">
-            {faqs.map((faq, index) => (
-              <details key={faq.q} open={index === 0}>
-                <summary><span>{faq.q}</span><span className="faq-plus">+</span></summary>
-                <p>{faq.a}</p>
-              </details>
-            ))}
+
+          <div className="hpdki-carousel" aria-live="polite">
+            <div className="hpdki-counter">
+              <span>
+                {String(activeHpdkiSlide + 1).padStart(2, "0")}
+              </span>
+              <small>
+                / {String(hpdkiSlides.length).padStart(2, "0")}
+              </small>
+            </div>
+
+            <article className="hpdki-slide">
+              <span className="hpdki-label">{currentHpdkiSlide.label}</span>
+              <h3>{currentHpdkiSlide.title}</h3>
+              <p>{currentHpdkiSlide.text}</p>
+
+              {currentHpdkiSlide.points && (
+                <ul className="hpdki-points">
+                  {currentHpdkiSlide.points.map((point) => (
+                    <li key={point}>
+                      <Icon name="check" size={18} />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              {currentHpdkiSlide.showRegistration && (
+                <a
+                  className="button button-primary"
+                  href="/hpdki/daftar"
+                >
+                  Daftar Anggota HPDKI
+                  <Icon name="arrow" size={18} />
+                </a>
+              )}
+            </article>
+          </div>
+
+          <div className="hpdki-navigation">
+            <div className="hpdki-dots" aria-label="Pilih slide HPDKI">
+              {hpdkiSlides.map((slide, index) => (
+                <button
+                  key={slide.title}
+                  type="button"
+                  className={index === activeHpdkiSlide ? "is-active" : ""}
+                  onClick={() => setActiveHpdkiSlide(index)}
+                  aria-label={`Tampilkan slide ${index + 1}: ${slide.title}`}
+                  aria-current={
+                    index === activeHpdkiSlide ? "true" : undefined
+                  }
+                />
+              ))}
+            </div>
+
+            <div className="hpdki-arrows">
+              <button
+                type="button"
+                onClick={showPreviousHpdkiSlide}
+                aria-label="Slide HPDKI sebelumnya"
+              >
+                <Icon name="chevronLeft" />
+              </button>
+
+              <button
+                type="button"
+                onClick={showNextHpdkiSlide}
+                aria-label="Slide HPDKI berikutnya"
+              >
+                <Icon name="chevronRight" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -564,15 +819,26 @@ export default function Home() {
       <section className="cta-section" id="kontak">
         <div className="container cta-band">
           <div>
-            <span>Siap bermitra bersama</span>
-            <h2>AYT Agro Farm?</h2>
+            <span>Butuh kambing atau domba?</span>
+            <h2>Hubungi AYT Agro Farm</h2>
           </div>
+
           <p>
-            Sampaikan kebutuhan breeding, fattening, trading, qurban, aqiqah, atau penawaran ternak Anda.
+            Sampaikan jenis ternak, jumlah, tujuan, kisaran bobot, lokasi, dan
+            anggaran yang Anda butuhkan.
           </p>
-          <a className="button button-whatsapp" href={stockWhatsappUrl} target="_blank" rel="noreferrer">
+
+          <a
+            className="button button-whatsapp"
+            href={livestockWhatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
             <Icon name="whatsapp" size={25} />
-            <span><strong>Chat WhatsApp Sekarang</strong><small>0878-8912-4342</small></span>
+            <span>
+              <strong>Chat WhatsApp Sekarang</strong>
+              <small>0878-8912-4342</small>
+            </span>
           </a>
         </div>
       </section>
@@ -582,22 +848,43 @@ export default function Home() {
           <div className="footer-about">
             <a className="brand footer-brand" href="#home">
               <span className="brand-logo">
-                <Image src="/images/ayt-logo-mark.png" alt="Logo AYT Agro Farm" width={58} height={58} />
+                <Image
+                  src="/images/ayt-logo-mark.png"
+                  alt="Logo AYT Agro Farm"
+                  width={58}
+                  height={58}
+                />
               </span>
+
               <span className="brand-text">
-                <strong>AYT <em>AGRO FARM</em></strong>
-                <small>Breeding • Fattening • Trading</small>
+                <strong>
+                  AYT <em>AGRO FARM</em>
+                </strong>
+                <small>Penyedia Kambing &amp; Domba</small>
               </span>
             </a>
+
             <p>
-              Mitra usaha kambing dan domba untuk penyediaan bibit, indukan, bakalan,
-              penggemukan, serta perdagangan ternak.
+              Wadah penyediaan kambing dan domba sesuai kebutuhan, didukung
+              informasi praktis seputar peternakan.
             </p>
+
             <div className="social-links">
-              <a href={instagramUrl} target="_blank" rel="noreferrer" aria-label="Instagram AYT Farm">
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram AYT Agro Farm"
+              >
                 <Icon name="instagram" size={19} />
               </a>
-              <a href={stockWhatsappUrl} target="_blank" rel="noreferrer" aria-label="WhatsApp AYT Agro Farm">
+
+              <a
+                href={livestockWhatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp AYT Agro Farm"
+              >
                 <Icon name="whatsapp" size={19} />
               </a>
             </div>
@@ -606,38 +893,66 @@ export default function Home() {
           <div className="footer-column">
             <h3>Menu</h3>
             <a href="#tentang">Tentang</a>
-            <a href="#layanan">Layanan</a>
-            <a href="#kemitraan">Kemitraan</a>
+            <a href="#pengetahuan">Pengetahuan</a>
+            <a href="#hpdki">HPDKI</a>
             <a href="#galeri">Galeri</a>
+            <a href="#kontak">Kontak</a>
           </div>
 
           <div className="footer-column">
-            <h3>Layanan</h3>
-            <a href={stockWhatsappUrl} target="_blank" rel="noreferrer">Breeding</a>
-            <a href={stockWhatsappUrl} target="_blank" rel="noreferrer">Fattening</a>
-            <a href={offerWhatsappUrl} target="_blank" rel="noreferrer">Trading</a>
+            <h3>Akses Cepat</h3>
+            <a
+              href={livestockWhatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Cari Kambing & Domba
+            </a>
+            <a href="#pengetahuan">Tips Peternakan</a>
+            <a href="/hpdki/daftar">Pendaftaran HPDKI</a>
           </div>
 
           <div className="footer-column footer-contact">
             <h3>Kontak</h3>
-            <a href={mapsUrl} target="_blank" rel="noreferrer"><Icon name="pin" size={17} /> Dramaga, Kabupaten Bogor</a>
-            <a href={stockWhatsappUrl} target="_blank" rel="noreferrer"><Icon name="phone" size={17} /> 0878-8912-4342</a>
-            <a href={instagramUrl} target="_blank" rel="noreferrer"><Icon name="instagram" size={17} /> @ayt_farm</a>
+
+            <a href={mapsUrl} target="_blank" rel="noreferrer">
+              <Icon name="pin" size={17} />
+              Dramaga, Kabupaten Bogor
+            </a>
+
+            <a
+              href={livestockWhatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Icon name="phone" size={17} />
+              0878-8912-4342
+            </a>
+
+            <a href={instagramUrl} target="_blank" rel="noreferrer">
+              <Icon name="instagram" size={17} />
+              @ayt_farm
+            </a>
           </div>
         </div>
 
         <div className="container footer-bottom">
-          <span>© {new Date().getFullYear()} AYT Agro Farm. All rights reserved.</span>
-          <span>Jl. Kp. Sukabakti RT.002/RW.006, Desa Sukawening, Dramaga, Bogor</span>
+          <span>
+            © {new Date().getFullYear()} AYT Agro Farm. All rights reserved.
+          </span>
+
+          <span>
+            Jl. Kp. Sukabakti RT.002/RW.006, Desa Sukawening, Dramaga, Bogor
+          </span>
         </div>
       </footer>
 
       <a
         className={`floating-whatsapp ${menuOpen ? "is-hidden" : ""}`}
-        href={stockWhatsappUrl}
+        href={livestockWhatsappUrl}
         target="_blank"
         rel="noreferrer"
-        aria-label="Hubungi AYT Agro Farm melalui WhatsApp"
+        aria-label="Cari kambing atau domba melalui WhatsApp"
         aria-hidden={menuOpen}
         tabIndex={menuOpen ? -1 : undefined}
       >
