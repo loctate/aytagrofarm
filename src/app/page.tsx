@@ -288,14 +288,13 @@ type HpdkiSlide = {
   title: string;
   text: string;
   points?: string[];
-  showRegistration?: boolean;
 };
 
 const hpdkiSlides: HpdkiSlide[] = [
   {
-    label: "Tentang DPC HPDKI",
-    title: "Wadah Peternak Domba & Kambing Kabupaten Bogor",
-    text: "DPC HPDKI Kabupaten Bogor menjadi wadah bagi peternak domba dan kambing untuk meningkatkan pengetahuan, membangun jaringan, memperkuat usaha, dan berkembang bersama.",
+    label: "Tentang PAC HPDKI",
+    title: "Wadah Peternak Domba & Kambing Kecamatan Dramaga",
+    text: "PAC HPDKI Kecamatan Dramaga Kabupaten Bogor menjadi wadah bagi peternak domba dan kambing untuk meningkatkan pengetahuan, membangun jaringan, memperkuat usaha, dan berkembang bersama.",
     points: [
       "Komunitas peternak domba dan kambing",
       "Pengembangan pengetahuan peternakan",
@@ -306,7 +305,7 @@ const hpdkiSlides: HpdkiSlide[] = [
   {
     label: "Visi Organisasi",
     title: "Peternak Mandiri, Profesional, dan Berdaya Saing",
-    text: "Menjadi organisasi peternak domba kambing yang mandiri, profesional, dan berdaya saing tinggi dalam mewujudkan kesejahteraan peternak serta kemandirian pangan berbasis potensi lokal Kabupaten Bogor.",
+    text: "Menjadi organisasi peternak domba kambing yang mandiri, profesional, dan berdaya saing tinggi dalam mewujudkan kesejahteraan peternak serta kemandirian pangan berbasis potensi lokal Kecamatan Dramaga, Kabupaten Bogor.",
   },
   {
     label: "Pengembangan Peternak",
@@ -344,7 +343,7 @@ const hpdkiSlides: HpdkiSlide[] = [
   {
     label: "Peternakan Berkelanjutan",
     title: "Tumbuh Bersama Potensi Lokal",
-    text: "Mengembangkan sistem peternakan yang terintegrasi dan ramah lingkungan, sekaligus memperkuat solidaritas serta kekuatan kolektif peternak Kabupaten Bogor.",
+    text: "Mengembangkan sistem peternakan yang terintegrasi dan ramah lingkungan, sekaligus memperkuat solidaritas serta kekuatan kolektif peternak Kecamatan Dramaga.",
     points: [
       "Ramah lingkungan",
       "Berbasis potensi lokal",
@@ -353,16 +352,15 @@ const hpdkiSlides: HpdkiSlide[] = [
     ],
   },
   {
-    label: "Pendaftaran Anggota",
-    title: "Bergabung Menjadi Anggota HPDKI",
-    text: "Bergabunglah dengan jaringan peternak domba dan kambing Kabupaten Bogor untuk memperoleh informasi, memperluas jaringan, dan membuka peluang kolaborasi.",
+    label: "Pendaftaran Anggota Peternak",
+    title: "Bergabung Menjadi Anggota Peternak PAC HPDKI",
+    text: "Bergabunglah dengan jaringan peternak domba dan kambing Kecamatan Dramaga, Kabupaten Bogor untuk memperoleh informasi, memperluas jaringan, dan membuka peluang kolaborasi.",
     points: [
       "Informasi kegiatan dan pelatihan",
       "Jaringan sesama peternak",
       "Peluang kolaborasi usaha",
       "Penguatan komunitas peternakan",
     ],
-    showRegistration: true,
   },
 ];
 
@@ -447,7 +445,10 @@ export default function Home() {
               <strong>
                 AYT <em>AGRO FARM</em>
               </strong>
-              <small>Penyedia Kambing &amp; Domba</small>
+              <small className="brand-services">
+                <span>BREEDING, FATTENING, TRADING</span>
+                <span>HILIR, FROZEN, PENYEMBELIHAN</span>
+              </small>
             </span>
           </a>
 
@@ -462,8 +463,13 @@ export default function Home() {
             <a href="#pengetahuan" onClick={() => setMenuOpen(false)}>
               Pengetahuan
             </a>
-            <a href="#hpdki" onClick={() => setMenuOpen(false)}>
-              HPDKI
+            <a
+              className="nav-hpdki-link"
+              href="#hpdki"
+              onClick={() => setMenuOpen(false)}
+            >
+              <span>PAC HPDKI</span>
+              <span>KECAMATAN DRAMAGA</span>
             </a>
             <a href="#galeri" onClick={() => setMenuOpen(false)}>
               Galeri
@@ -769,7 +775,7 @@ export default function Home() {
         <div className="container hpdki-shell">
           <div className="hpdki-heading hpdki-heading-compact">
             <h2 className="hpdki-section-title">
-              HPDKI DPC Kab. Bogor
+              PAC HPDKI KECAMATAN DRAMAGA KAB. BOGOR
             </h2>
           </div>
 
@@ -789,17 +795,17 @@ export default function Home() {
                   ))}
                 </ul>
               )}
-
-              {currentHpdkiSlide.showRegistration && (
-                <a
-                  className="button button-primary"
-                  href="/hpdki/daftar"
-                >
-                  Daftar Anggota HPDKI
-                  <Icon name="arrow" size={18} />
-                </a>
-              )}
             </article>
+          </div>
+
+          <div className="hpdki-static-cta">
+            <a
+              className="button button-primary"
+              href="/hpdki/daftar"
+            >
+              Daftar Anggota Peternak PAC HPDKI KEC. DRAMAGA
+              <Icon name="arrow" size={18} />
+            </a>
           </div>
 
           <div className="hpdki-navigation">
@@ -883,7 +889,10 @@ export default function Home() {
                 <strong>
                   AYT <em>AGRO FARM</em>
                 </strong>
-                <small>Penyedia Kambing &amp; Domba</small>
+                <small className="brand-services">
+                <span>BREEDING, FATTENING, TRADING</span>
+                <span>HILIR, FROZEN, PENYEMBELIHAN</span>
+              </small>
               </span>
             </a>
 
@@ -917,7 +926,9 @@ export default function Home() {
             <h3>Menu</h3>
             <a href="#tentang">Tentang</a>
             <a href="#pengetahuan">Pengetahuan</a>
-            <a href="#hpdki">HPDKI</a>
+            <a href="#hpdki">
+              PAC HPDKI KECAMATAN DRAMAGA
+            </a>
             <a href="#galeri">Galeri</a>
             <a href="#kontak">Kontak</a>
           </div>

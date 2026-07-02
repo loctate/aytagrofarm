@@ -9,7 +9,7 @@ const siteUrl = (
 const siteName = "AYT Agro Farm";
 
 const description =
-  "AYT Agro Farm membantu menyediakan kambing dan domba sesuai kebutuhan di Bogor dan Jabodetabek, berbagi tips praktis peternakan, serta menyediakan layanan pendaftaran anggota HPDKI.";
+  "AYT Agro Farm membantu menyediakan kambing dan domba sesuai kebutuhan di Bogor dan Jabodetabek, berbagi tips praktis peternakan, serta menyediakan layanan pendaftaran anggota peternak PAC HPDKI Kecamatan Dramaga.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     "tips peternakan domba",
     "breeding kambing domba",
     "fattening kambing domba",
-    "pendaftaran anggota HPDKI",
+    "pendaftaran anggota PAC HPDKI Dramaga",
   ],
 
   authors: [
@@ -154,7 +154,7 @@ const jsonLd = {
     "Breeding kambing dan domba",
     "Fattening kambing dan domba",
     "Tips peternakan",
-    "Pendaftaran anggota HPDKI",
+    "Pendaftaran anggota peternak PAC HPDKI Kecamatan Dramaga",
   ],
 };
 

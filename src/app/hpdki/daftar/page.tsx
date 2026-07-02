@@ -7,13 +7,13 @@ const whatsappNumber = "6287889124342";
 
 const temporaryWhatsappUrl =
   `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    "Halo AYT Agro Farm, saya ingin mendapatkan informasi mengenai pendaftaran anggota DPC HPDKI Kabupaten Bogor."
+    "Halo AYT Agro Farm, saya ingin mendapatkan informasi mengenai pendaftaran anggota PAC HPDKI KEC. DRAMAGA KAB. BOGOR."
   )}`;
 
 export const metadata: Metadata = {
-  title: "Pendaftaran Anggota HPDKI",
+  title: "Pendaftaran Anggota Peternak PAC HPDKI Dramaga",
   description:
-    "Formulir pendaftaran calon anggota DPC HPDKI Kabupaten Bogor melalui AYT Agro Farm.",
+    "Formulir pendaftaran calon anggota PAC HPDKI KEC. DRAMAGA KAB. BOGOR melalui AYT Agro Farm.",
   alternates: {
     canonical: "/hpdki/daftar",
   },
@@ -39,7 +39,10 @@ export default function HpdkiRegistrationPage() {
               <strong>
                 AYT <em>AGRO FARM</em>
               </strong>
-              <small>Penyedia Kambing &amp; Domba</small>
+              <small className="brand-services">
+                <span>BREEDING, FATTENING, TRADING</span>
+                <span>HILIR, FROZEN, PENYEMBELIHAN</span>
+              </small>
             </span>
           </Link>
 
@@ -53,10 +56,10 @@ export default function HpdkiRegistrationPage() {
         <div className="container registration-hero-grid">
           <div className="registration-intro">
             <span className="registration-kicker">
-              DPC HPDKI Kabupaten Bogor
+              PAC HPDKI KEC. DRAMAGA KAB. BOGOR
             </span>
 
-            <h1>Pendaftaran Calon Anggota HPDKI</h1>
+            <h1>Pendaftaran Calon Anggota Peternak PAC HPDKI KEC. DRAMAGA KAB BOGOR</h1>
 
             <p>
               Lengkapi data awal pendaftaran. Setelah formulir resmi dikirim,
@@ -109,7 +112,7 @@ export default function HpdkiRegistrationPage() {
           <div className="registration-form-shell">
             <div className="registration-form-heading">
               <span>Formulir Pendaftaran</span>
-              <h2>Data Calon Anggota</h2>
+              <h2>Data Calon Anggota Peternak</h2>
               <p>
                 Isi data sesuai dengan kondisi peternakan atau kandang
                 yang sedang dijalankan.
@@ -127,7 +130,7 @@ export default function HpdkiRegistrationPage() {
             © {new Date().getFullYear()} AYT Agro Farm
           </span>
           <span>
-            Layanan pendataan calon anggota DPC HPDKI Kabupaten Bogor
+            Layanan pendataan calon anggota PAC HPDKI KEC. DRAMAGA KAB. BOGOR
           </span>
         </div>
       </footer>

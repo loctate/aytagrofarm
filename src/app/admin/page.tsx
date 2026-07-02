@@ -89,7 +89,7 @@ function whatsappLink(
   const message = encodeURIComponent(
     `Halo Bapak/Ibu ${registration.farmer_name}, ` +
       `kami dari AYT Agro Farm sedang memeriksa ` +
-      `pendaftaran anggota HPDKI dengan nomor ` +
+      `pendaftaran anggota peternak PAC HPDKI Kecamatan Dramaga dengan nomor ` +
       `${registration.registration_number}.`
   );
 
@@ -373,7 +373,7 @@ export default function AdminPage() {
               setActiveMenu("pendaftaran")
             }
           >
-            Pendaftaran HPDKI
+            Pendaftaran PAC HPDKI
           </button>
 
           <button
@@ -415,7 +415,7 @@ export default function AdminPage() {
                 "Pengetahuan"}
 
               {activeMenu === "pendaftaran" &&
-                "Pendaftaran HPDKI"}
+                "Pendaftaran PAC HPDKI"}
 
               {activeMenu === "anggota" &&
                 "Data Anggota"}
@@ -511,7 +511,7 @@ export default function AdminPage() {
               </strong>
 
               <p>
-                Pendaftaran HPDKI diselesaikan lebih
+                Pendaftaran PAC HPDKI diselesaikan lebih
                 dahulu sebelum modul Pengetahuan dibuat.
               </p>
             </div>
