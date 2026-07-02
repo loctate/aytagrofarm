@@ -2,153 +2,292 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
   getCurrentAdmin,
   logoutAdmin,
 } from "@/lib/appwrite/auth";
 
-type RegistrationStatus =
-  | "Pendaftaran Baru"
-  | "Sedang Diperiksa"
-  | "Data Belum Lengkap"
-  | "Menunggu Konfirmasi WhatsApp"
-  | "Lolos Validasi"
-  | "Disetujui"
-  | "Ditolak";
+import {
+  type HpdkiRegistrationRecord,
+  type RegistrationStatus,
+  listHpdkiRegistrations,
+  registrationStatuses,
+  updateHpdkiRegistration,
+} from "@/lib/appwrite/registrations";
 
-type Registration = {
-  id: string;
-  name: string;
-  whatsapp: string;
-  domicile: string;
-  farmName: string;
-  livestockType: string;
-  registeredAt: string;
-  status: RegistrationStatus;
-};
+type AdminMenu =
+  | "ringkasan"
+  | "pengetahuan"
+  | "pendaftaran"
+  | "anggota";
 
-const initialRegistrations: Registration[] = [
-  {
-    id: "AYT-HPDKI-2026-0001",
-    name: "Ahmad Hidayat",
-    whatsapp: "0812-3456-7890",
-    domicile: "Dramaga, Kabupaten Bogor",
-    farmName: "Hidayat Farm",
-    livestockType: "Domba",
-    registeredAt: "1 Juli 2026",
-    status: "Pendaftaran Baru",
-  },
-  {
-    id: "AYT-HPDKI-2026-0002",
-    name: "Dedi Suhendar",
-    whatsapp: "0813-7654-3210",
-    domicile: "Cibinong, Kabupaten Bogor",
-    farmName: "Ternak Mandiri",
-    livestockType: "Kambing dan domba",
-    registeredAt: "30 Juni 2026",
-    status: "Sedang Diperiksa",
-  },
-  {
-    id: "AYT-HPDKI-2026-0003",
-    name: "Siti Nurhayati",
-    whatsapp: "0857-1122-3344",
-    domicile: "Ciseeng, Kabupaten Bogor",
-    farmName: "Berkah Ternak",
-    livestockType: "Kambing",
-    registeredAt: "29 Juni 2026",
-    status: "Data Belum Lengkap",
-  },
-];
+function formatDate(value: string | null) {
+  if (!value) {
+    return "-";
+  }
 
-const statuses: RegistrationStatus[] = [
-  "Pendaftaran Baru",
-  "Sedang Diperiksa",
-  "Data Belum Lengkap",
-  "Menunggu Konfirmasi WhatsApp",
-  "Lolos Validasi",
-  "Disetujui",
-  "Ditolak",
-];
+  const date = new Date(value);
 
-const whatsappLink = (phone: string, name: string, id: string) => {
-  const normalized = phone.replace(/\D/g, "").replace(/^0/, "62");
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+function getLivestockLabel(
+  registration: HpdkiRegistrationRecord
+) {
+  const goats =
+    registration.female_goats + registration.male_goats;
+
+  const sheep =
+    registration.female_sheep + registration.male_sheep;
+
+  if (goats > 0 && sheep > 0) {
+    return "Kambing & Domba";
+  }
+
+  if (goats > 0) {
+    return "Kambing";
+  }
+
+  if (sheep > 0) {
+    return "Domba";
+  }
+
+  return "Belum ada";
+}
+
+function getLocation(
+  registration: HpdkiRegistrationRecord
+) {
+  return [registration.district, registration.regency]
+    .filter(Boolean)
+    .join(", ");
+}
+
+function whatsappLink(
+  registration: HpdkiRegistrationRecord
+) {
+  const normalized = registration.whatsapp
+    .replace(/\D/g, "")
+    .replace(/^0/, "62");
+
   const message = encodeURIComponent(
-    `Halo Bapak/Ibu ${name}, kami dari AYT Agro Farm sedang memeriksa pendaftaran anggota HPDKI dengan nomor ${id}.`
+    `Halo Bapak/Ibu ${registration.farmer_name}, ` +
+      `kami dari AYT Agro Farm sedang memeriksa ` +
+      `pendaftaran anggota HPDKI dengan nomor ` +
+      `${registration.registration_number}.`
   );
 
   return `https://wa.me/${normalized}?text=${message}`;
-};
+}
 
 export default function AdminPage() {
   const router = useRouter();
 
-  const [checkingSession, setCheckingSession] = useState(true);
-  const [registrations, setRegistrations] =
-    useState<Registration[]>(initialRegistrations);
-  const [activeMenu, setActiveMenu] = useState("pendaftaran");
+  const [checkingSession, setCheckingSession] =
+    useState(true);
+
+  const [loadingData, setLoadingData] = useState(true);
+  const [dataError, setDataError] = useState("");
+
+  const [registrations, setRegistrations] = useState<
+    HpdkiRegistrationRecord[]
+  >([]);
+
+  const [activeMenu, setActiveMenu] =
+    useState<AdminMenu>("pendaftaran");
+
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("Semua Status");
-  const [selectedRegistration, setSelectedRegistration] =
-    useState<Registration | null>(null);
+  const [statusFilter, setStatusFilter] =
+    useState("Semua Status");
+
+  const [
+    selectedRegistration,
+    setSelectedRegistration,
+  ] = useState<HpdkiRegistrationRecord | null>(null);
+
+  const [selectedStatus, setSelectedStatus] =
+    useState<RegistrationStatus>("Pendaftaran Baru");
+
+  const [selectedAdminNotes, setSelectedAdminNotes] =
+    useState("");
+
+  const [savingRegistration, setSavingRegistration] =
+    useState(false);
+
+  const [modalError, setModalError] = useState("");
+
+  const loadRegistrations = useCallback(async () => {
+    setLoadingData(true);
+    setDataError("");
+
+    try {
+      const rows = await listHpdkiRegistrations();
+      setRegistrations(rows);
+    } catch (error) {
+      console.error(
+        "Gagal mengambil data pendaftaran:",
+        error
+      );
+
+      setDataError(
+        "Data pendaftaran belum dapat dimuat. " +
+          "Periksa koneksi dan permission Appwrite."
+      );
+    } finally {
+      setLoadingData(false);
+    }
+  }, []);
 
   useEffect(() => {
     let active = true;
 
-    getCurrentAdmin()
-      .then(() => {
-        if (active) {
-          setCheckingSession(false);
+    const initializeDashboard = async () => {
+      try {
+        await getCurrentAdmin();
+
+        if (!active) {
+          return;
         }
-      })
-      .catch(() => {
+
+        setCheckingSession(false);
+        await loadRegistrations();
+      } catch {
         if (active) {
           router.replace("/admin/login");
         }
-      });
+      }
+    };
+
+    void initializeDashboard();
 
     return () => {
       active = false;
     };
-  }, [router]);
+  }, [loadRegistrations, router]);
 
   const filteredRegistrations = useMemo(() => {
     const keyword = search.trim().toLowerCase();
 
     return registrations.filter((item) => {
+      const searchableText = [
+        item.farmer_name,
+        item.registration_number,
+        item.whatsapp,
+        item.farm_group_name,
+        item.village,
+        item.district,
+        item.regency,
+      ]
+        .join(" ")
+        .toLowerCase();
+
       const matchesSearch =
-        !keyword ||
-        item.name.toLowerCase().includes(keyword) ||
-        item.id.toLowerCase().includes(keyword) ||
-        item.domicile.toLowerCase().includes(keyword) ||
-        item.whatsapp.toLowerCase().includes(keyword);
+        !keyword || searchableText.includes(keyword);
 
       const matchesStatus =
-        statusFilter === "Semua Status" || item.status === statusFilter;
+        statusFilter === "Semua Status" ||
+        item.status === statusFilter;
 
       return matchesSearch && matchesStatus;
     });
   }, [registrations, search, statusFilter]);
 
-  const updateStatus = (
-    id: string,
-    newStatus: RegistrationStatus
-  ) => {
-    setRegistrations((current) =>
-      current.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item
-      )
-    );
+  const approvedRegistrations = useMemo(
+    () =>
+      registrations.filter(
+        (item) => item.status === "Disetujui"
+      ),
+    [registrations]
+  );
 
-    setSelectedRegistration((current) =>
-      current?.id === id ? { ...current, status: newStatus } : current
+  const openRegistrationDetail = (
+    registration: HpdkiRegistrationRecord
+  ) => {
+    setSelectedRegistration(registration);
+    setSelectedStatus(registration.status);
+    setSelectedAdminNotes(
+      registration.admin_notes ?? ""
     );
+    setModalError("");
   };
 
-  const totalApproved = registrations.filter(
-    (item) => item.status === "Disetujui"
-  ).length;
+  const closeRegistrationDetail = () => {
+    if (savingRegistration) {
+      return;
+    }
+
+    setSelectedRegistration(null);
+    setModalError("");
+  };
+
+  const saveRegistrationChanges = async () => {
+    if (!selectedRegistration) {
+      return;
+    }
+
+    setSavingRegistration(true);
+    setModalError("");
+
+    try {
+      const updateData: {
+        status: RegistrationStatus;
+        admin_notes: string;
+        approved_at?: string;
+      } = {
+        status: selectedStatus,
+        admin_notes: selectedAdminNotes.trim(),
+      };
+
+      if (
+        selectedStatus === "Disetujui" &&
+        !selectedRegistration.approved_at
+      ) {
+        updateData.approved_at =
+          new Date().toISOString();
+      }
+
+      const updated = await updateHpdkiRegistration(
+        selectedRegistration.$id,
+        updateData
+      );
+
+      setRegistrations((current) =>
+        current.map((item) =>
+          item.$id === updated.$id ? updated : item
+        )
+      );
+
+      setSelectedRegistration(null);
+    } catch (error) {
+      console.error(
+        "Gagal memperbarui pendaftaran:",
+        error
+      );
+
+      setModalError(
+        "Perubahan belum berhasil disimpan. " +
+          "Silakan coba kembali."
+      );
+    } finally {
+      setSavingRegistration(false);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -157,6 +296,14 @@ export default function AdminPage() {
       router.replace("/admin/login");
     }
   };
+
+  const newRegistrations = registrations.filter(
+    (item) => item.status === "Pendaftaran Baru"
+  ).length;
+
+  const registrationsInReview = registrations.filter(
+    (item) => item.status === "Sedang Diperiksa"
+  ).length;
 
   if (checkingSession) {
     return (
@@ -178,16 +325,24 @@ export default function AdminPage() {
             height={48}
             priority
           />
+
           <span>
             <strong>AYT Agro Farm</strong>
             <small>Dashboard Admin</small>
           </span>
         </Link>
 
-        <nav className="admin-menu" aria-label="Menu dashboard admin">
+        <nav
+          className="admin-menu"
+          aria-label="Menu dashboard admin"
+        >
           <button
             type="button"
-            className={activeMenu === "ringkasan" ? "is-active" : ""}
+            className={
+              activeMenu === "ringkasan"
+                ? "is-active"
+                : ""
+            }
             onClick={() => setActiveMenu("ringkasan")}
           >
             Ringkasan
@@ -195,23 +350,39 @@ export default function AdminPage() {
 
           <button
             type="button"
-            className={activeMenu === "pengetahuan" ? "is-active" : ""}
-            onClick={() => setActiveMenu("pengetahuan")}
+            className={
+              activeMenu === "pengetahuan"
+                ? "is-active"
+                : ""
+            }
+            onClick={() =>
+              setActiveMenu("pengetahuan")
+            }
           >
             Pengetahuan
           </button>
 
           <button
             type="button"
-            className={activeMenu === "pendaftaran" ? "is-active" : ""}
-            onClick={() => setActiveMenu("pendaftaran")}
+            className={
+              activeMenu === "pendaftaran"
+                ? "is-active"
+                : ""
+            }
+            onClick={() =>
+              setActiveMenu("pendaftaran")
+            }
           >
             Pendaftaran HPDKI
           </button>
 
           <button
             type="button"
-            className={activeMenu === "anggota" ? "is-active" : ""}
+            className={
+              activeMenu === "anggota"
+                ? "is-active"
+                : ""
+            }
             onClick={() => setActiveMenu("anggota")}
           >
             Data Anggota
@@ -219,10 +390,14 @@ export default function AdminPage() {
         </nav>
 
         <div className="admin-sidebar-note">
-          <strong>Mode Prototipe</strong>
+          <strong className="admin-live-indicator">
+            <span />
+            Terhubung ke Appwrite
+          </strong>
+
           <p>
-            Data pada dashboard ini masih berupa contoh dan belum tersimpan
-            ke database.
+            Pendaftaran yang dikirim melalui website
+            tampil langsung pada dashboard ini.
           </p>
         </div>
       </aside>
@@ -231,11 +406,19 @@ export default function AdminPage() {
         <header className="admin-topbar">
           <div>
             <span>Dashboard Admin</span>
+
             <h1>
-              {activeMenu === "ringkasan" && "Ringkasan"}
-              {activeMenu === "pengetahuan" && "Pengetahuan"}
-              {activeMenu === "pendaftaran" && "Pendaftaran HPDKI"}
-              {activeMenu === "anggota" && "Data Anggota"}
+              {activeMenu === "ringkasan" &&
+                "Ringkasan"}
+
+              {activeMenu === "pengetahuan" &&
+                "Pengetahuan"}
+
+              {activeMenu === "pendaftaran" &&
+                "Pendaftaran HPDKI"}
+
+              {activeMenu === "anggota" &&
+                "Data Anggota"}
             </h1>
           </div>
 
@@ -261,38 +444,47 @@ export default function AdminPage() {
                 <span>Total Pendaftar</span>
                 <strong>{registrations.length}</strong>
               </article>
+
               <article>
                 <span>Pendaftaran Baru</span>
-                <strong>
-                  {
-                    registrations.filter(
-                      (item) => item.status === "Pendaftaran Baru"
-                    ).length
-                  }
-                </strong>
+                <strong>{newRegistrations}</strong>
               </article>
+
               <article>
                 <span>Sedang Diperiksa</span>
-                <strong>
-                  {
-                    registrations.filter(
-                      (item) => item.status === "Sedang Diperiksa"
-                    ).length
-                  }
-                </strong>
+                <strong>{registrationsInReview}</strong>
               </article>
+
               <article>
                 <span>Anggota Disetujui</span>
-                <strong>{totalApproved}</strong>
+                <strong>
+                  {approvedRegistrations.length}
+                </strong>
               </article>
             </div>
 
             <div className="admin-placeholder-panel">
-              <h2>Aktivitas Terbaru</h2>
-              <p>
-                Aktivitas pendaftaran, perubahan status, dan pembaruan data
-                anggota nantinya tampil di bagian ini.
-              </p>
+              <div className="admin-panel-heading">
+                <div>
+                  <h2>Aktivitas Pendaftaran</h2>
+                  <p>
+                    Statistik diambil langsung dari data
+                    Appwrite Cloud.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadRegistrations()
+                  }
+                  disabled={loadingData}
+                >
+                  {loadingData
+                    ? "Memuat..."
+                    : "Muat Ulang"}
+                </button>
+              </div>
             </div>
           </>
         )}
@@ -303,7 +495,8 @@ export default function AdminPage() {
               <div>
                 <h2>Artikel dan Tips Peternakan</h2>
                 <p>
-                  Kelola artikel ringan untuk bagian Pengetahuan di homepage.
+                  Modul artikel akan dihubungkan ke
+                  tabel Pengetahuan pada tahap berikutnya.
                 </p>
               </div>
 
@@ -313,10 +506,13 @@ export default function AdminPage() {
             </div>
 
             <div className="admin-empty-state">
-              <strong>Editor artikel belum diaktifkan</strong>
+              <strong>
+                Editor artikel belum diaktifkan
+              </strong>
+
               <p>
-                Form tambah, edit, draft, publikasi, dan hapus artikel dibuat
-                setelah dashboard terhubung ke database.
+                Pendaftaran HPDKI diselesaikan lebih
+                dahulu sebelum modul Pengetahuan dibuat.
               </p>
             </div>
           </div>
@@ -328,88 +524,177 @@ export default function AdminPage() {
               <div>
                 <h2>Calon Anggota</h2>
                 <p>
-                  Periksa data pendaftaran dan ubah status proses validasi.
+                  Periksa data nyata yang masuk dari
+                  formulir pendaftaran.
                 </p>
               </div>
 
-              <span>{filteredRegistrations.length} data</span>
+              <div className="admin-panel-heading-actions">
+                <span>
+                  {filteredRegistrations.length} data
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadRegistrations()
+                  }
+                  disabled={loadingData}
+                >
+                  {loadingData
+                    ? "Memuat..."
+                    : "Muat Ulang"}
+                </button>
+              </div>
             </div>
 
             <div className="admin-toolbar">
               <input
                 type="search"
                 value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Cari nama, nomor, WhatsApp, atau wilayah"
+                onChange={(event) =>
+                  setSearch(event.target.value)
+                }
+                placeholder="Cari nama, nomor, WhatsApp, kandang, atau wilayah"
                 aria-label="Cari calon anggota"
               />
 
               <select
                 value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value)}
+                onChange={(event) =>
+                  setStatusFilter(event.target.value)
+                }
                 aria-label="Filter status pendaftaran"
               >
                 <option>Semua Status</option>
-                {statuses.map((status) => (
-                  <option key={status}>{status}</option>
+
+                {registrationStatuses.map((status) => (
+                  <option key={status}>
+                    {status}
+                  </option>
                 ))}
               </select>
             </div>
 
-            <div className="admin-table-shell">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Calon Anggota</th>
-                    <th>Wilayah</th>
-                    <th>Ternak</th>
-                    <th>Tanggal Daftar</th>
-                    <th>Status</th>
-                    <th />
-                  </tr>
-                </thead>
+            {dataError && (
+              <div className="admin-data-error">
+                <p>{dataError}</p>
 
-                <tbody>
-                  {filteredRegistrations.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <strong>{item.name}</strong>
-                        <small>{item.id}</small>
-                        <small>{item.whatsapp}</small>
-                      </td>
-                      <td>{item.domicile}</td>
-                      <td>{item.livestockType}</td>
-                      <td>{item.registeredAt}</td>
-                      <td>
-                        <span
-                          className="admin-status"
-                          data-status={item.status}
-                        >
-                          {item.status}
-                        </span>
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className="admin-detail-button"
-                          onClick={() => setSelectedRegistration(item)}
-                        >
-                          Detail
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                <button
+                  type="button"
+                  onClick={() =>
+                    void loadRegistrations()
+                  }
+                >
+                  Coba Lagi
+                </button>
+              </div>
+            )}
 
-                  {filteredRegistrations.length === 0 && (
+            {!dataError && loadingData && (
+              <div className="admin-empty-state">
+                <strong>
+                  Memuat data pendaftaran...
+                </strong>
+
+                <p>
+                  Dashboard sedang mengambil row dari
+                  Appwrite Cloud.
+                </p>
+              </div>
+            )}
+
+            {!dataError && !loadingData && (
+              <div className="admin-table-shell">
+                <table className="admin-table">
+                  <thead>
                     <tr>
-                      <td colSpan={6} className="admin-no-result">
-                        Data tidak ditemukan.
-                      </td>
+                      <th>Calon Anggota</th>
+                      <th>Wilayah</th>
+                      <th>Ternak</th>
+                      <th>Tanggal Daftar</th>
+                      <th>Status</th>
+                      <th />
                     </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+
+                  <tbody>
+                    {filteredRegistrations.map(
+                      (item) => (
+                        <tr key={item.$id}>
+                          <td>
+                            <strong>
+                              {item.farmer_name}
+                            </strong>
+
+                            <small>
+                              {item.registration_number}
+                            </small>
+
+                            <small>{item.whatsapp}</small>
+                          </td>
+
+                          <td>
+                            {getLocation(item)}
+                            <small>
+                              {item.village}
+                            </small>
+                          </td>
+
+                          <td>
+                            {getLivestockLabel(item)}
+                            <small>
+                              {item.total_population} ekor
+                            </small>
+                          </td>
+
+                          <td>
+                            {formatDate(
+                              item.registered_at
+                            )}
+                          </td>
+
+                          <td>
+                            <span
+                              className="admin-status"
+                              data-status={item.status}
+                            >
+                              {item.status}
+                            </span>
+                          </td>
+
+                          <td>
+                            <button
+                              type="button"
+                              className="admin-detail-button"
+                              onClick={() =>
+                                openRegistrationDetail(
+                                  item
+                                )
+                              }
+                            >
+                              Detail
+                            </button>
+                          </td>
+                        </tr>
+                      )
+                    )}
+
+                    {filteredRegistrations.length ===
+                      0 && (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="admin-no-result"
+                        >
+                          Belum ada data yang sesuai.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 
@@ -418,9 +703,10 @@ export default function AdminPage() {
             <div className="admin-panel-heading">
               <div>
                 <h2>Database Anggota</h2>
+
                 <p>
-                  Data anggota yang telah disetujui dan kolom kunjungan akan
-                  dikelola dari bagian ini.
+                  Untuk sementara menampilkan pendaftaran
+                  dengan status Disetujui.
                 </p>
               </div>
 
@@ -428,19 +714,72 @@ export default function AdminPage() {
                 <button type="button" disabled>
                   Download Excel
                 </button>
+
                 <button type="button" disabled>
                   Download PDF
                 </button>
               </div>
             </div>
 
-            <div className="admin-empty-state">
-              <strong>Belum ada data anggota aktif</strong>
-              <p>
-                Data pendaftar akan masuk ke daftar anggota setelah statusnya
-                diubah menjadi Disetujui.
-              </p>
-            </div>
+            {approvedRegistrations.length === 0 ? (
+              <div className="admin-empty-state">
+                <strong>
+                  Belum ada anggota disetujui
+                </strong>
+
+                <p>
+                  Ubah status calon anggota menjadi
+                  Disetujui setelah pemeriksaan selesai.
+                </p>
+              </div>
+            ) : (
+              <div className="admin-table-shell admin-member-table">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Nama Peternak</th>
+                      <th>Kandang/Kelompok</th>
+                      <th>Wilayah</th>
+                      <th>Populasi</th>
+                      <th>Disetujui</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {approvedRegistrations.map(
+                      (item) => (
+                        <tr key={item.$id}>
+                          <td>
+                            <strong>
+                              {item.farmer_name}
+                            </strong>
+                            <small>
+                              {item.whatsapp}
+                            </small>
+                          </td>
+
+                          <td>
+                            {item.farm_group_name}
+                          </td>
+
+                          <td>{getLocation(item)}</td>
+
+                          <td>
+                            {item.total_population} ekor
+                          </td>
+
+                          <td>
+                            {formatDate(
+                              item.approved_at
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -449,27 +788,34 @@ export default function AdminPage() {
         <div
           className="admin-modal-backdrop"
           role="presentation"
-          onClick={() => setSelectedRegistration(null)}
+          onClick={closeRegistrationDetail}
         >
           <section
             className="admin-modal"
             role="dialog"
             aria-modal="true"
             aria-labelledby="registration-detail-title"
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) =>
+              event.stopPropagation()
+            }
           >
             <div className="admin-modal-heading">
               <div>
-                <span>{selectedRegistration.id}</span>
+                <span>
+                  {
+                    selectedRegistration.registration_number
+                  }
+                </span>
+
                 <h2 id="registration-detail-title">
-                  {selectedRegistration.name}
+                  {selectedRegistration.farmer_name}
                 </h2>
               </div>
 
               <button
                 type="button"
                 aria-label="Tutup detail pendaftaran"
-                onClick={() => setSelectedRegistration(null)}
+                onClick={closeRegistrationDetail}
               >
                 ×
               </button>
@@ -478,57 +824,157 @@ export default function AdminPage() {
             <dl className="admin-detail-list">
               <div>
                 <dt>Nomor WhatsApp</dt>
-                <dd>{selectedRegistration.whatsapp}</dd>
+                <dd>
+                  {selectedRegistration.whatsapp}
+                </dd>
               </div>
+
               <div>
-                <dt>Domisili</dt>
-                <dd>{selectedRegistration.domicile}</dd>
+                <dt>Kelompok/Kandang</dt>
+                <dd>
+                  {selectedRegistration.farm_group_name}
+                </dd>
               </div>
+
+              <div className="admin-detail-wide">
+                <dt>Alamat Kandang</dt>
+                <dd>
+                  {selectedRegistration.farm_address}
+                </dd>
+              </div>
+
               <div>
-                <dt>Nama Peternakan</dt>
-                <dd>{selectedRegistration.farmName}</dd>
+                <dt>Desa/Kelurahan</dt>
+                <dd>
+                  {selectedRegistration.village}
+                </dd>
               </div>
+
               <div>
-                <dt>Jenis Ternak</dt>
-                <dd>{selectedRegistration.livestockType}</dd>
+                <dt>Kecamatan</dt>
+                <dd>
+                  {selectedRegistration.district}
+                </dd>
               </div>
+
+              <div>
+                <dt>Kabupaten/Kota</dt>
+                <dd>
+                  {selectedRegistration.regency}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Kambing Betina</dt>
+                <dd>
+                  {selectedRegistration.female_goats}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Kambing Jantan</dt>
+                <dd>
+                  {selectedRegistration.male_goats}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Domba Betina</dt>
+                <dd>
+                  {selectedRegistration.female_sheep}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Domba Jantan</dt>
+                <dd>
+                  {selectedRegistration.male_sheep}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Total Populasi</dt>
+                <dd>
+                  {selectedRegistration.total_population} ekor
+                </dd>
+              </div>
+
+              <div>
+                <dt>Jenis Pakan</dt>
+                <dd>
+                  {selectedRegistration.feed_type}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Luas Kandang</dt>
+                <dd>
+                  {selectedRegistration.farm_area_m2} m²
+                </dd>
+              </div>
+
               <div>
                 <dt>Tanggal Daftar</dt>
-                <dd>{selectedRegistration.registeredAt}</dd>
+                <dd>
+                  {formatDate(
+                    selectedRegistration.registered_at
+                  )}
+                </dd>
+              </div>
+
+              <div className="admin-detail-wide">
+                <dt>Catatan Pendaftar</dt>
+                <dd>
+                  {selectedRegistration.notes || "-"}
+                </dd>
               </div>
             </dl>
 
             <label className="admin-status-field">
               <span>Status pendaftaran</span>
+
               <select
-                value={selectedRegistration.status}
+                value={selectedStatus}
                 onChange={(event) =>
-                  updateStatus(
-                    selectedRegistration.id,
-                    event.target.value as RegistrationStatus
+                  setSelectedStatus(
+                    event.target
+                      .value as RegistrationStatus
                   )
                 }
               >
-                {statuses.map((status) => (
-                  <option key={status}>{status}</option>
+                {registrationStatuses.map((status) => (
+                  <option key={status}>
+                    {status}
+                  </option>
                 ))}
               </select>
             </label>
 
             <label className="admin-notes-field">
               <span>Catatan admin</span>
+
               <textarea
                 rows={4}
-                placeholder="Contoh: Foto identitas perlu dikirim ulang."
+                value={selectedAdminNotes}
+                onChange={(event) =>
+                  setSelectedAdminNotes(
+                    event.target.value
+                  )
+                }
+                placeholder="Contoh: Data sudah diperiksa atau perlu diperbaiki."
               />
             </label>
+
+            {modalError && (
+              <div className="admin-modal-error">
+                {modalError}
+              </div>
+            )}
 
             <div className="admin-modal-actions">
               <a
                 href={whatsappLink(
-                  selectedRegistration.whatsapp,
-                  selectedRegistration.name,
-                  selectedRegistration.id
+                  selectedRegistration
                 )}
                 target="_blank"
                 rel="noreferrer"
@@ -538,9 +984,14 @@ export default function AdminPage() {
 
               <button
                 type="button"
-                onClick={() => setSelectedRegistration(null)}
+                onClick={() =>
+                  void saveRegistrationChanges()
+                }
+                disabled={savingRegistration}
               >
-                Simpan &amp; Tutup
+                {savingRegistration
+                  ? "Menyimpan..."
+                  : "Simpan Perubahan"}
               </button>
             </div>
           </section>

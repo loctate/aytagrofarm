@@ -3337,3 +3337,98 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     flex-direction: column;
   }
 }
+
+/* V7.2 — live Appwrite dashboard */
+.admin-live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.admin-live-indicator > span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #48cf78;
+  box-shadow: 0 0 0 4px rgba(72, 207, 120, .12);
+}
+
+.admin-panel-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-panel-heading-actions > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.admin-data-error {
+  margin-top: 20px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border: 1px solid rgba(171, 63, 42, .2);
+  border-radius: 12px;
+  background: #fff0eb;
+  color: #913f2d;
+}
+
+.admin-data-error p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.admin-data-error button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #913f2d;
+  color: white;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.admin-detail-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-modal-error {
+  margin-top: 17px;
+  padding: 12px 14px;
+  border: 1px solid rgba(171, 63, 42, .2);
+  border-radius: 10px;
+  background: #fff0eb;
+  color: #913f2d;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.admin-modal-actions button:disabled,
+.admin-panel-heading button:disabled {
+  cursor: wait;
+  opacity: .6;
+}
+
+.admin-member-table {
+  margin-top: 24px;
+}
+
+@media (max-width: 650px) {
+  .admin-panel-heading-actions {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-data-error {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
