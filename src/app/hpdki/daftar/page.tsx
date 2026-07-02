@@ -109,10 +109,10 @@ export default function HpdkiRegistrationPage() {
           <div className="registration-form-shell">
             <div className="registration-form-heading">
               <span>Formulir Pendaftaran</span>
-              <h2>Data Awal Calon Anggota</h2>
+              <h2>Data Calon Anggota</h2>
               <p>
-                Struktur isian ini masih berupa rancangan awal dan akan
-                disesuaikan dengan persyaratan resmi DPC HPDKI Kabupaten Bogor.
+                Isi data sesuai dengan kondisi peternakan atau kandang
+                yang sedang dijalankan.
               </p>
             </div>
 

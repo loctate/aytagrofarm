@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  getCurrentAdmin,
+  logoutAdmin,
+} from "@/lib/appwrite/auth";
 
 type RegistrationStatus =
   | "Pendaftaran Baru"
@@ -77,6 +82,9 @@ const whatsappLink = (phone: string, name: string, id: string) => {
 };
 
 export default function AdminPage() {
+  const router = useRouter();
+
+  const [checkingSession, setCheckingSession] = useState(true);
   const [registrations, setRegistrations] =
     useState<Registration[]>(initialRegistrations);
   const [activeMenu, setActiveMenu] = useState("pendaftaran");
@@ -84,6 +92,26 @@ export default function AdminPage() {
   const [statusFilter, setStatusFilter] = useState("Semua Status");
   const [selectedRegistration, setSelectedRegistration] =
     useState<Registration | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    getCurrentAdmin()
+      .then(() => {
+        if (active) {
+          setCheckingSession(false);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          router.replace("/admin/login");
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [router]);
 
   const filteredRegistrations = useMemo(() => {
     const keyword = search.trim().toLowerCase();
@@ -121,6 +149,23 @@ export default function AdminPage() {
   const totalApproved = registrations.filter(
     (item) => item.status === "Disetujui"
   ).length;
+
+  const handleLogout = async () => {
+    try {
+      await logoutAdmin();
+    } finally {
+      router.replace("/admin/login");
+    }
+  };
+
+  if (checkingSession) {
+    return (
+      <main className="admin-auth-loading">
+        <span className="admin-auth-spinner" />
+        <p>Memeriksa akses dashboard...</p>
+      </main>
+    );
+  }
 
   return (
     <main className="admin-page">
@@ -194,9 +239,19 @@ export default function AdminPage() {
             </h1>
           </div>
 
-          <Link href="/" className="admin-view-site">
-            Lihat Website
-          </Link>
+          <div className="admin-topbar-actions">
+            <Link href="/" className="admin-view-site">
+              Lihat Website
+            </Link>
+
+            <button
+              className="admin-logout-button"
+              type="button"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         </header>
 
         {activeMenu === "ringkasan" && (
