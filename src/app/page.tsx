@@ -293,35 +293,75 @@ type HpdkiSlide = {
 
 const hpdkiSlides: HpdkiSlide[] = [
   {
-    label: "Mengenal HPDKI",
-    title: "Apa Itu HPDKI?",
-    text: "HPDKI adalah Himpunan Peternak Domba Kambing Indonesia, sebuah wadah bagi peternak dan pelaku usaha untuk membangun jaringan, bertukar informasi, serta mengembangkan peternakan domba dan kambing.",
-  },
-  {
-    label: "Arah Organisasi",
-    title: "Visi HPDKI",
-    text: "Mendorong kemajuan peternak domba dan kambing Indonesia melalui kebersamaan, peningkatan kapasitas, penguatan jaringan, dan pengembangan usaha yang berkelanjutan.",
-  },
-  {
-    label: "Peran Organisasi",
-    title: "Misi HPDKI",
-    text: "Membangun komunikasi antarpeternak, meningkatkan pengetahuan, memperluas jaringan usaha, dan mendorong kolaborasi dalam pengembangan peternakan.",
-  },
-  {
-    label: "Keanggotaan",
-    title: "Manfaat Menjadi Anggota",
-    text: "Keanggotaan membantu peternak untuk lebih terhubung dengan komunitas, kegiatan, informasi, dan peluang kolaborasi.",
+    label: "Tentang DPC HPDKI",
+    title: "Wadah Peternak Domba & Kambing Kabupaten Bogor",
+    text: "DPC HPDKI Kabupaten Bogor menjadi wadah bagi peternak domba dan kambing untuk meningkatkan pengetahuan, membangun jaringan, memperkuat usaha, dan berkembang bersama.",
     points: [
-      "Memperluas jaringan sesama peternak",
-      "Mendapatkan informasi kegiatan dan edukasi",
-      "Berbagi pengalaman serta pengetahuan",
-      "Membuka peluang kolaborasi usaha",
+      "Komunitas peternak domba dan kambing",
+      "Pengembangan pengetahuan peternakan",
+      "Penguatan jaringan dan kolaborasi",
+      "Dukungan bagi usaha peternakan rakyat",
     ],
   },
   {
-    label: "Pendaftaran",
+    label: "Visi Organisasi",
+    title: "Peternak Mandiri, Profesional, dan Berdaya Saing",
+    text: "Menjadi organisasi peternak domba kambing yang mandiri, profesional, dan berdaya saing tinggi dalam mewujudkan kesejahteraan peternak serta kemandirian pangan berbasis potensi lokal Kabupaten Bogor.",
+  },
+  {
+    label: "Pengembangan Peternak",
+    title: "Meningkatkan Kapasitas dan Kompetensi",
+    text: "Meningkatkan kemampuan peternak melalui pendidikan, pelatihan, dan pendampingan yang memanfaatkan teknologi serta inovasi peternakan.",
+    points: [
+      "Pendidikan peternakan",
+      "Pelatihan praktis",
+      "Pendampingan peternak",
+      "Teknologi dan inovasi",
+    ],
+  },
+  {
+    label: "Jejaring Strategis",
+    title: "Membangun Ekosistem Peternakan yang Kuat",
+    text: "Membangun kemitraan strategis bersama pemerintah, swasta, akademisi, dan komunitas untuk memperkuat ekosistem peternakan rakyat.",
+    points: [
+      "Kolaborasi dengan pemerintah",
+      "Kemitraan pelaku usaha",
+      "Dukungan akademisi",
+      "Jaringan komunitas peternak",
+    ],
+  },
+  {
+    label: "Kemandirian Ekonomi",
+    title: "Memperkuat Usaha Peternak",
+    text: "Mendorong kemandirian ekonomi peternak melalui akses pasar, pembiayaan, sarana produksi, dan kelembagaan usaha yang transparan serta berkelanjutan.",
+    points: [
+      "Memperluas akses pasar",
+      "Informasi peluang pembiayaan",
+      "Dukungan sarana produksi",
+      "Penguatan kelembagaan usaha",
+    ],
+  },
+  {
+    label: "Peternakan Berkelanjutan",
+    title: "Tumbuh Bersama Potensi Lokal",
+    text: "Mengembangkan sistem peternakan yang terintegrasi dan ramah lingkungan, sekaligus memperkuat solidaritas serta kekuatan kolektif peternak Kabupaten Bogor.",
+    points: [
+      "Ramah lingkungan",
+      "Berbasis potensi lokal",
+      "Solidaritas antarpeternak",
+      "Perlindungan usaha peternakan rakyat",
+    ],
+  },
+  {
+    label: "Pendaftaran Anggota",
     title: "Bergabung Menjadi Anggota HPDKI",
-    text: "AYT Agro Farm membantu proses pengumpulan dan pemeriksaan awal data calon anggota. Setelah formulir dikirim, admin akan memeriksa data dan menghubungi calon anggota melalui WhatsApp.",
+    text: "Bergabunglah dengan jaringan peternak domba dan kambing Kabupaten Bogor untuk memperoleh informasi, memperluas jaringan, dan membuka peluang kolaborasi.",
+    points: [
+      "Informasi kegiatan dan pelatihan",
+      "Jaringan sesama peternak",
+      "Peluang kolaborasi usaha",
+      "Penguatan komunitas peternakan",
+    ],
     showRegistration: true,
   },
 ];
@@ -356,7 +396,7 @@ export default function Home() {
       setActiveHpdkiSlide(
         (current) => (current + 1) % hpdkiSlides.length
       );
-    }, 6500);
+    }, 8000);
 
     return () => window.clearInterval(interval);
   }, []);
@@ -727,31 +767,14 @@ export default function Home() {
         aria-label="Informasi HPDKI"
       >
         <div className="container hpdki-shell">
-          <div className="hpdki-heading">
-            <span className="section-kicker">
-              <Icon name="users" size={16} />
-              Informasi tambahan
-            </span>
-
-            <h2>Mengenal HPDKI</h2>
-
-            <p>
-              Informasi singkat mengenai Himpunan Peternak Domba Kambing
-              Indonesia dan layanan pendaftaran anggota melalui AYT Agro Farm.
-            </p>
+          <div className="hpdki-heading hpdki-heading-compact">
+            <h2 className="hpdki-section-title">
+              HPDKI DPC Kab. Bogor
+            </h2>
           </div>
 
           <div className="hpdki-carousel" aria-live="polite">
-            <div className="hpdki-counter">
-              <span>
-                {String(activeHpdkiSlide + 1).padStart(2, "0")}
-              </span>
-              <small>
-                / {String(hpdkiSlides.length).padStart(2, "0")}
-              </small>
-            </div>
-
-            <article className="hpdki-slide">
+<article className="hpdki-slide" key={activeHpdkiSlide}>
               <span className="hpdki-label">{currentHpdkiSlide.label}</span>
               <h3>{currentHpdkiSlide.title}</h3>
               <p>{currentHpdkiSlide.text}</p>
