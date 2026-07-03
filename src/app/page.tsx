@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import PublicBrand from "@/components/PublicBrand";
 
 const whatsappNumber = "6287889124342";
 const instagramUrl = "https://www.instagram.com/ayt_farm/";
@@ -425,32 +426,7 @@ export default function Home() {
     <main>
       <header className="site-header">
         <div className="container nav-shell">
-          <a
-            className="brand"
-            href="#home"
-            aria-label="AYT Agro Farm beranda"
-            onClick={() => setMenuOpen(false)}
-          >
-            <span className="brand-logo">
-              <Image
-                src="/images/ayt-logo-2026.png"
-                alt="Logo CV. AYT Agro Farm"
-                width={58}
-                height={58}
-                priority
-              />
-            </span>
-
-            <span className="brand-text">
-              <strong>
-                AYT <em>AGRO FARM</em>
-              </strong>
-              <small className="brand-services">
-                <span>BREEDING, FATTENING, TRADING</span>
-                <span>HILIR, FROZEN, PENYEMBELIHAN</span>
-              </small>
-            </span>
-          </a>
+          <PublicBrand href="#home" />
 
           <nav
             id="primary-navigation"

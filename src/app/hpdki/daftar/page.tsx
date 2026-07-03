@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import RegistrationForm from "./RegistrationForm";
 
+import PublicBrand from "@/components/PublicBrand";
 const whatsappNumber = "6287889124342";
 
 const temporaryWhatsappUrl =
@@ -24,27 +25,7 @@ export default function HpdkiRegistrationPage() {
     <main className="registration-page">
       <header className="registration-header">
         <div className="container registration-nav">
-          <Link className="brand" href="/" aria-label="Kembali ke AYT Agro Farm">
-            <span className="brand-logo">
-              <Image
-                src="/images/ayt-logo-2026.png"
-                alt="Logo CV. AYT Agro Farm"
-                width={58}
-                height={58}
-                priority
-              />
-            </span>
-
-            <span className="brand-text">
-              <strong>
-                AYT <em>AGRO FARM</em>
-              </strong>
-              <small className="brand-services">
-                <span>BREEDING, FATTENING, TRADING</span>
-                <span>HILIR, FROZEN, PENYEMBELIHAN</span>
-              </small>
-            </span>
-          </Link>
+          <PublicBrand href="/" />
 
           <Link className="registration-back-link" href="/#hpdki">
             ← Kembali ke informasi HPDKI

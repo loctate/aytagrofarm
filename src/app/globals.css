@@ -3696,3 +3696,37 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     flex-basis: 50px;
   }
 }
+/* V7.9 — PAC HPDKI and AYT public header logos */
+.public-brand-logos {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+}
+
+.public-brand-logos .public-brand-logo,
+.public-brand-logos > img {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+.public-brand-logo-hpdki {
+  padding: 1px;
+}
+
+@media (max-width: 700px) {
+  .public-brand-logos {
+    gap: 5px;
+  }
+
+  .public-brand-logos .public-brand-logo,
+  .public-brand-logos > img {
+    width: 39px;
+    height: 39px;
+    flex-basis: 39px;
+  }
+}
