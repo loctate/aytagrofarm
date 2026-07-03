@@ -27,8 +27,8 @@ export default function HpdkiRegistrationPage() {
           <Link className="brand" href="/" aria-label="Kembali ke AYT Agro Farm">
             <span className="brand-logo">
               <Image
-                src="/images/ayt-logo-mark.png"
-                alt="Logo AYT Agro Farm"
+                src="/images/ayt-logo-2026.png"
+                alt="Logo CV. AYT Agro Farm"
                 width={58}
                 height={58}
                 priority

@@ -80,8 +80,8 @@ export default function AdminLoginPage() {
           aria-label="Kembali ke AYT Agro Farm"
         >
           <Image
-            src="/images/ayt-logo-mark.png"
-            alt="Logo AYT Agro Farm"
+            src="/images/ayt-logo-2026.png"
+            alt="Logo CV. AYT Agro Farm"
             width={64}
             height={64}
             priority

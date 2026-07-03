@@ -433,8 +433,8 @@ export default function Home() {
           >
             <span className="brand-logo">
               <Image
-                src="/images/ayt-logo-mark.png"
-                alt="Logo AYT Agro Farm"
+                src="/images/ayt-logo-2026.png"
+                alt="Logo CV. AYT Agro Farm"
                 width={58}
                 height={58}
                 priority
@@ -878,8 +878,8 @@ export default function Home() {
             <a className="brand footer-brand" href="#home">
               <span className="brand-logo">
                 <Image
-                  src="/images/ayt-logo-mark.png"
-                  alt="Logo AYT Agro Farm"
+                  src="/images/ayt-logo-2026.png"
+                  alt="Logo CV. AYT Agro Farm"
                   width={58}
                   height={58}
                 />

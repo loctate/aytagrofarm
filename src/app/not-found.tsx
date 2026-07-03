@@ -6,8 +6,8 @@ export default function NotFound() {
     <main className="not-found-page">
       <div className="not-found-card">
         <Image
-          src="/images/ayt-logo-mark.png"
-          alt="Logo AYT Agro Farm"
+          src="/images/ayt-logo-2026.png"
+          alt="Logo CV. AYT Agro Farm"
           width={92}
           height={92}
           priority

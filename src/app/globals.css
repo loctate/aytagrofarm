@@ -3664,3 +3664,35 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     line-height: 1.3;
   }
 }
+
+/* V7.8 — new official CV. AYT Agro Farm logo */
+.site-brand img,
+.admin-brand img,
+.admin-login-brand img {
+  object-fit: contain;
+  border-radius: 50%;
+  background: transparent;
+}
+/* Official CV. AYT Agro Farm logo */
+.brand > img,
+.site-brand > img,
+.admin-brand > img,
+.admin-login-brand > img {
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  object-fit: cover;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+@media (max-width: 700px) {
+  .brand > img,
+  .site-brand > img,
+  .admin-brand > img,
+  .admin-login-brand > img {
+    width: 50px;
+    height: 50px;
+    flex-basis: 50px;
+  }
+}

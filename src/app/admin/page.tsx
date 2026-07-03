@@ -319,8 +319,8 @@ export default function AdminPage() {
       <aside className="admin-sidebar">
         <Link className="admin-brand" href="/">
           <Image
-            src="/images/ayt-logo-mark.png"
-            alt="Logo AYT Agro Farm"
+            src="/images/ayt-logo-2026.png"
+            alt="Logo CV. AYT Agro Farm"
             width={48}
             height={48}
             priority
