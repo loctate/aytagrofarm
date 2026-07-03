@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import RegistrationForm from "./RegistrationForm";
 
 import PublicBrand from "@/components/PublicBrand";
+import SiteAddress from "@/components/SiteAddress";
 const whatsappNumber = "6287889124342";
 
 const temporaryWhatsappUrl =
@@ -114,7 +114,9 @@ export default function HpdkiRegistrationPage() {
             Layanan pendataan calon anggota PAC HPDKI KEC. DRAMAGA KAB. BOGOR
           </span>
         </div>
-      </footer>
+
+          <SiteAddress />
+        </footer>
     </main>
   );
 }

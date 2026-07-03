@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import PublicBrand from "@/components/PublicBrand";
 
+import SiteAddress from "@/components/SiteAddress";
 const whatsappNumber = "6287889124342";
 const instagramUrl = "https://www.instagram.com/ayt_farm/";
 const mapsUrl =
@@ -955,7 +956,9 @@ export default function Home() {
             Jl. Kp. Sukabakti RT.002/RW.006, Desa Sukawening, Dramaga, Bogor
           </span>
         </div>
-      </footer>
+
+          <SiteAddress />
+        </footer>
 
       <a
         className={`floating-whatsapp ${menuOpen ? "is-hidden" : ""}`}

@@ -3730,3 +3730,54 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     flex-basis: 39px;
   }
 }
+
+/* V8.1 — AYT Agro Farm full address */
+.site-address {
+  margin: 18px auto 0;
+  padding-top: 16px;
+  display: grid;
+  gap: 7px;
+  border-top: 1px solid rgba(255, 255, 255, 0.13);
+  color: inherit;
+  font-style: normal;
+}
+
+.site-address-label {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.site-address a {
+  max-width: 620px;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.87);
+  font-size: 10px;
+  line-height: 1.65;
+  transition:
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.site-address a:hover {
+  color: #ffffff;
+}
+
+.site-address a > span:first-child {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 700px) {
+  .site-address {
+    margin-top: 15px;
+    padding-top: 14px;
+  }
+
+  .site-address a {
+    font-size: 9px;
+  }
+}

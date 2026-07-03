@@ -144,7 +144,7 @@ const jsonLd = {
   areaServed: ["Bogor", "Jabodetabek"],
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Jl. Kp. Sukabakti RT.002/RW.006, Desa Sukawening",
+    streetAddress: "Jl. KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor, Jawa Barat 16680, Kec. Dramaga, Kabupaten Bogor, Jawa Barat 16680",
     addressLocality: "Dramaga",
     addressRegion: "Jawa Barat",
     addressCountry: "ID",
