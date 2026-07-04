@@ -212,3 +212,16 @@ export async function getHpdkiMemberByNumber(memberNumber: string) {
 
   return member ?? null;
 }
+
+export async function listHpdkiMembers(limit = 300) {
+  validateMembersWriteConfig();
+
+  const response = await tablesDB.listRows({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.membersTableId,
+    queries: [Query.orderAsc("member_number"), Query.limit(limit)],
+  });
+
+  return response.rows as unknown as PublicHpdkiMemberRecord[];
+}
+
