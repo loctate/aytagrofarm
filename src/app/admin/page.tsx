@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { getCurrentAdmin, logoutAdmin } from "@/lib/appwrite/auth";
+import AdminMembersPanel from "@/components/admin/AdminMembersPanel";
 import {
   listHpdkiRegistrations,
   registrationStatuses,
@@ -821,90 +822,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {activeMenu === "anggota" && (
-          <div className="admin-placeholder-panel">
-            <div className="admin-panel-heading">
-              <div>
-                <h2>Database Anggota</h2>
-
-                <p>
-                  Untuk sementara menampilkan pendaftaran
-                  dengan status Disetujui.
-                </p>
-              </div>
-
-              <div className="admin-export-actions">
-                <button type="button" disabled>
-                  Download Excel
-                </button>
-
-                <button type="button" disabled>
-                  Download PDF
-                </button>
-              </div>
-            </div>
-
-            {approvedRegistrations.length === 0 ? (
-              <div className="admin-empty-state">
-                <strong>
-                  Belum ada anggota disetujui
-                </strong>
-
-                <p>
-                  Ubah status calon anggota menjadi
-                  Disetujui setelah pemeriksaan selesai.
-                </p>
-              </div>
-            ) : (
-              <div className="admin-table-shell admin-member-table">
-                <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>Nama Peternak</th>
-                      <th>Kandang/Kelompok</th>
-                      <th>Wilayah</th>
-                      <th>Populasi</th>
-                      <th>Disetujui</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {approvedRegistrations.map(
-                      (item) => (
-                        <tr key={item.$id}>
-                          <td>
-                            <strong>
-                              {item.farmer_name}
-                            </strong>
-                            <small>
-                              {item.whatsapp}
-                            </small>
-                          </td>
-
-                          <td>
-                            {item.farm_group_name}
-                          </td>
-
-                          <td>{getLocation(item)}</td>
-
-                          <td>
-                            {item.total_population} ekor
-                          </td>
-
-                          <td>
-                            {formatDate(
-                              item.approved_at
-                            )}
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
+                {activeMenu === "anggota" && <AdminMembersPanel />}
       </section>
 
       {selectedRegistration && (
