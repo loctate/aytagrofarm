@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { QRCodeSVG } from "qrcode.react";
 
 import type { PublicHpdkiMemberRecord } from "@/lib/appwrite/members";
 
@@ -33,11 +34,6 @@ function getAddress(member: PublicHpdkiMemberRecord) {
     .join(", ");
 }
 
-function getQrCodeUrl(verificationUrl: string) {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=${encodeURIComponent(
-    verificationUrl,
-  )}`;
-}
 
 export default function HpdkiMemberCard({
   member,
@@ -69,8 +65,14 @@ export default function HpdkiMemberCard({
           <p>{organizationRegion}</p>
 
           <div className="kta-card-qr-box">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={getQrCodeUrl(verificationUrl)} alt="QR verifikasi KTA" />
+            <div className="kta-card-qr-code" aria-label="QR verifikasi KTA">
+              <QRCodeSVG
+                value={verificationUrl}
+                size={180}
+                level="M"
+                includeMargin
+              />
+            </div>
             <span>Pindai untuk verifikasi</span>
           </div>
         </div>

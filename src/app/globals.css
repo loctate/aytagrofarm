@@ -5672,3 +5672,26 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     font-size: clamp(1.35rem, 6vw, 2rem);
   }
 }
+
+
+/* KTA export refinement */
+.kta-card-qr-code {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0.35rem;
+  background: #fff;
+}
+
+.kta-card-qr-code svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.admin-kta-modal-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import HpdkiMemberCard from "@/components/admin/HpdkiMemberCard";
 
@@ -57,6 +57,9 @@ export default function AdminMembersPanel() {
   const [selectedKtaMember, setSelectedKtaMember] =
     useState<PublicHpdkiMemberRecord | null>(null);
   const [copiedKtaLink, setCopiedKtaLink] = useState("");
+  const [ktaExportLoading, setKtaExportLoading] =
+    useState<"" | "png" | "pdf">("");
+  const ktaPreviewRef = useRef<HTMLDivElement | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] =
@@ -188,6 +191,114 @@ export default function AdminMembersPanel() {
       setErrorMessage(
         "Link verifikasi belum berhasil disalin. Silakan buka verifikasi lalu salin URL dari browser.",
       );
+    }
+  };
+
+
+  const getKtaPreviewNode = () => {
+    const node = ktaPreviewRef.current;
+
+    if (!node) {
+      throw new Error("Preview KTA belum tersedia.");
+    }
+
+    return node;
+  };
+
+  const downloadKtaPng = async () => {
+    if (!selectedKtaMember) {
+      return;
+    }
+
+    setKtaExportLoading("png");
+    setErrorMessage("");
+
+    try {
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(getKtaPreviewNode(), {
+        backgroundColor: "#fffaf0",
+        cacheBust: true,
+        pixelRatio: 2,
+      });
+
+      const link = document.createElement("a");
+      link.download = `${selectedKtaMember.member_number}-kta.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error("Gagal download PNG KTA:", error);
+      setErrorMessage(
+        "PNG KTA belum berhasil dibuat. Pastikan preview KTA sudah tampil sempurna.",
+      );
+    } finally {
+      setKtaExportLoading("");
+    }
+  };
+
+  const loadImage = (dataUrl: string) =>
+    new Promise<HTMLImageElement>((resolve, reject) => {
+      const image = new window.Image();
+
+      image.onload = () => resolve(image);
+      image.onerror = () =>
+        reject(new Error("Gambar preview KTA gagal dimuat."));
+      image.src = dataUrl;
+    });
+
+  const downloadKtaPdf = async () => {
+    if (!selectedKtaMember) {
+      return;
+    }
+
+    setKtaExportLoading("pdf");
+    setErrorMessage("");
+
+    try {
+      const [{ toPng }, { jsPDF }] = await Promise.all([
+        import("html-to-image"),
+        import("jspdf"),
+      ]);
+
+      const dataUrl = await toPng(getKtaPreviewNode(), {
+        backgroundColor: "#fffaf0",
+        cacheBust: true,
+        pixelRatio: 2,
+      });
+
+      const image = await loadImage(dataUrl);
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4",
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      const maxWidth = pageWidth - margin * 2;
+      const maxHeight = pageHeight - margin * 2;
+      const imageRatio = image.naturalWidth / image.naturalHeight;
+
+      let renderWidth = maxWidth;
+      let renderHeight = renderWidth / imageRatio;
+
+      if (renderHeight > maxHeight) {
+        renderHeight = maxHeight;
+        renderWidth = renderHeight * imageRatio;
+      }
+
+      const x = (pageWidth - renderWidth) / 2;
+      const y = (pageHeight - renderHeight) / 2;
+
+      pdf.addImage(dataUrl, "PNG", x, y, renderWidth, renderHeight);
+      pdf.save(`${selectedKtaMember.member_number}-kta.pdf`);
+    } catch (error) {
+      console.error("Gagal download PDF KTA:", error);
+      setErrorMessage(
+        "PDF KTA belum berhasil dibuat. Pastikan preview KTA sudah tampil sempurna.",
+      );
+    } finally {
+      setKtaExportLoading("");
     }
   };
 
@@ -386,7 +497,7 @@ export default function AdminMembersPanel() {
               </button>
             </div>
 
-            <div className="admin-kta-preview-modal">
+            <div className="admin-kta-preview-modal" ref={ktaPreviewRef}>
               <HpdkiMemberCard
                 member={selectedKtaMember}
                 verificationUrl={getAbsoluteVerificationUrl(
@@ -413,6 +524,22 @@ export default function AdminMembersPanel() {
                 {copiedKtaLink === selectedKtaMember.member_number
                   ? "Link Tersalin"
                   : "Salin Link"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => void downloadKtaPng()}
+                disabled={Boolean(ktaExportLoading)}
+              >
+                {ktaExportLoading === "png" ? "Menyiapkan PNG..." : "Download PNG"}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => void downloadKtaPdf()}
+                disabled={Boolean(ktaExportLoading)}
+              >
+                {ktaExportLoading === "pdf" ? "Menyiapkan PDF..." : "Download PDF"}
               </button>
 
               <button type="button" onClick={() => window.print()}>
