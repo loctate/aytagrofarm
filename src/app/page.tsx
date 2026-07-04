@@ -306,7 +306,7 @@ const hpdkiSlides: HpdkiSlide[] = [
   {
     label: "Visi Organisasi",
     title: "Peternak Mandiri, Profesional, dan Berdaya Saing",
-    text: "Menjadi organisasi peternak domba kambing yang mandiri, profesional, dan berdaya saing tinggi dalam mewujudkan kesejahteraan peternak serta kemandirian pangan berbasis potensi lokal Kecamatan Dramaga, Kabupaten Bogor.",
+    text: "Menjadi organisasi peternak domba kambing yang mandiri, profesional, dan berdaya saing tinggi dalam mewujudkan kesejahteraan peternak serta kemandirian pangan berbasis potensi lokal Kecamatan KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor.",
   },
   {
     label: "Pengembangan Peternak",
