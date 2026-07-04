@@ -306,7 +306,7 @@ const hpdkiSlides: HpdkiSlide[] = [
   {
     label: "Visi Organisasi",
     title: "Peternak Mandiri, Profesional, dan Berdaya Saing",
-    text: "Menjadi organisasi peternak domba kambing yang mandiri, profesional, dan berdaya saing tinggi dalam mewujudkan kesejahteraan peternak serta kemandirian pangan berbasis potensi lokal Kecamatan KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor.",
+    text: "Menjadi organisasi peternak domba kambing yang mandiri, profesional, dan berdaya saing tinggi dalam mewujudkan kesejahteraan peternak serta kemandirian pangan berbasis potensi lokal Kecamatan KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor, Jawa Barat 16680.",
   },
   {
     label: "Pengembangan Peternak",
@@ -355,7 +355,7 @@ const hpdkiSlides: HpdkiSlide[] = [
   {
     label: "Pendaftaran Anggota Peternak",
     title: "Bergabung Menjadi Anggota Peternak PAC HPDKI",
-    text: "Bergabunglah dengan jaringan peternak domba dan kambing Kecamatan KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor untuk memperoleh informasi, memperluas jaringan, dan membuka peluang kolaborasi.",
+    text: "Bergabunglah dengan jaringan peternak domba dan kambing Kecamatan KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor, Jawa Barat 16680 untuk memperoleh informasi, memperluas jaringan, dan membuka peluang kolaborasi.",
     points: [
       "Informasi kegiatan dan pelatihan",
       "Jaringan sesama peternak",
@@ -938,7 +938,7 @@ export default function Home() {
 
             <a href={mapsUrl} target="_blank" rel="noreferrer">
               <Icon name="pin" size={17} />
-              KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor
+              KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor, Jawa Barat 16680
             </a>
 
             <a
@@ -963,7 +963,7 @@ export default function Home() {
           </span>
 
           <span>
-            Jl. Kp. Sukabakti RT.002/RW.006, Desa Sukawening, Dramaga, Bogor
+            KP Jl. Sukabakti, RT.002/RW.006, Sukawening, Kec. Dramaga, Kabupaten Bogor, Jawa Barat 16680
           </span>
         </div>
         </footer>
