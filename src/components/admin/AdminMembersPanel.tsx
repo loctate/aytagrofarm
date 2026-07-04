@@ -70,7 +70,11 @@ export default function AdminMembersPanel() {
   }, []);
 
   useEffect(() => {
-    void loadMembers();
+    const timeout = window.setTimeout(() => {
+      void loadMembers();
+    }, 0);
+
+    return () => window.clearTimeout(timeout);
   }, [loadMembers]);
 
   const filteredMembers = useMemo(() => {
