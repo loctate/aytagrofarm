@@ -22,6 +22,7 @@ import {
   registrationStatuses,
   updateHpdkiRegistration,
 } from "@/lib/appwrite/registrations";
+import { publishRegistrationAsMember } from "@/lib/appwrite/members";
 
 type AdminMenu =
   | "ringkasan"
@@ -129,6 +130,7 @@ export default function AdminPage() {
 
   const [savingRegistration, setSavingRegistration] =
     useState(false);
+  const [publishingMember, setPublishingMember] = useState(false);
 
   const [modalError, setModalError] = useState("");
 
@@ -228,7 +230,7 @@ export default function AdminPage() {
   };
 
   const closeRegistrationDetail = () => {
-    if (savingRegistration) {
+    if (savingRegistration || publishingMember) {
       return;
     }
 
@@ -286,6 +288,38 @@ export default function AdminPage() {
       );
     } finally {
       setSavingRegistration(false);
+    }
+  };
+
+
+  const publishSelectedRegistrationMember = async () => {
+    if (!selectedRegistration || selectedRegistration.member_data_number) {
+      return;
+    }
+
+    setPublishingMember(true);
+    setModalError("");
+
+    try {
+      const result = await publishRegistrationAsMember(selectedRegistration);
+
+      setRegistrations((current) =>
+        current.map((item) =>
+          item.$id === result.registration.$id ? result.registration : item,
+        ),
+      );
+
+      setSelectedRegistration(result.registration);
+      setSelectedStatus(result.registration.status);
+      setSelectedAdminNotes(result.registration.admin_notes ?? "");
+      setActiveMenu("anggota");
+    } catch (error) {
+      console.error("Gagal menerbitkan anggota:", error);
+      setModalError(
+        "Anggota belum berhasil diterbitkan. Pastikan table members, permission Create, kolom, dan unique index Appwrite sudah benar.",
+      );
+    } finally {
+      setPublishingMember(false);
     }
   };
 
@@ -940,7 +974,35 @@ export default function AdminPage() {
               </div>
             </dl>
 
-            <label className="admin-status-field">
+
+              <div className="admin-publish-member-panel">
+                {!selectedRegistration.member_data_number ? (
+                  <>
+                    <p>
+                      Data sudah valid? Terbitkan nomor anggota dan masukkan ke
+                      daftar anggota publik.
+                    </p>
+
+                    <button
+                      type="button"
+                      className="admin-publish-member-button admin-publish-member-button-wide"
+                      onClick={() => void publishSelectedRegistrationMember()}
+                      disabled={savingRegistration || publishingMember}
+                    >
+                      {publishingMember
+                        ? "Menerbitkan..."
+                        : "Setujui & Terbitkan Anggota"}
+                    </button>
+                  </>
+                ) : (
+                  <div className="admin-member-published-box">
+                    <span>Anggota sudah diterbitkan</span>
+                    <strong>{selectedRegistration.member_data_number}</strong>
+                  </div>
+                )}
+              </div>
+
+<label className="admin-status-field">
               <span>Status pendaftaran</span>
 
               <select
