@@ -4644,3 +4644,81 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
 .admin-member-published-box strong {
   font-size: 0.95rem;
 }
+
+
+/* Admin deactivate HPDKI member */
+.admin-deactivate-member-button {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.72rem 0.9rem;
+  border: 1px solid rgba(180, 71, 55, 0.28);
+  border-radius: 999px;
+  background: rgba(180, 71, 55, 0.08);
+  color: #8f2f23;
+  font-weight: 900;
+}
+
+.admin-deactivate-member-button:hover:not(:disabled) {
+  background: rgba(180, 71, 55, 0.13);
+}
+
+.admin-deactivate-member-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+
+/* Admin toggle HPDKI member status */
+.admin-member-status-label {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 0.35rem;
+  padding: 0.38rem 0.65rem;
+  border-radius: 999px;
+  font-style: normal;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.admin-member-status-label-active {
+  background: rgba(34, 122, 76, 0.12);
+  color: #1b6b44;
+}
+
+.admin-member-status-label-inactive {
+  background: rgba(180, 71, 55, 0.1);
+  color: #8f2f23;
+}
+
+.admin-member-status-toggle {
+  width: 100%;
+  margin-top: 0.85rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.admin-member-status-toggle-danger {
+  border: 1px solid rgba(180, 71, 55, 0.28);
+  background: rgba(180, 71, 55, 0.08);
+  color: #8f2f23;
+}
+
+.admin-member-status-toggle-danger:hover:not(:disabled) {
+  background: rgba(180, 71, 55, 0.13);
+}
+
+.admin-member-status-toggle-success {
+  border: 1px solid rgba(34, 122, 76, 0.26);
+  background: rgba(34, 122, 76, 0.1);
+  color: #1b6b44;
+}
+
+.admin-member-status-toggle-success:hover:not(:disabled) {
+  background: rgba(34, 122, 76, 0.15);
+}
+
+.admin-member-status-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}

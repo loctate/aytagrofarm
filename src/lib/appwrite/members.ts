@@ -158,3 +158,57 @@ export async function publishRegistrationAsMember(
     registration: updatedRegistration,
   };
 }
+
+export async function updateHpdkiMemberStatusByNumber(
+  memberNumber: string,
+  membershipStatus: HpdkiMembershipStatus,
+  isPublic: boolean,
+) {
+  validateMembersWriteConfig();
+
+  const response = await tablesDB.listRows({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.membersTableId,
+    queries: [Query.equal("member_number", memberNumber), Query.limit(1)],
+  });
+
+  const [member] = response.rows as unknown as PublicHpdkiMemberRecord[];
+
+  if (!member) {
+    throw new Error(`Anggota dengan nomor ${memberNumber} tidak ditemukan.`);
+  }
+
+  return tablesDB.updateRow({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.membersTableId,
+    rowId: member.$id,
+    data: {
+      membership_status: membershipStatus,
+      is_public: isPublic,
+    },
+  });
+}
+
+export async function deactivateHpdkiMember(memberNumber: string) {
+  return updateHpdkiMemberStatusByNumber(memberNumber, "inactive", false);
+}
+
+export async function reactivateHpdkiMember(memberNumber: string) {
+  return updateHpdkiMemberStatusByNumber(memberNumber, "active", true);
+}
+
+export async function getHpdkiMemberByNumber(memberNumber: string) {
+  if (!hasMembersConfig()) {
+    return null;
+  }
+
+  const response = await tablesDB.listRows({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.membersTableId,
+    queries: [Query.equal("member_number", memberNumber), Query.limit(1)],
+  });
+
+  const [member] = response.rows as unknown as PublicHpdkiMemberRecord[];
+
+  return member ?? null;
+}

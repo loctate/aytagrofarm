@@ -3,26 +3,23 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { getCurrentAdmin, logoutAdmin } from "@/lib/appwrite/auth";
 import {
-  getCurrentAdmin,
-  logoutAdmin,
-} from "@/lib/appwrite/auth";
-
-import {
-  type HpdkiRegistrationRecord,
-  type RegistrationStatus,
   listHpdkiRegistrations,
   registrationStatuses,
   updateHpdkiRegistration,
+  type HpdkiRegistrationRecord,
+  type RegistrationStatus,
 } from "@/lib/appwrite/registrations";
-import { publishRegistrationAsMember } from "@/lib/appwrite/members";
+import {
+  deactivateHpdkiMember,
+  getHpdkiMemberByNumber,
+  publishRegistrationAsMember,
+  reactivateHpdkiMember,
+  type HpdkiMembershipStatus,
+} from "@/lib/appwrite/members";
 
 type AdminMenu =
   | "ringkasan"
@@ -131,6 +128,9 @@ export default function AdminPage() {
   const [savingRegistration, setSavingRegistration] =
     useState(false);
   const [publishingMember, setPublishingMember] = useState(false);
+  const [memberActionLoading, setMemberActionLoading] = useState(false);
+  const [selectedMembershipStatus, setSelectedMembershipStatus] =
+    useState<HpdkiMembershipStatus | null>(null);
 
   const [modalError, setModalError] = useState("");
 
@@ -229,8 +229,46 @@ export default function AdminPage() {
     setModalError("");
   };
 
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSelectedMembershipStatus() {
+      if (!selectedRegistration?.member_data_number) {
+        setSelectedMembershipStatus(null);
+        return;
+      }
+
+      try {
+        const member = await getHpdkiMemberByNumber(
+          selectedRegistration.member_data_number,
+        );
+
+        if (!active) {
+          return;
+        }
+
+        setSelectedMembershipStatus(member?.membership_status ?? null);
+      } catch (error) {
+        console.error("Gagal memuat status anggota:", error);
+
+        if (active) {
+          setSelectedMembershipStatus(null);
+        }
+      }
+    }
+
+    void loadSelectedMembershipStatus();
+
+    return () => {
+      active = false;
+    };
+  }, [selectedRegistration?.member_data_number]);
+
+  const selectedMemberIsActive = selectedMembershipStatus === "active";
+
   const closeRegistrationDetail = () => {
-    if (savingRegistration || publishingMember) {
+    if (savingRegistration || publishingMember || memberActionLoading) {
       return;
     }
 
@@ -320,6 +358,47 @@ export default function AdminPage() {
       );
     } finally {
       setPublishingMember(false);
+    }
+  };
+
+
+  const toggleSelectedMemberStatus = async () => {
+    if (!selectedRegistration?.member_data_number || !selectedMembershipStatus) {
+      return;
+    }
+
+    const nextStatus =
+      selectedMembershipStatus === "active" ? "inactive" : "active";
+
+    const confirmed = window.confirm(
+      nextStatus === "active"
+        ? `Aktifkan kembali anggota ${selectedRegistration.member_data_number}? Anggota akan tampil lagi di halaman publik.`
+        : `Nonaktifkan anggota ${selectedRegistration.member_data_number}? Anggota tidak akan tampil lagi di halaman publik.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setMemberActionLoading(true);
+    setModalError("");
+
+    try {
+      if (nextStatus === "active") {
+        await reactivateHpdkiMember(selectedRegistration.member_data_number);
+      } else {
+        await deactivateHpdkiMember(selectedRegistration.member_data_number);
+      }
+
+      setSelectedMembershipStatus(nextStatus);
+      setActiveMenu("anggota");
+    } catch (error) {
+      console.error("Gagal mengubah status anggota:", error);
+      setModalError(
+        "Status anggota belum berhasil diubah. Pastikan permission Update table members sudah aktif untuk Users.",
+      );
+    } finally {
+      setMemberActionLoading(false);
     }
   };
 
@@ -998,6 +1077,39 @@ export default function AdminPage() {
                   <div className="admin-member-published-box">
                     <span>Anggota sudah diterbitkan</span>
                     <strong>{selectedRegistration.member_data_number}</strong>
+
+                    <em
+                      className={
+                        selectedMemberIsActive
+                          ? "admin-member-status-label admin-member-status-label-active"
+                          : "admin-member-status-label admin-member-status-label-inactive"
+                      }
+                    >
+                      Status:{" "}
+                      {selectedMemberIsActive ? "Aktif" : "Nonaktif"}
+                    </em>
+
+                    <button
+                      type="button"
+                      className={
+                        selectedMemberIsActive
+                          ? "admin-member-status-toggle admin-member-status-toggle-danger"
+                          : "admin-member-status-toggle admin-member-status-toggle-success"
+                      }
+                      onClick={() => void toggleSelectedMemberStatus()}
+                      disabled={
+                        savingRegistration ||
+                        publishingMember ||
+                        memberActionLoading ||
+                        !selectedMembershipStatus
+                      }
+                    >
+                      {memberActionLoading
+                        ? "Memproses..."
+                        : selectedMemberIsActive
+                          ? "Nonaktifkan Anggota"
+                          : "Aktifkan Kembali"}
+                    </button>
                   </div>
                 )}
               </div>
