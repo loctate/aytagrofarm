@@ -57,9 +57,9 @@ export default function HpdkiProfilePage() {
                 Daftar Menjadi Anggota
               </Link>
 
-              <a href="#anggota" className="secondary-button">
-                Lihat Informasi Anggota
-              </a>
+              <Link href="/hpdki/anggota" className="secondary-button">
+                Lihat Daftar Anggota
+              </Link>
             </div>
           </div>
 

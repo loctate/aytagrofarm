@@ -4,6 +4,7 @@ import RegistrationForm from "./RegistrationForm";
 
 import PublicBrand from "@/components/PublicBrand";
 import SiteAddress from "@/components/SiteAddress";
+import PublicMembersList from "@/components/hpdki/PublicMembersList";
 const whatsappNumber = "6287889124342";
 
 const temporaryWhatsappUrl =
@@ -101,7 +102,9 @@ export default function HpdkiRegistrationPage() {
             </div>
 
             <RegistrationForm />
-          </div>
+
+          <PublicMembersList variant="compact" limit={6} />
+</div>
         </div>
       </section>
 
