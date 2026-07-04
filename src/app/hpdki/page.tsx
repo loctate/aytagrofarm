@@ -1,225 +1,251 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-const memberNumberExample = "HPDKI-PAC-DRAMAGA-2026-001";
+import PublicMembersList from "@/components/hpdki/PublicMembersList";
 
-const programs = [
+export const metadata: Metadata = {
+  title: "PAC HPDKI Kecamatan Dramaga Kabupaten Bogor",
+  description:
+    "Halaman resmi PAC HPDKI Kecamatan Dramaga Kabupaten Bogor untuk profil organisasi, pendaftaran anggota, kegiatan, daftar anggota terverifikasi, dan verifikasi KTA.",
+  alternates: {
+    canonical: "/hpdki",
+  },
+};
+
+const navItems = [
   {
-    title: "Pendataan & Keanggotaan",
-    text: "Membangun data anggota peternak domba dan kambing Kecamatan Dramaga secara lebih rapi, terverifikasi, dan mudah dikelola.",
+    title: "Profil",
+    description: "Tentang PAC HPDKI Dramaga",
+    href: "#profil",
+    icon: "▤",
   },
   {
-    title: "Peningkatan Kapasitas Peternak",
-    text: "Mendorong pelatihan, pendampingan, dan berbagi pengetahuan praktis seputar breeding, fattening, pakan, kandang, dan kesehatan ternak.",
+    title: "Anggota",
+    description: "Daftar anggota terverifikasi",
+    href: "/hpdki/anggota",
+    icon: "♙",
   },
   {
-    title: "Kolaborasi & Kemitraan",
-    text: "Membuka ruang kerja sama dengan pemerintah, pelaku usaha, akademisi, komunitas, dan pihak lain yang mendukung kemajuan peternak.",
+    title: "Pendaftaran",
+    description: "Formulir calon anggota",
+    href: "/hpdki/daftar",
+    icon: "☑",
   },
   {
-    title: "Penguatan Usaha Peternakan",
-    text: "Mendukung peternak dalam akses informasi pasar, pengembangan usaha, dan penguatan jejaring antaranggota.",
+    title: "Verifikasi KTA",
+    description: "Cek nomor anggota",
+    href: "/hpdki/verifikasi",
+    icon: "▣",
+  },
+  {
+    title: "Kegiatan",
+    description: "Dokumentasi kegiatan",
+    href: "/hpdki/kegiatan",
+    icon: "▦",
   },
 ];
 
-const profileStats = [
-  { value: "PAC", label: "Tingkat Organisasi" },
-  { value: "Dramaga", label: "Wilayah Kecamatan" },
-  { value: "Bogor", label: "Kabupaten" },
-  { value: "2026", label: "Format Penomoran" },
+const focusItems = [
+  {
+    title: "Pendataan Anggota",
+    description:
+      "Merapikan data peternak domba dan kambing agar lebih mudah dikelola, diverifikasi, dan diterbitkan KTA.",
+  },
+  {
+    title: "Kebersamaan Peternak",
+    description:
+      "Menjadi wadah saling mengenal, saling membantu, dan berbagi pengalaman antarpeternak.",
+  },
+  {
+    title: "Kegiatan Organisasi",
+    description:
+      "Menyiapkan ruang dokumentasi untuk kegiatan PAC HPDKI Dramaga yang sudah terlaksana.",
+  },
 ];
 
-export default function HpdkiProfilePage() {
+const activityItems = [
+  "Pendataan anggota peternak",
+  "Silaturahmi dan koordinasi pengurus",
+  "Edukasi pakan, kandang, dan kesehatan ternak",
+];
+
+export default function HpdkiPage() {
   return (
-    <main className="hpdki-profile-page">
-      <section className="hpdki-profile-hero">
-        <div className="container hpdki-profile-hero-grid">
-          <div className="hpdki-profile-hero-content">
-            <Link href="/" className="hpdki-profile-back-link">
-              ← Kembali ke AYT Agro Farm
-            </Link>
+    <main className="hpdki-locked-page">
+      <section className="hpdki-locked-hero">
+        <div className="container">
+          <Link href="/" className="hpdki-locked-back">
+            ← Kembali ke AYT Agro Farm
+          </Link>
 
-            <p className="eyebrow">Halaman Organisasi</p>
+          <div className="hpdki-locked-hero-card">
+            <Image
+              src="/images/hpdki-pac-logo.png"
+              alt="Logo HPDKI PAC Dramaga"
+              width={220}
+              height={220}
+              priority
+              className="hpdki-locked-logo"
+            />
+
+            <p className="hpdki-locked-badge">
+              PAC HPDKI Kecamatan Dramaga
+            </p>
+
+            <div className="hpdki-locked-divider" aria-hidden="true">
+              <span />
+            </div>
 
             <h1>
-              PAC HPDKI Kecamatan Dramaga
-              <span>Kabupaten Bogor</span>
+              Himpunan Peternak Domba Kambing Indonesia
+              <span>tingkat Pengurus Anak Cabang Kecamatan Dramaga.</span>
             </h1>
 
-            <p className="hpdki-profile-lead">
-              Wadah organisasi peternak domba dan kambing di Kecamatan Dramaga
-              untuk memperkuat pendataan, pengetahuan, jejaring, dan kolaborasi
-              peternakan rakyat.
+            <p className="hpdki-locked-description">
+              Halaman resmi PAC HPDKI Kecamatan Dramaga, Kabupaten Bogor untuk
+              profil organisasi, pendaftaran anggota, kegiatan, daftar anggota
+              terverifikasi, dan verifikasi KTA.
             </p>
 
-            <div className="hpdki-profile-actions">
-              <Link href="/hpdki/daftar" className="primary-button">
-                Daftar Menjadi Anggota
-              </Link>
+            <nav className="hpdki-locked-nav" aria-label="Menu HPDKI">
+              {navItems.map((item) => (
+                <Link key={item.title} href={item.href}>
+                  <span className="hpdki-locked-nav-icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
 
-              <Link href="/hpdki/anggota" className="secondary-button">
-                Lihat Daftar Anggota
-              </Link>
+                  <strong>{item.title}</strong>
+                  <small>{item.description}</small>
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <section id="profil" className="hpdki-locked-section">
+        <div className="container hpdki-locked-two-col">
+          <div className="hpdki-locked-section-copy">
+            <p className="hpdki-locked-small-badge">Profil Singkat</p>
+            <h2>Pendataan yang rapi, komunitas yang saling menguatkan.</h2>
+          </div>
+
+          <div className="hpdki-locked-panel">
+            <p>
+              PAC HPDKI Kecamatan Dramaga menjadi wadah bagi peternak domba dan
+              kambing untuk saling mengenal, bertukar informasi, memperkuat
+              pendataan anggota, dan mendukung kegiatan yang bermanfaat bagi
+              peternak lokal.
+            </p>
+
+            <div className="hpdki-locked-stats">
+              <div>
+                <strong>PAC</strong>
+                <span>Tingkat Organisasi</span>
+              </div>
+
+              <div>
+                <strong>Dramaga</strong>
+                <span>Wilayah Kecamatan</span>
+              </div>
+
+              <div>
+                <strong>Bogor</strong>
+                <span>Kabupaten</span>
+              </div>
             </div>
           </div>
-
-          <aside className="hpdki-profile-card" aria-label="Identitas HPDKI PAC Dramaga">
-            <div className="hpdki-profile-logo-wrap">
-              <Image
-                src="/images/hpdki-pac-logo.png"
-                alt="Logo Himpunan Peternak Domba Kambing Indonesia PAC Dramaga"
-                width={220}
-                height={220}
-                priority
-                className="hpdki-profile-logo"
-              />
-            </div>
-
-            <h2>HPDKI PAC Dramaga</h2>
-            <p>
-              Himpunan Peternak Domba Kambing Indonesia tingkat Pengurus Anak
-              Cabang Kecamatan Dramaga, Kabupaten Bogor.
-            </p>
-
-            <div className="hpdki-profile-number">
-              <span>Format Nomor Anggota</span>
-              <strong>{memberNumberExample}</strong>
-            </div>
-          </aside>
         </div>
       </section>
 
-      <section className="hpdki-profile-nav-section" aria-label="Navigasi halaman HPDKI">
-        <div className="container hpdki-profile-nav">
-          <a href="#profil">Profil</a>
-          <a href="#visi">Visi & Misi</a>
-          <a href="#program">Program</a>
-          <a href="#anggota">Anggota</a>
-          <a href="#pendaftaran">Pendaftaran</a>
-        </div>
-      </section>
-
-      <section id="profil" className="hpdki-profile-section">
-        <div className="container hpdki-profile-two-column">
-          <div>
-            <p className="eyebrow">Profil Organisasi</p>
-            <h2>PAC HPDKI Kecamatan Dramaga</h2>
-          </div>
-
-          <div className="hpdki-profile-copy">
-            <p>
-              PAC HPDKI Kecamatan Dramaga Kabupaten Bogor menjadi wadah bagi
-              peternak domba dan kambing untuk meningkatkan pengetahuan,
-              membangun jaringan, memperkuat usaha, dan berkembang bersama.
-            </p>
-
-            <p>
-              Halaman ini disiapkan sebagai pusat informasi organisasi,
-              pendaftaran anggota, daftar anggota terverifikasi, dan nantinya
-              menjadi pintu verifikasi Kartu Tanda Anggota.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="hpdki-profile-stats-section">
-        <div className="container hpdki-profile-stats">
-          {profileStats.map((item) => (
-            <div className="hpdki-profile-stat" key={item.label}>
-              <strong>{item.value}</strong>
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section id="visi" className="hpdki-profile-section hpdki-profile-section-muted">
-        <div className="container hpdki-profile-two-column">
-          <div>
-            <p className="eyebrow">Visi Organisasi</p>
-            <h2>Peternak Mandiri, Profesional, dan Berdaya Saing</h2>
-          </div>
-
-          <div className="hpdki-profile-copy">
-            <p>
-              Menjadi organisasi peternak domba kambing yang mandiri,
-              profesional, dan berdaya saing tinggi dalam mewujudkan
-              kesejahteraan peternak serta kemandirian pangan berbasis potensi
-              lokal Kecamatan Dramaga, Kabupaten Bogor.
-            </p>
-
-            <ul className="hpdki-profile-list">
-              <li>Meningkatkan kapasitas dan kompetensi peternak.</li>
-              <li>Membangun jejaring strategis dan kolaborasi usaha.</li>
-              <li>Mendorong kemandirian ekonomi peternak.</li>
-              <li>Mengembangkan peternakan yang berkelanjutan.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section id="program" className="hpdki-profile-section">
+      <section className="hpdki-locked-section hpdki-locked-soft-section">
         <div className="container">
-          <div className="hpdki-profile-section-heading">
-            <p className="eyebrow">Program & Fokus</p>
-            <h2>Ruang Kerja PAC HPDKI Dramaga</h2>
-            <p>
-              Program organisasi diarahkan untuk memperkuat data anggota,
-              pengetahuan peternak, kemitraan, dan pengembangan usaha.
-            </p>
+          <div className="hpdki-locked-section-heading">
+            <p className="hpdki-locked-small-badge">Fokus Organisasi</p>
+            <h2>Sederhana, rapi, dan bermanfaat.</h2>
           </div>
 
-          <div className="hpdki-profile-program-grid">
-            {programs.map((program) => (
-              <article className="hpdki-profile-program-card" key={program.title}>
-                <h3>{program.title}</h3>
-                <p>{program.text}</p>
+          <div className="hpdki-locked-focus-grid">
+            {focusItems.map((item, index) => (
+              <article key={item.title} className="hpdki-locked-focus-card">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section id="anggota" className="hpdki-profile-section hpdki-profile-section-muted">
-        <div className="container hpdki-profile-two-column">
-          <div>
-            <p className="eyebrow">Keanggotaan</p>
-            <h2>Daftar Anggota Terverifikasi</h2>
-          </div>
-
-          <div className="hpdki-profile-copy">
+      <section className="hpdki-locked-section">
+        <div className="container hpdki-locked-two-col">
+          <div className="hpdki-locked-section-copy">
+            <p className="hpdki-locked-small-badge">Kegiatan HPDKI</p>
+            <h2>Dokumentasi kegiatan PAC HPDKI Dramaga.</h2>
             <p>
-              Daftar anggota publik akan menampilkan anggota yang sudah
-              diverifikasi oleh admin. Data yang ditampilkan hanya data umum,
-              seperti nomor anggota, nama, wilayah, dan status keanggotaan.
+              Bagian ini disiapkan untuk menampilkan kegiatan yang sudah
+              terlaksana, seperti pendataan anggota, pertemuan, edukasi, dan
+              kegiatan lapangan.
             </p>
 
-            <div className="hpdki-profile-member-preview">
-              <span>Contoh Nomor Anggota</span>
-              <strong>{memberNumberExample}</strong>
-              <p>
-                Nomor anggota diterbitkan setelah data pendaftaran divalidasi
-                dan disetujui oleh admin.
-              </p>
-            </div>
+            <Link href="/hpdki/kegiatan" className="hpdki-locked-secondary">
+              Lihat Kegiatan
+            </Link>
+          </div>
+
+          <div className="hpdki-locked-panel">
+            <h3>Coming Soon</h3>
+            <p>Konten kegiatan bisa ditambahkan bertahap dari dashboard admin.</p>
+
+            <ul className="hpdki-locked-list">
+              {activityItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      <section id="pendaftaran" className="hpdki-profile-cta">
-        <div className="container hpdki-profile-cta-card">
-          <div>
-            <p className="eyebrow">Pendaftaran Anggota</p>
-            <h2>Bergabung bersama PAC HPDKI Kecamatan Dramaga</h2>
-            <p>
-              Isi formulir pendaftaran untuk masuk ke proses pendataan dan
-              validasi calon anggota peternak.
-            </p>
+      <section className="hpdki-locked-section hpdki-locked-members-section">
+        <div className="container">
+          <div className="hpdki-locked-members-head">
+            <div className="hpdki-locked-section-copy">
+              <p className="hpdki-locked-small-badge">Anggota Terverifikasi</p>
+              <h2>Daftar anggota aktif PAC HPDKI Dramaga.</h2>
+              <p>
+                Data publik hanya menampilkan informasi umum anggota yang sudah
+                divalidasi admin.
+              </p>
+            </div>
+
+            <Link href="/hpdki/anggota" className="hpdki-locked-secondary">
+              Lihat Semua Anggota
+            </Link>
           </div>
 
-          <Link href="/hpdki/daftar" className="primary-button">
-            Buka Formulir Pendaftaran
-          </Link>
+          <div className="hpdki-locked-members-card">
+            <PublicMembersList variant="compact" limit={6} />
+          </div>
+        </div>
+      </section>
+
+      <section className="hpdki-locked-cta-section">
+        <div className="container">
+          <div className="hpdki-locked-cta">
+            <div>
+              <p className="hpdki-locked-small-badge">Pendaftaran Anggota</p>
+              <h2>Siap bergabung bersama PAC HPDKI Dramaga?</h2>
+              <p>
+                Isi formulir pendaftaran untuk masuk ke proses pendataan dan
+                validasi calon anggota.
+              </p>
+            </div>
+
+            <Link href="/hpdki/daftar" className="hpdki-locked-primary">
+              Buka Formulir Pendaftaran
+            </Link>
+          </div>
         </div>
       </section>
     </main>
