@@ -442,7 +442,7 @@ export default function Home() {
             </a>
             <a
               className="nav-hpdki-link"
-              href="#hpdki"
+              href="/hpdki"
               onClick={() => setMenuOpen(false)}
             >
               <span>PAC HPDKI</span>
@@ -914,7 +914,7 @@ export default function Home() {
             <h3>Menu</h3>
             <a href="#tentang">Tentang</a>
             <a href="#pengetahuan">Pengetahuan</a>
-            <a href="#hpdki">
+            <a href="/hpdki">
               PAC HPDKI KECAMATAN DRAMAGA
             </a>
             <a href="#galeri">Galeri</a>
