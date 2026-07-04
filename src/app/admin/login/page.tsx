@@ -86,6 +86,16 @@ export default function AdminLoginPage() {
             height={64}
             priority
           />
+          <span className="admin-hpdki-brand-logo" aria-label="Logo HPDKI PAC Dramaga">
+            <Image
+              src="/images/hpdki-pac-logo.png"
+              alt="Logo Himpunan Peternak Domba Kambing Indonesia PAC Dramaga"
+              width={96}
+              height={96}
+              sizes="(max-width: 640px) 44px, 56px"
+              className="admin-hpdki-brand-logo-image"
+            />
+          </span>
 
           <span>
             <strong>AYT Agro Farm</strong>
