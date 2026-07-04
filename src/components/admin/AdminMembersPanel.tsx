@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import HpdkiMemberCard from "@/components/admin/HpdkiMemberCard";
+
 import {
   deactivateHpdkiMember,
   listHpdkiMembers,
@@ -37,6 +39,11 @@ function formatDate(value: string | null) {
   }).format(date);
 }
 
+
+function getVerificationPath(memberNumber: string) {
+  return `/hpdki/verifikasi?nomor=${encodeURIComponent(memberNumber)}`;
+}
+
 function getLocation(member: PublicHpdkiMemberRecord) {
   return [member.village, member.district, member.regency]
     .filter(Boolean)
@@ -47,6 +54,9 @@ export default function AdminMembersPanel() {
   const [members, setMembers] = useState<PublicHpdkiMemberRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoadingNumber, setActionLoadingNumber] = useState("");
+  const [selectedKtaMember, setSelectedKtaMember] =
+    useState<PublicHpdkiMemberRecord | null>(null);
+  const [copiedKtaLink, setCopiedKtaLink] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] =
@@ -149,6 +159,35 @@ export default function AdminMembersPanel() {
       );
     } finally {
       setActionLoadingNumber("");
+    }
+  };
+
+
+  const getAbsoluteVerificationUrl = (memberNumber: string) => {
+    const origin =
+      typeof window !== "undefined" ? window.location.origin : "";
+
+    return `${origin}${getVerificationPath(memberNumber)}`;
+  };
+
+  const copyKtaVerificationLink = async (memberNumber: string) => {
+    try {
+      await navigator.clipboard.writeText(
+        getAbsoluteVerificationUrl(memberNumber),
+      );
+
+      setCopiedKtaLink(memberNumber);
+
+      window.setTimeout(() => {
+        setCopiedKtaLink((current) =>
+          current === memberNumber ? "" : current,
+        );
+      }, 1800);
+    } catch (error) {
+      console.error("Gagal menyalin link verifikasi KTA:", error);
+      setErrorMessage(
+        "Link verifikasi belum berhasil disalin. Silakan buka verifikasi lalu salin URL dari browser.",
+      );
     }
   };
 
@@ -300,14 +339,24 @@ export default function AdminMembersPanel() {
                     </td>
 
                     <td>
-                      <button
-                        type="button"
-                        className="admin-member-kta-button"
-                        disabled
-                        title="Fitur KTA akan dikerjakan pada tahap berikutnya."
-                      >
-                        KTA
-                      </button>
+                      <div className="admin-member-kta-actions">
+                        <button
+                          type="button"
+                          className="admin-member-kta-link"
+                          onClick={() => setSelectedKtaMember(member)}
+                        >
+                          Preview KTA
+                        </button>
+
+                        <a
+                          href={getVerificationPath(member.member_number)}
+                          className="admin-member-kta-copy"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Verifikasi
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -316,6 +365,64 @@ export default function AdminMembersPanel() {
           </table>
         </div>
       )}
+
+      {selectedKtaMember && (
+        <div
+          className="admin-kta-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Preview KTA ${selectedKtaMember.member_number}`}
+        >
+          <div className="admin-kta-modal">
+            <div className="admin-kta-modal-header">
+              <div>
+                <p className="eyebrow">Preview KTA</p>
+                <h3>{selectedKtaMember.farmer_name}</h3>
+                <span>{selectedKtaMember.member_number}</span>
+              </div>
+
+              <button type="button" onClick={() => setSelectedKtaMember(null)}>
+                Tutup
+              </button>
+            </div>
+
+            <div className="admin-kta-preview-modal">
+              <HpdkiMemberCard
+                member={selectedKtaMember}
+                verificationUrl={getAbsoluteVerificationUrl(
+                  selectedKtaMember.member_number,
+                )}
+              />
+            </div>
+
+            <div className="admin-kta-modal-actions">
+              <a
+                href={getVerificationPath(selectedKtaMember.member_number)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Buka Verifikasi
+              </a>
+
+              <button
+                type="button"
+                onClick={() =>
+                  void copyKtaVerificationLink(selectedKtaMember.member_number)
+                }
+              >
+                {copiedKtaLink === selectedKtaMember.member_number
+                  ? "Link Tersalin"
+                  : "Salin Link"}
+              </button>
+
+              <button type="button" onClick={() => window.print()}>
+                Cetak
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 }
