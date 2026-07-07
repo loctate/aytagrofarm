@@ -239,7 +239,7 @@ const benefits = [
 
 const knowledgePosts = [
   {
-    image: "/images/gallery-ternak.jpg",
+    image: "/images/ayt-home-logo-generated.png",
     category: "Tips Peternakan",
     title: "Tips Memilih Kambing dan Domba yang Sehat",
     summary:
@@ -253,7 +253,7 @@ const knowledgePosts = [
       "Pemilihan bakalan yang tepat membantu proses penggemukan berjalan lebih terarah dan sesuai target usaha.",
   },
   {
-    image: "/images/gallery-kandang.jpg",
+    image: "/images/ayt-home-logo-generated.png",
     category: "Perawatan",
     title: "Menjaga Kandang Tetap Bersih dan Nyaman",
     summary:
@@ -273,7 +273,7 @@ const galleryItems = [
     text: "Lingkungan peternakan menjadi bagian penting dalam aktivitas dan pemeliharaan ternak.",
   },
   {
-    src: "/images/gallery-kandang.jpg",
+    src: "/images/gallery-ternak.jpg",
     title: "Kandang & Perawatan",
     text: "Kandang digunakan sebagai pusat perawatan, pemantauan, dan aktivitas ternak.",
   },
@@ -566,7 +566,7 @@ export default function Home() {
           <div className="hero-media">
             <div className="hero-image-frame">
               <Image
-                src="/images/hero-ayt-agro-farm.jpg"
+                src="/images/ayt-home-logo-generated.png"
                 alt="AYT Agro Farm dengan kandang, kambing, dan domba"
                 fill
                 priority
