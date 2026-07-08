@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function HpdkiRegistrationLockedPage() {
   return (
-    <main className="min-h-screen bg-stone-50 px-4 py-16 text-slate-900 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[#f7f2e8] px-4 py-16 text-slate-900 sm:px-6 lg:px-8">
       <section className="mx-auto max-w-3xl rounded-[2rem] border border-amber-200 bg-white p-6 text-center shadow-sm sm:p-10">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-2xl">
           🔒
@@ -40,7 +40,7 @@ export default function HpdkiRegistrationLockedPage() {
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Link
             href="/hpdki"
-            className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+            className="inline-flex items-center justify-center rounded-full bg-emerald-950 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-900"
           >
             Kembali ke Halaman HPDKI
           </Link>
