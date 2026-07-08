@@ -36,8 +36,8 @@ export type HpdkiKtaSettingsFormData = {
 export const defaultHpdkiKtaSettings: HpdkiKtaSettingsRecord = {
   $id: HPDKI_KTA_SETTING_KEY,
   setting_key: HPDKI_KTA_SETTING_KEY,
-  chairman_name: "Salman Asidiqi",
-  vice_chairman_name: "-",
+  chairman_name: "Muhammad Imron",
+  vice_chairman_name: "Apriyan Susanto, ST., MT",
   chairman_title: "Ketua PAC HPDKI Kec. Dramaga",
   vice_chairman_title: "Wakil Ketua PAC HPDKI Kec. Dramaga",
   validity_years: 5,
