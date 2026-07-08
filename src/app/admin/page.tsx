@@ -89,10 +89,15 @@ function whatsappLink(
     `Halo Bapak/Ibu ${registration.farmer_name}, ` +
       `kami dari AYT Agro Farm sedang memeriksa ` +
       `pendaftaran anggota peternak PAC HPDKI Kecamatan Dramaga dengan nomor ` +
-      `${registration.registration_number}.`
+      `${getRegistrationOfficialNumber(registration)}.`
   );
 
   return `https://wa.me/${normalized}?text=${message}`;
+}
+
+
+function getRegistrationOfficialNumber(registration: HpdkiRegistrationRecord) {
+  return registration.member_data_number || registration.registration_number;
 }
 
 export default function AdminPage() {
@@ -190,6 +195,7 @@ export default function AdminPage() {
     return registrations.filter((item) => {
       const searchableText = [
         item.farmer_name,
+        getRegistrationOfficialNumber(item),
         item.registration_number,
         item.whatsapp,
         item.farm_group_name,
@@ -752,7 +758,7 @@ export default function AdminPage() {
                             </strong>
 
                             <small>
-                              {item.registration_number}
+                              {getRegistrationOfficialNumber(item)}
                             </small>
 
                             <small>{item.whatsapp}</small>
