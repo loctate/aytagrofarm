@@ -593,13 +593,53 @@ export default function AdminPage() {
               </article>
             </div>
 
+            <div className="admin-production-status-panel">
+              <div>
+                <span className="admin-production-status-kicker">
+                  Status Production
+                </span>
+
+                <h2>Backend AYT Agro Farm sudah terhubung</h2>
+
+                <p>
+                  Sistem saat ini memakai Appwrite self-hosted production.
+                  Pendaftaran publik masih dikunci sampai proses serah terima
+                  ke pengelola selesai.
+                </p>
+              </div>
+
+              <dl className="admin-production-status-grid">
+                <div>
+                  <dt>Pendaftaran HPDKI</dt>
+                  <dd className="admin-production-status-locked">
+                    Terkunci
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>Data anggota production</dt>
+                  <dd>Kosong</dd>
+                </div>
+
+                <div>
+                  <dt>Nomor anggota pertama</dt>
+                  <dd>HPDKI-PAC-DRAMAGA-2026-001</dd>
+                </div>
+
+                <div>
+                  <dt>Backend</dt>
+                  <dd>Appwrite self-hosted</dd>
+                </div>
+              </dl>
+            </div>
+
             <div className="admin-placeholder-panel">
               <div className="admin-panel-heading">
                 <div>
                   <h2>Aktivitas Pendaftaran</h2>
                   <p>
                     Statistik diambil langsung dari data
-                    Appwrite Cloud.
+                    Appwrite self-hosted production.
                   </p>
                 </div>
 
