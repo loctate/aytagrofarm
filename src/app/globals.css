@@ -6745,3 +6745,348 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   }
 }
 
+
+/* Polish KTA settings actions and sample preview */
+.admin-kta-settings-heading-actions {
+  align-items: center;
+}
+
+.admin-kta-reload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.85rem;
+  padding: 0.85rem 1.25rem;
+  border: 1px solid rgba(180, 83, 9, 0.28) !important;
+  border-radius: 999px;
+  background: #fff8e6 !important;
+  color: #7c4a03 !important;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-kta-reload-button:hover:not(:disabled) {
+  background: #ffefc2 !important;
+  color: #7c4a03 !important;
+}
+
+.admin-kta-reload-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.admin-kta-settings-actions {
+  align-items: center;
+}
+
+.admin-kta-settings-actions .admin-kta-sample-button {
+  box-shadow: none;
+}
+
+.admin-kta-sample-modal {
+  width: min(1220px, calc(100vw - 2rem));
+  max-width: min(1220px, calc(100vw - 2rem));
+  max-height: min(92vh, 900px);
+  overflow: auto;
+}
+
+.admin-kta-sample-preview-wrap {
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  padding: 1.25rem;
+  border: 1px dashed rgba(15, 74, 52, 0.18);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(circle at top right, rgba(212, 175, 55, 0.12), transparent 34%),
+    #fffaf0;
+}
+
+.admin-kta-sample-preview-wrap .kta-preview-canvas {
+  width: 100%;
+  min-width: 0;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-design {
+  min-height: 300px;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front,
+.admin-kta-sample-preview-wrap .kta-card-back {
+  overflow: hidden;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-light-panel {
+  min-width: 0;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-name-plate {
+  padding: 0.55rem 0.75rem;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-name-plate strong {
+  font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list {
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list div {
+  gap: 0.35rem;
+  padding: 0.35rem 0;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list dt {
+  font-size: 0.62rem;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list dd {
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signatures {
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature {
+  gap: 0.18rem;
+  text-align: center;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature span {
+  min-height: 1.7rem;
+  font-size: 0.52rem;
+  line-height: 1.2;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature-image {
+  width: 92px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature strong {
+  font-size: 0.58rem;
+  line-height: 1.2;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-terms {
+  font-size: 0.67rem;
+  line-height: 1.45;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-back-footer {
+  gap: 0.75rem;
+  font-size: 0.64rem;
+}
+
+@media (max-width: 1100px) {
+  .admin-kta-sample-preview-wrap {
+    justify-content: flex-start;
+  }
+
+  .admin-kta-sample-preview-wrap .kta-preview-canvas {
+    min-width: 960px;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-kta-sample-preview-wrap {
+    padding: 0.75rem;
+  }
+
+  .admin-kta-sample-preview-wrap .kta-preview-canvas {
+    min-width: 900px;
+  }
+}
+
+
+/* Final override: KTA settings buttons and sample modal layout */
+.admin-kta-settings-heading-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  justify-content: flex-end !important;
+}
+
+.admin-kta-settings-heading-actions .admin-kta-sample-button,
+.admin-kta-settings-actions .admin-kta-sample-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 2.85rem !important;
+  padding: 0.85rem 1.25rem !important;
+  border: 1px solid #0f4a34 !important;
+  border-radius: 999px !important;
+  background: #0f4a34 !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  box-shadow: 0 12px 25px rgba(15, 74, 52, 0.18) !important;
+}
+
+.admin-kta-settings-heading-actions .admin-kta-reload-button,
+.admin-kta-settings-heading-actions > button:not(.admin-kta-sample-button) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 2.85rem !important;
+  padding: 0.85rem 1.25rem !important;
+  border: 1px solid rgba(180, 83, 9, 0.3) !important;
+  border-radius: 999px !important;
+  background: #fff8e6 !important;
+  color: #7c4a03 !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+}
+
+.admin-kta-sample-modal {
+  width: min(760px, calc(100vw - 2rem)) !important;
+  max-width: min(760px, calc(100vw - 2rem)) !important;
+  max-height: 92vh !important;
+  overflow: auto !important;
+}
+
+.admin-kta-sample-preview-wrap {
+  display: block !important;
+  overflow: visible !important;
+  padding: 1.25rem !important;
+  border: 1px dashed rgba(15, 74, 52, 0.18) !important;
+  border-radius: 1.25rem !important;
+  background: #fffaf0 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-preview-canvas {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 1.25rem !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 640px !important;
+  margin: 0 auto !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-design {
+  width: 100% !important;
+  min-height: 360px !important;
+  overflow: hidden !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front,
+.admin-kta-sample-preview-wrap .kta-card-back {
+  width: 100% !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-light-panel {
+  min-width: 0 !important;
+  padding: 1rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-name-plate {
+  padding: 0.55rem 0.75rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-name-plate strong {
+  font-size: 1rem !important;
+  line-height: 1.2 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list {
+  gap: 0.35rem !important;
+  margin-top: 0.65rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list div {
+  gap: 0.4rem !important;
+  padding: 0.35rem 0 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list dt {
+  font-size: 0.62rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-data-list dd {
+  font-size: 0.75rem !important;
+  line-height: 1.25 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signatures {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 0.65rem !important;
+  margin-top: 0.75rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature {
+  gap: 0.18rem !important;
+  min-height: 90px !important;
+  text-align: center !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature span {
+  min-height: 1.8rem !important;
+  font-size: 0.55rem !important;
+  line-height: 1.2 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature-image {
+  width: 110px !important;
+  height: 44px !important;
+  object-fit: contain !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature strong {
+  font-size: 0.62rem !important;
+  line-height: 1.2 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-qr-box {
+  margin-top: 1rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-qr-code svg {
+  width: 92px !important;
+  height: 92px !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-terms {
+  font-size: 0.72rem !important;
+  line-height: 1.55 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-back-footer {
+  gap: 0.75rem !important;
+  font-size: 0.68rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-print-size-note {
+  text-align: center !important;
+}
+
+@media (max-width: 720px) {
+  .admin-kta-settings-heading-actions {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .admin-kta-settings-heading-actions button,
+  .admin-kta-settings-actions button {
+    width: 100% !important;
+  }
+
+  .admin-kta-sample-preview-wrap {
+    padding: 0.75rem !important;
+  }
+
+  .admin-kta-sample-preview-wrap .kta-preview-canvas {
+    max-width: 600px !important;
+  }
+}
+
