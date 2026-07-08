@@ -422,6 +422,7 @@ export default function AdminMembersPanel() {
         <div className="admin-members-heading-actions">
           <button
             type="button"
+            className="admin-members-export-button"
             onClick={() => void downloadMembersExcel()}
             disabled={loading || membersExportLoading}
           >
@@ -432,6 +433,7 @@ export default function AdminMembersPanel() {
 
           <button
             type="button"
+            className="admin-members-reload-button"
             onClick={() => void loadMembers()}
             disabled={loading}
           >
