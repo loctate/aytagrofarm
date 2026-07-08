@@ -134,7 +134,13 @@ export default function HpdkiMemberCard({
 
             <div className="kta-card-signature">
               <span>{settings.vice_chairman_title}</span>
-              <div className="kta-card-signature-placeholder" />
+              <Image
+                src="/images/ttd-wakil-ketua-hpdki.png"
+                alt="Tanda tangan Wakil Ketua PAC HPDKI Kecamatan Dramaga"
+                width={180}
+                height={72}
+                className="kta-card-signature-image"
+              />
               <strong>{settings.vice_chairman_name}</strong>
             </div>
           </div>
