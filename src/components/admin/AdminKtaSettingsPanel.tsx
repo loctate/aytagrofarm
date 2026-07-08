@@ -2,14 +2,73 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import HpdkiMemberCard from "@/components/admin/HpdkiMemberCard";
 import {
   defaultHpdkiKtaSettings,
   getHpdkiKtaSettings,
   saveHpdkiKtaSettings,
   type HpdkiKtaSettingsFormData,
+  type HpdkiKtaSettingsRecord,
 } from "@/lib/appwrite/kta-settings";
+import type { PublicHpdkiMemberRecord } from "@/lib/appwrite/members";
 
 const defaultTermsText = defaultHpdkiKtaSettings.card_terms || "";
+
+const sampleKtaMember: PublicHpdkiMemberRecord = {
+  $id: "sample-kta-member",
+  $createdAt: new Date().toISOString(),
+  $updatedAt: new Date().toISOString(),
+  member_number: "HPDKI-PAC-DRAMAGA-2026-001",
+  farmer_name: "Contoh Anggota HPDKI",
+  farm_group_name: "Contoh Farm Dramaga",
+  village: "Sukawening",
+  district: "Dramaga",
+  regency: "Kabupaten Bogor",
+  member_year: 2026,
+  member_sequence: 1,
+  approved_at: new Date().toISOString(),
+  membership_status: "active",
+  is_public: true,
+  female_goats: 10,
+  male_goats: 2,
+  female_sheep: 8,
+  male_sheep: 1,
+  total_population: 21,
+  feed_type: "Rumput odot, ampas tahu, dan konsentrat",
+  farm_area_m2: 120,
+  registration_id: "sample-registration",
+  kta_status: "issued",
+  kta_issued_at: new Date().toISOString(),
+  kta_expired_at: null,
+};
+
+function formToPreviewSettings(
+  form: HpdkiKtaSettingsFormData,
+): HpdkiKtaSettingsRecord {
+  return {
+    ...defaultHpdkiKtaSettings,
+    $id: "preview-kta-settings",
+    setting_key: "default",
+    chairman_name:
+      form.chairman_name || defaultHpdkiKtaSettings.chairman_name,
+    vice_chairman_name:
+      form.vice_chairman_name ||
+      defaultHpdkiKtaSettings.vice_chairman_name,
+    chairman_title:
+      form.chairman_title || defaultHpdkiKtaSettings.chairman_title,
+    vice_chairman_title:
+      form.vice_chairman_title ||
+      defaultHpdkiKtaSettings.vice_chairman_title,
+    validity_years:
+      Number.isFinite(form.validity_years) && form.validity_years > 0
+        ? form.validity_years
+        : defaultHpdkiKtaSettings.validity_years,
+    secretariat_address: form.secretariat_address,
+    secretariat_contact: form.secretariat_contact,
+    card_terms: form.card_terms,
+    updated_by: form.updated_by,
+  };
+}
 
 function settingsToForm(): HpdkiKtaSettingsFormData {
   return {
@@ -34,6 +93,7 @@ export default function AdminKtaSettingsPanel() {
   const [saving, setSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showSampleKta, setShowSampleKta] = useState(false);
 
   const termsPreview = useMemo(
     () =>
@@ -43,6 +103,20 @@ export default function AdminKtaSettingsPanel() {
         .filter(Boolean),
     [form.card_terms],
   );
+
+  const previewSettings = useMemo(
+    () => formToPreviewSettings(form),
+    [form],
+  );
+
+  const sampleVerificationUrl =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/hpdki/verifikasi?nomor=${encodeURIComponent(
+          sampleKtaMember.member_number,
+        )}`
+      : `/hpdki/verifikasi?nomor=${encodeURIComponent(
+          sampleKtaMember.member_number,
+        )}`;
 
   const updateField = (
     field: keyof HpdkiKtaSettingsFormData,
@@ -156,13 +230,23 @@ export default function AdminKtaSettingsPanel() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => void loadSettings()}
-          disabled={loading || saving}
-        >
-          {loading ? "Memuat..." : "Muat Ulang"}
-        </button>
+        <div className="admin-kta-settings-heading-actions">
+          <button
+            type="button"
+            className="admin-kta-sample-button"
+            onClick={() => setShowSampleKta(true)}
+          >
+            Lihat Sample KTA
+          </button>
+
+          <button
+            type="button"
+            onClick={() => void loadSettings()}
+            disabled={loading || saving}
+          >
+            {loading ? "Memuat..." : "Muat Ulang"}
+          </button>
+        </div>
       </div>
 
       {errorMessage && (
@@ -319,11 +403,53 @@ export default function AdminKtaSettingsPanel() {
         </div>
 
         <div className="admin-kta-settings-actions">
+          <button
+            type="button"
+            className="admin-kta-sample-button"
+            onClick={() => setShowSampleKta(true)}
+          >
+            Lihat Sample KTA
+          </button>
+
           <button type="submit" disabled={loading || saving}>
             {saving ? "Menyimpan..." : "Simpan Pengaturan KTA"}
           </button>
         </div>
       </form>
+
+      {showSampleKta && (
+        <div
+          className="admin-kta-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Sample preview KTA"
+        >
+          <div className="admin-kta-modal admin-kta-sample-modal">
+            <div className="admin-kta-modal-header">
+              <div>
+                <p className="eyebrow">Sample Preview KTA</p>
+                <h3>Contoh Tampilan Kartu Anggota</h3>
+                <span>
+                  Preview ini hanya contoh tampilan. Data contoh tidak
+                  disimpan ke Appwrite dan tidak mengubah data production.
+                </span>
+              </div>
+
+              <button type="button" onClick={() => setShowSampleKta(false)}>
+                Tutup
+              </button>
+            </div>
+
+            <div className="admin-kta-sample-preview-wrap">
+              <HpdkiMemberCard
+                member={sampleKtaMember}
+                settings={previewSettings}
+                verificationUrl={sampleVerificationUrl}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

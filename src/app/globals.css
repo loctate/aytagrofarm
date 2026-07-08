@@ -6682,3 +6682,66 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   }
 }
 
+
+/* KTA sample preview button and modal */
+.admin-kta-settings-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.admin-kta-sample-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.85rem;
+  padding: 0.85rem 1.25rem;
+  border: 1px solid #0f4a34 !important;
+  border-radius: 999px;
+  background: #0f4a34 !important;
+  color: #ffffff !important;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 25px rgba(15, 74, 52, 0.18);
+}
+
+.admin-kta-sample-button:hover {
+  background: #0b3c2a !important;
+  color: #ffffff !important;
+}
+
+.admin-kta-settings-actions {
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admin-kta-sample-modal {
+  width: min(1120px, calc(100vw - 2rem));
+  max-width: min(1120px, calc(100vw - 2rem));
+}
+
+.admin-kta-sample-preview-wrap {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px dashed rgba(15, 74, 52, 0.18);
+  border-radius: 1.25rem;
+  background: #fffaf0;
+}
+
+.admin-kta-sample-preview-wrap .kta-preview-canvas {
+  min-width: 720px;
+}
+
+@media (max-width: 720px) {
+  .admin-kta-settings-heading-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .admin-kta-settings-heading-actions button,
+  .admin-kta-settings-actions button {
+    width: 100%;
+  }
+}
+
