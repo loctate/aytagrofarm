@@ -7125,3 +7125,78 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   margin-top: 0.9rem !important;
 }
 
+
+/* Final override: enlarge KTA signature display */
+.kta-card-signatures {
+  margin-top: 1rem !important;
+  gap: 1rem !important;
+}
+
+.kta-card-signature {
+  min-height: 138px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.kta-card-signature span {
+  min-height: 1.8rem !important;
+  margin-bottom: 0.25rem !important;
+  font-size: 0.62rem !important;
+  line-height: 1.2 !important;
+}
+
+.kta-card-signature-image {
+  width: 230px !important;
+  height: 90px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto 0.25rem auto !important;
+}
+
+.kta-card-signature strong {
+  font-size: 0.78rem !important;
+  line-height: 1.2 !important;
+  margin-top: 0 !important;
+}
+
+/* Bigger signatures specifically inside admin sample preview */
+.admin-kta-sample-preview-wrap .kta-card-signatures {
+  margin-top: 1rem !important;
+  gap: 1rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature {
+  min-height: 130px !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature span {
+  min-height: 1.75rem !important;
+  margin-bottom: 0.2rem !important;
+  font-size: 0.58rem !important;
+  line-height: 1.2 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature-image {
+  width: 210px !important;
+  height: 82px !important;
+  object-fit: contain !important;
+  margin: 0 auto 0.2rem auto !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature strong {
+  font-size: 0.7rem !important;
+  line-height: 1.2 !important;
+}
+
+/* Give the front card enough height so larger signatures do not get clipped */
+.admin-kta-sample-preview-wrap .kta-card-front {
+  min-height: 390px !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-light-panel {
+  padding-bottom: 1.25rem !important;
+}
+
