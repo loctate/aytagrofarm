@@ -8,11 +8,41 @@ import {
   deactivateHpdkiMember,
   listHpdkiMembers,
   reactivateHpdkiMember,
+  updateHpdkiMemberData,
+  type HpdkiMemberUpdateData,
   type HpdkiMembershipStatus,
   type PublicHpdkiMemberRecord,
 } from "@/lib/appwrite/members";
 
 type MemberStatusFilter = "all" | HpdkiMembershipStatus;
+
+type MemberEditForm = {
+  farmer_name: string;
+  farm_group_name: string;
+  village: string;
+  district: string;
+  regency: string;
+  female_goats: string;
+  male_goats: string;
+  female_sheep: string;
+  male_sheep: string;
+  feed_type: string;
+  farm_area_m2: string;
+};
+
+const emptyMemberEditForm: MemberEditForm = {
+  farmer_name: "",
+  farm_group_name: "",
+  village: "",
+  district: "",
+  regency: "",
+  female_goats: "0",
+  male_goats: "0",
+  female_sheep: "0",
+  male_sheep: "0",
+  feed_type: "",
+  farm_area_m2: "0",
+};
 
 const statusLabels: Record<HpdkiMembershipStatus, string> = {
   active: "Aktif",
@@ -91,6 +121,15 @@ const memberExportHeaders = [
   "Kabupaten",
   "Tahun Anggota",
   "Urutan Anggota",
+  "Kambing Betina",
+  "Kambing Jantan",
+  "Total Kambing",
+  "Domba Betina",
+  "Domba Jantan",
+  "Total Domba",
+  "Total Populasi",
+  "Jenis Pakan",
+  "Luas Kandang m2",
   "Status Membership",
   "Status Publik",
   "Status KTA",
@@ -111,6 +150,15 @@ function buildMemberExportRows(members: PublicHpdkiMemberRecord[]) {
       member.regency,
       member.member_year,
       member.member_sequence,
+      member.female_goats ?? 0,
+      member.male_goats ?? 0,
+      (member.female_goats ?? 0) + (member.male_goats ?? 0),
+      member.female_sheep ?? 0,
+      member.male_sheep ?? 0,
+      (member.female_sheep ?? 0) + (member.male_sheep ?? 0),
+      member.total_population ?? 0,
+      member.feed_type || "",
+      member.farm_area_m2 ?? 0,
       statusLabels[member.membership_status] ?? member.membership_status,
       member.is_public ? "Publik" : "Tidak Publik",
       member.kta_status || "",
@@ -120,12 +168,86 @@ function buildMemberExportRows(members: PublicHpdkiMemberRecord[]) {
     ]);
 }
 
+function getInitialMemberEditForm(member: PublicHpdkiMemberRecord): MemberEditForm {
+  return {
+    farmer_name: member.farmer_name,
+    farm_group_name: member.farm_group_name || "",
+    village: member.village,
+    district: member.district,
+    regency: member.regency,
+    female_goats: String(member.female_goats ?? 0),
+    male_goats: String(member.male_goats ?? 0),
+    female_sheep: String(member.female_sheep ?? 0),
+    male_sheep: String(member.male_sheep ?? 0),
+    feed_type: member.feed_type || "",
+    farm_area_m2: String(member.farm_area_m2 ?? 0),
+  };
+}
+
+function parseRequiredNonNegativeNumber(value: string, label: string) {
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new Error(`${label} harus diisi dengan angka 0 atau lebih.`);
+  }
+
+  return parsed;
+}
+
+function buildMemberEditPayload(form: MemberEditForm): HpdkiMemberUpdateData {
+  const farmerName = form.farmer_name.trim();
+  const village = form.village.trim();
+  const district = form.district.trim();
+  const regency = form.regency.trim();
+  const feedType = form.feed_type.trim();
+
+  if (!farmerName || !village || !district || !regency || !feedType) {
+    throw new Error(
+      "Nama peternak, desa, kecamatan, kabupaten, dan jenis pakan wajib diisi.",
+    );
+  }
+
+  return {
+    farmer_name: farmerName,
+    farm_group_name: form.farm_group_name.trim(),
+    village,
+    district,
+    regency,
+    female_goats: parseRequiredNonNegativeNumber(
+      form.female_goats,
+      "Kambing betina",
+    ),
+    male_goats: parseRequiredNonNegativeNumber(
+      form.male_goats,
+      "Kambing jantan",
+    ),
+    female_sheep: parseRequiredNonNegativeNumber(
+      form.female_sheep,
+      "Domba betina",
+    ),
+    male_sheep: parseRequiredNonNegativeNumber(
+      form.male_sheep,
+      "Domba jantan",
+    ),
+    feed_type: feedType,
+    farm_area_m2: parseRequiredNonNegativeNumber(
+      form.farm_area_m2,
+      "Luas kandang",
+    ),
+  };
+}
+
 export default function AdminMembersPanel() {
   const [members, setMembers] = useState<PublicHpdkiMemberRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoadingNumber, setActionLoadingNumber] = useState("");
   const [selectedKtaMember, setSelectedKtaMember] =
     useState<PublicHpdkiMemberRecord | null>(null);
+  const [editingMember, setEditingMember] =
+    useState<PublicHpdkiMemberRecord | null>(null);
+  const [memberEditForm, setMemberEditForm] =
+    useState<MemberEditForm>(emptyMemberEditForm);
+  const [memberEditSaving, setMemberEditSaving] = useState(false);
   const [copiedKtaLink, setCopiedKtaLink] = useState("");
   const [ktaExportLoading, setKtaExportLoading] =
     useState<"" | "png" | "pdf">("");
@@ -192,6 +314,80 @@ export default function AdminMembersPanel() {
   const inactiveCount = members.filter(
     (member) => member.membership_status === "inactive",
   ).length;
+
+  const memberEditTotalPopulation = useMemo(
+    () =>
+      Number(memberEditForm.female_goats || 0) +
+      Number(memberEditForm.male_goats || 0) +
+      Number(memberEditForm.female_sheep || 0) +
+      Number(memberEditForm.male_sheep || 0),
+    [memberEditForm],
+  );
+
+  const updateMemberEditField = (
+    field: keyof MemberEditForm,
+    value: string,
+  ) => {
+    setMemberEditForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  const openMemberEditModal = (member: PublicHpdkiMemberRecord) => {
+    setEditingMember(member);
+    setMemberEditForm(getInitialMemberEditForm(member));
+    setErrorMessage("");
+  };
+
+  const closeMemberEditModal = () => {
+    if (memberEditSaving) {
+      return;
+    }
+
+    setEditingMember(null);
+    setMemberEditForm(emptyMemberEditForm);
+  };
+
+  const saveMemberEdit = async () => {
+    if (!editingMember) {
+      return;
+    }
+
+    setMemberEditSaving(true);
+    setErrorMessage("");
+
+    try {
+      const payload = buildMemberEditPayload(memberEditForm);
+      const updatedMember = await updateHpdkiMemberData(
+        editingMember.$id,
+        payload,
+      );
+
+      setMembers((current) =>
+        current.map((member) =>
+          member.$id === editingMember.$id
+            ? {
+                ...member,
+                ...updatedMember,
+              }
+            : member,
+        ),
+      );
+
+      setEditingMember(null);
+      setMemberEditForm(emptyMemberEditForm);
+    } catch (error) {
+      console.error("Gagal menyimpan perubahan anggota:", error);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Data anggota belum berhasil disimpan. Pastikan permission Update table members sudah aktif untuk Users.",
+      );
+    } finally {
+      setMemberEditSaving(false);
+    }
+  };
 
   const toggleMemberStatus = async (member: PublicHpdkiMemberRecord) => {
     const nextActive = member.membership_status !== "active";
@@ -591,6 +787,14 @@ export default function AdminMembersPanel() {
                         >
                           Verifikasi
                         </a>
+
+                        <button
+                          type="button"
+                          className="admin-member-edit-button"
+                          onClick={() => openMemberEditModal(member)}
+                        >
+                          Edit Data
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -598,6 +802,232 @@ export default function AdminMembersPanel() {
               })}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {editingMember && (
+        <div
+          className="admin-kta-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Edit data anggota ${editingMember.member_number}`}
+        >
+          <div className="admin-kta-modal admin-member-edit-modal">
+            <div className="admin-kta-modal-header">
+              <div>
+                <p className="eyebrow">Edit Data Anggota</p>
+                <h3>{editingMember.farmer_name}</h3>
+                <span>{editingMember.member_number}</span>
+              </div>
+
+              <button type="button" onClick={closeMemberEditModal}>
+                Tutup
+              </button>
+            </div>
+
+            <form
+              className="admin-member-edit-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void saveMemberEdit();
+              }}
+            >
+              <div className="admin-member-edit-section">
+                <h4>Data Identitas</h4>
+
+                <div className="admin-member-edit-grid">
+                  <label>
+                    Nama Peternak
+                    <input
+                      type="text"
+                      value={memberEditForm.farmer_name}
+                      onChange={(event) =>
+                        updateMemberEditField("farmer_name", event.target.value)
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Nama Kandang/Kelompok
+                    <input
+                      type="text"
+                      value={memberEditForm.farm_group_name}
+                      onChange={(event) =>
+                        updateMemberEditField(
+                          "farm_group_name",
+                          event.target.value,
+                        )
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    Desa
+                    <input
+                      type="text"
+                      value={memberEditForm.village}
+                      onChange={(event) =>
+                        updateMemberEditField("village", event.target.value)
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Kecamatan
+                    <input
+                      type="text"
+                      value={memberEditForm.district}
+                      onChange={(event) =>
+                        updateMemberEditField("district", event.target.value)
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Kabupaten
+                    <input
+                      type="text"
+                      value={memberEditForm.regency}
+                      onChange={(event) =>
+                        updateMemberEditField("regency", event.target.value)
+                      }
+                      required
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="admin-member-edit-section">
+                <h4>Data Ternak dan Kandang</h4>
+
+                <div className="admin-member-edit-grid">
+                  <label>
+                    Kambing Betina
+                    <input
+                      type="number"
+                      min="0"
+                      value={memberEditForm.female_goats}
+                      onChange={(event) =>
+                        updateMemberEditField(
+                          "female_goats",
+                          event.target.value,
+                        )
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Kambing Jantan
+                    <input
+                      type="number"
+                      min="0"
+                      value={memberEditForm.male_goats}
+                      onChange={(event) =>
+                        updateMemberEditField(
+                          "male_goats",
+                          event.target.value,
+                        )
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Domba Betina
+                    <input
+                      type="number"
+                      min="0"
+                      value={memberEditForm.female_sheep}
+                      onChange={(event) =>
+                        updateMemberEditField(
+                          "female_sheep",
+                          event.target.value,
+                        )
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Domba Jantan
+                    <input
+                      type="number"
+                      min="0"
+                      value={memberEditForm.male_sheep}
+                      onChange={(event) =>
+                        updateMemberEditField(
+                          "male_sheep",
+                          event.target.value,
+                        )
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Jenis Pakan
+                    <input
+                      type="text"
+                      value={memberEditForm.feed_type}
+                      onChange={(event) =>
+                        updateMemberEditField("feed_type", event.target.value)
+                      }
+                      required
+                    />
+                  </label>
+
+                  <label>
+                    Luas Kandang m2
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={memberEditForm.farm_area_m2}
+                      onChange={(event) =>
+                        updateMemberEditField(
+                          "farm_area_m2",
+                          event.target.value,
+                        )
+                      }
+                      required
+                    />
+                  </label>
+                </div>
+
+                <div className="admin-member-edit-total">
+                  <span>Total Populasi</span>
+                  <strong>
+                    {Number.isFinite(memberEditTotalPopulation)
+                      ? memberEditTotalPopulation
+                      : 0}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="admin-member-edit-locked-note">
+                Nomor anggota, tahun anggota, urutan anggota, tanggal disetujui,
+                dan ID dokumen tidak dapat diedit dari form ini.
+              </div>
+
+              <div className="admin-kta-modal-actions">
+                <button
+                  type="button"
+                  onClick={closeMemberEditModal}
+                  disabled={memberEditSaving}
+                >
+                  Batal
+                </button>
+
+                <button type="submit" disabled={memberEditSaving}>
+                  {memberEditSaving ? "Menyimpan..." : "Simpan Perubahan"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 

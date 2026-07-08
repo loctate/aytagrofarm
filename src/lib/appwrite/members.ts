@@ -30,10 +30,31 @@ export type PublicHpdkiMemberRecord = {
   approved_at: string | null;
   membership_status: HpdkiMembershipStatus;
   is_public: boolean;
+  female_goats: number;
+  male_goats: number;
+  female_sheep: number;
+  male_sheep: number;
+  total_population: number;
+  feed_type: string;
+  farm_area_m2: number;
   registration_id?: string | null;
   kta_status?: string | null;
   kta_issued_at?: string | null;
   kta_expired_at?: string | null;
+};
+
+export type HpdkiMemberUpdateData = {
+  farmer_name: string;
+  farm_group_name: string;
+  village: string;
+  district: string;
+  regency: string;
+  female_goats: number;
+  male_goats: number;
+  female_sheep: number;
+  male_sheep: number;
+  feed_type: string;
+  farm_area_m2: number;
 };
 
 function hasMembersConfig() {
@@ -148,6 +169,18 @@ export async function publishRegistrationAsMember(
       approved_at: approvedAt,
       membership_status: "active",
       is_public: true,
+      registration_id: registration.$id,
+      female_goats: registration.female_goats ?? 0,
+      male_goats: registration.male_goats ?? 0,
+      female_sheep: registration.female_sheep ?? 0,
+      male_sheep: registration.male_sheep ?? 0,
+      total_population:
+        (registration.female_goats ?? 0) +
+        (registration.male_goats ?? 0) +
+        (registration.female_sheep ?? 0) +
+        (registration.male_sheep ?? 0),
+      feed_type: registration.feed_type || "",
+      farm_area_m2: registration.farm_area_m2 ?? 0,
     },
   });
 
@@ -199,6 +232,41 @@ export async function deactivateHpdkiMember(memberNumber: string) {
 
 export async function reactivateHpdkiMember(memberNumber: string) {
   return updateHpdkiMemberStatusByNumber(memberNumber, "active", true);
+}
+
+export async function updateHpdkiMemberData(
+  memberId: string,
+  data: HpdkiMemberUpdateData,
+) {
+  validateMembersWriteConfig();
+
+  const totalPopulation =
+    data.female_goats +
+    data.male_goats +
+    data.female_sheep +
+    data.male_sheep;
+
+  const updatedMember = await tablesDB.updateRow({
+    databaseId: appwriteConfig.databaseId,
+    tableId: appwriteConfig.membersTableId,
+    rowId: memberId,
+    data: {
+      farmer_name: data.farmer_name,
+      farm_group_name: data.farm_group_name,
+      village: data.village,
+      district: data.district,
+      regency: data.regency,
+      female_goats: data.female_goats,
+      male_goats: data.male_goats,
+      female_sheep: data.female_sheep,
+      male_sheep: data.male_sheep,
+      total_population: totalPopulation,
+      feed_type: data.feed_type,
+      farm_area_m2: data.farm_area_m2,
+    },
+  });
+
+  return updatedMember as unknown as PublicHpdkiMemberRecord;
 }
 
 export async function getHpdkiMemberByNumber(memberNumber: string) {
