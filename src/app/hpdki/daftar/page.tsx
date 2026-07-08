@@ -39,30 +39,30 @@ function RegistrationLockedNotice() {
         </p>
       </div>
 
-      <div className="rounded-3xl border border-amber-200 bg-amber-50 p-6 text-amber-950">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-2xl">
+      <div className="registration-locked-card">
+        <div className="registration-locked-icon" aria-hidden="true">
           🔒
         </div>
 
-        <h3 className="text-xl font-bold text-slate-950">
-          Formulir pendaftaran belum dapat digunakan
-        </h3>
+        <div>
+          <h3>Formulir pendaftaran belum dapat digunakan</h3>
 
-        <p className="mt-3 leading-7 text-slate-700">
-          Data anggota production masih dikosongkan terlebih dahulu untuk
-          menghindari salah input sebelum proses serah terima resmi kepada
-          klien. Form pendaftaran akan dibuka kembali setelah proses ini
-          selesai.
-        </p>
+          <p>
+            Data anggota production masih dikosongkan terlebih dahulu untuk
+            menghindari salah input sebelum proses serah terima resmi kepada
+            klien. Form pendaftaran akan dibuka kembali setelah proses ini
+            selesai.
+          </p>
 
-        <a
-          href={temporaryWhatsappUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-6 inline-flex items-center justify-center rounded-full bg-emerald-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-900"
-        >
-          Tanya melalui WhatsApp
-        </a>
+          <a
+            href={temporaryWhatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="registration-locked-whatsapp"
+          >
+            Tanya melalui WhatsApp
+          </a>
+        </div>
       </div>
     </>
   );
