@@ -6216,3 +6216,71 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     width: 100%;
   }
 }
+
+
+/* HPDKI registration locked notice */
+.registration-locked-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1rem;
+  margin: 1.5rem 0 0;
+  padding: 1.5rem;
+  border: 1px solid rgba(180, 83, 9, 0.2);
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(135deg, rgba(255, 251, 235, 0.96), rgba(254, 243, 199, 0.72));
+  color: #0f2f22;
+  box-shadow: 0 18px 45px rgba(15, 47, 34, 0.08);
+}
+
+.registration-locked-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.16);
+  font-size: 1.35rem;
+}
+
+.registration-locked-card h3 {
+  margin: 0;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  line-height: 1.35;
+  color: #0f2f22;
+}
+
+.registration-locked-card p {
+  margin: 0.75rem 0 0;
+  color: rgba(15, 47, 34, 0.76);
+  line-height: 1.75;
+}
+
+.registration-locked-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  background: #0f4a34;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 12px 25px rgba(15, 74, 52, 0.18);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.registration-locked-whatsapp:hover {
+  transform: translateY(-1px);
+  background: #0b3c2a;
+}
+
+@media (max-width: 640px) {
+  .registration-locked-card {
+    grid-template-columns: 1fr;
+    padding: 1.25rem;
+  }
+}
+
