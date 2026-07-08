@@ -7090,3 +7090,38 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   }
 }
 
+
+/* Final override: make KTA signatures readable */
+.kta-card-signature-image {
+  width: 160px !important;
+  height: 64px !important;
+  object-fit: contain !important;
+}
+
+.kta-card-signature {
+  min-height: 112px !important;
+}
+
+.kta-card-signature strong {
+  margin-top: 0.15rem !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature {
+  min-height: 116px !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature-image {
+  width: 150px !important;
+  height: 60px !important;
+  object-fit: contain !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signature strong {
+  font-size: 0.68rem !important;
+  line-height: 1.2 !important;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-signatures {
+  margin-top: 0.9rem !important;
+}
+
