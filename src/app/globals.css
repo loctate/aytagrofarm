@@ -6432,3 +6432,36 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   opacity: 0.55;
 }
 
+
+/* Force visible default state for members export buttons */
+.admin-card-heading .admin-members-heading-actions .admin-members-export-button {
+  background: #0f4a34 !important;
+  color: #ffffff !important;
+  border: 1px solid #0f4a34 !important;
+  opacity: 1 !important;
+  box-shadow: 0 12px 25px rgba(15, 74, 52, 0.2) !important;
+}
+
+.admin-card-heading .admin-members-heading-actions .admin-members-export-button:hover:not(:disabled) {
+  background: #0b3c2a !important;
+  color: #ffffff !important;
+}
+
+.admin-card-heading .admin-members-heading-actions .admin-members-reload-button {
+  background: #fff8e6 !important;
+  color: #7c4a03 !important;
+  border: 1px solid rgba(180, 83, 9, 0.28) !important;
+  opacity: 1 !important;
+}
+
+.admin-card-heading .admin-members-heading-actions .admin-members-reload-button:hover:not(:disabled) {
+  background: #ffefc2 !important;
+  color: #7c4a03 !important;
+}
+
+.admin-card-heading .admin-members-heading-actions .admin-members-export-button:disabled,
+.admin-card-heading .admin-members-heading-actions .admin-members-reload-button:disabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+}
+
