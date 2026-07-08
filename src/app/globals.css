@@ -6365,3 +6365,23 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   }
 }
 
+
+/* Admin members export actions */
+.admin-members-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 720px) {
+  .admin-members-heading-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .admin-members-heading-actions button {
+    width: 100%;
+  }
+}
+

@@ -30,6 +30,10 @@ export type PublicHpdkiMemberRecord = {
   approved_at: string | null;
   membership_status: HpdkiMembershipStatus;
   is_public: boolean;
+  registration_id?: string | null;
+  kta_status?: string | null;
+  kta_issued_at?: string | null;
+  kta_expired_at?: string | null;
 };
 
 function hasMembersConfig() {
