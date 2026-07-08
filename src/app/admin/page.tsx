@@ -7,6 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { getCurrentAdmin, logoutAdmin } from "@/lib/appwrite/auth";
 import AdminMembersPanel from "@/components/admin/AdminMembersPanel";
+import AdminKtaSettingsPanel from "@/components/admin/AdminKtaSettingsPanel";
 import {
   listHpdkiRegistrations,
   registrationStatuses,
@@ -26,7 +27,8 @@ type AdminMenu =
   | "ringkasan"
   | "pengetahuan"
   | "pendaftaran"
-  | "anggota";
+  | "anggota"
+  | "kta-settings";
 
 function formatDate(value: string | null) {
   if (!value) {
@@ -517,6 +519,18 @@ export default function AdminPage() {
           >
             Data Anggota
           </button>
+
+          <button
+            type="button"
+            className={
+              activeMenu === "kta-settings"
+                ? "is-active"
+                : ""
+            }
+            onClick={() => setActiveMenu("kta-settings")}
+          >
+            Pengaturan KTA
+          </button>
         </nav>
 
         <div className="admin-sidebar-note">
@@ -549,6 +563,9 @@ export default function AdminPage() {
 
               {activeMenu === "anggota" &&
                 "Data Anggota"}
+
+              {activeMenu === "kta-settings" &&
+                "Pengaturan KTA"}
             </h1>
           </div>
 
@@ -869,6 +886,8 @@ export default function AdminPage() {
         )}
 
                 {activeMenu === "anggota" && <AdminMembersPanel />}
+
+                {activeMenu === "kta-settings" && <AdminKtaSettingsPanel />}
       </section>
 
       {selectedRegistration && (
