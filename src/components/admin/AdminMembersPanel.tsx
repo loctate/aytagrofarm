@@ -50,6 +50,76 @@ function getLocation(member: PublicHpdkiMemberRecord) {
     .join(", ");
 }
 
+function formatDateForExport(value: string | null | undefined) {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+}
+
+function sortMembersByOfficialNumber(
+  first: PublicHpdkiMemberRecord,
+  second: PublicHpdkiMemberRecord,
+) {
+  return (
+    (first.member_year ?? 0) - (second.member_year ?? 0) ||
+    (first.member_sequence ?? 0) - (second.member_sequence ?? 0) ||
+    first.member_number.localeCompare(second.member_number, "id-ID", {
+      numeric: true,
+      sensitivity: "base",
+    })
+  );
+}
+
+const memberExportHeaders = [
+  "Nomor Anggota",
+  "Nama Peternak",
+  "Kelompok/Kandang",
+  "Desa",
+  "Kecamatan",
+  "Kabupaten",
+  "Tahun Anggota",
+  "Urutan Anggota",
+  "Status Membership",
+  "Status Publik",
+  "Status KTA",
+  "Tanggal Disetujui",
+  "KTA Diterbitkan",
+  "Masa Berlaku KTA",
+];
+
+function buildMemberExportRows(members: PublicHpdkiMemberRecord[]) {
+  return [...members]
+    .sort(sortMembersByOfficialNumber)
+    .map((member) => [
+      member.member_number,
+      member.farmer_name,
+      member.farm_group_name || "",
+      member.village,
+      member.district,
+      member.regency,
+      member.member_year,
+      member.member_sequence,
+      statusLabels[member.membership_status] ?? member.membership_status,
+      member.is_public ? "Publik" : "Tidak Publik",
+      member.kta_status || "",
+      formatDateForExport(member.approved_at),
+      formatDateForExport(member.kta_issued_at),
+      formatDateForExport(member.kta_expired_at),
+    ]);
+}
+
 export default function AdminMembersPanel() {
   const [members, setMembers] = useState<PublicHpdkiMemberRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +129,7 @@ export default function AdminMembersPanel() {
   const [copiedKtaLink, setCopiedKtaLink] = useState("");
   const [ktaExportLoading, setKtaExportLoading] =
     useState<"" | "png" | "pdf">("");
+  const [membersExportLoading, setMembersExportLoading] = useState(false);
   const ktaPreviewRef = useRef<HTMLDivElement | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [search, setSearch] = useState("");
@@ -165,6 +236,41 @@ export default function AdminMembersPanel() {
     }
   };
 
+
+  const downloadMembersExcel = async () => {
+    setMembersExportLoading(true);
+    setErrorMessage("");
+
+    try {
+      const XLSX = await import("xlsx");
+      const today = new Date().toISOString().slice(0, 10);
+      const exportRows = buildMemberExportRows(members);
+      const worksheet = XLSX.utils.aoa_to_sheet([
+        memberExportHeaders,
+        ...exportRows,
+      ]);
+
+      worksheet["!cols"] = memberExportHeaders.map((header) => ({
+        wch: Math.max(header.length + 4, 16),
+      }));
+
+      const workbook = XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Data Anggota");
+      XLSX.writeFile(
+        workbook,
+        `anggota-hpdki-dramaga-${today}.xlsx`,
+        { compression: true },
+      );
+    } catch (error) {
+      console.error("Gagal export Excel anggota:", error);
+      setErrorMessage(
+        "Excel anggota belum berhasil dibuat. Silakan muat ulang data anggota lalu coba kembali.",
+      );
+    } finally {
+      setMembersExportLoading(false);
+    }
+  };
 
   const getAbsoluteVerificationUrl = (memberNumber: string) => {
     const origin =
@@ -313,9 +419,25 @@ export default function AdminMembersPanel() {
           </p>
         </div>
 
-        <button type="button" onClick={() => void loadMembers()} disabled={loading}>
-          {loading ? "Memuat..." : "Muat Ulang"}
-        </button>
+        <div className="admin-members-heading-actions">
+          <button
+            type="button"
+            onClick={() => void downloadMembersExcel()}
+            disabled={loading || membersExportLoading}
+          >
+            {membersExportLoading
+              ? "Menyiapkan Excel..."
+              : "Download Excel Anggota"}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => void loadMembers()}
+            disabled={loading}
+          >
+            {loading ? "Memuat..." : "Muat Ulang"}
+          </button>
+        </div>
       </div>
 
       <div className="admin-members-stats">
