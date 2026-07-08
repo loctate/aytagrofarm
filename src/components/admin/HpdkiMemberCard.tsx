@@ -4,26 +4,31 @@ import Image from "next/image";
 import { QRCodeSVG } from "qrcode.react";
 
 import type { PublicHpdkiMemberRecord } from "@/lib/appwrite/members";
+import {
+  defaultHpdkiKtaSettings,
+  type HpdkiKtaSettingsRecord,
+} from "@/lib/appwrite/kta-settings";
 
 type HpdkiMemberCardProps = {
   member: PublicHpdkiMemberRecord;
   verificationUrl: string;
+  settings?: HpdkiKtaSettingsRecord;
 };
 
-const organizationName = "PAC HPDKI KECAMATAN DRAMAGA";
-const organizationRegion = "KABUPATEN BOGOR";
-const chairmanName = "Salman Asidiqi";
-const chairmanNumber = "012025001";
+const organizationLineOne = "PAC HPDKI";
+const organizationLineTwo = "KECAMATAN DRAMAGA";
+const organizationLineThree = "KABUPATEN BOGOR";
+const organizationName = `${organizationLineOne} ${organizationLineTwo}`;
+const organizationRegion = organizationLineThree;
 
-
-function getValidUntil(value: string | null) {
+function getValidUntil(value: string | null, validityYears: number) {
   const sourceDate = value ? new Date(value) : new Date();
 
   if (Number.isNaN(sourceDate.getTime())) {
-    return "31 Desember 2030";
+    return `31 Desember ${new Date().getFullYear() + validityYears}`;
   }
 
-  const validYear = sourceDate.getFullYear() + 5;
+  const validYear = sourceDate.getFullYear() + validityYears;
 
   return `31 Desember ${validYear}`;
 }
@@ -38,9 +43,17 @@ function getAddress(member: PublicHpdkiMemberRecord) {
 export default function HpdkiMemberCard({
   member,
   verificationUrl,
+  settings = defaultHpdkiKtaSettings,
 }: HpdkiMemberCardProps) {
   const address = getAddress(member);
-  const validUntil = getValidUntil(member.approved_at);
+  const validUntil = getValidUntil(
+    member.approved_at,
+    settings.validity_years,
+  );
+  const terms = (settings.card_terms || defaultHpdkiKtaSettings.card_terms || "")
+    .split("\n")
+    .map((term) => term.trim())
+    .filter(Boolean);
 
   return (
     <div className="kta-preview-canvas" aria-label="Preview KTA anggota">
@@ -61,8 +74,9 @@ export default function HpdkiMemberCard({
             <strong>ANGGOTA</strong>
           </div>
 
-          <p>{organizationName}</p>
-          <p>{organizationRegion}</p>
+          <p>{organizationLineOne}</p>
+          <p>{organizationLineTwo}</p>
+          <p>{organizationLineThree}</p>
 
           <div className="kta-card-qr-box">
             <div className="kta-card-qr-code" aria-label="QR verifikasi KTA">
@@ -105,17 +119,24 @@ export default function HpdkiMemberCard({
             </div>
           </dl>
 
-          <div className="kta-card-signature">
-            <span>Ketua PAC HPDKI Kec. Dramaga</span>
-<Image
-  src="/images/ttd-ketua-hpdki.png"
-  alt="Tanda tangan Ketua PAC HPDKI Kecamatan Dramaga"
-  width={180}
-  height={72}
-  className="kta-card-signature-image"
-/>
-            <strong>{chairmanName}</strong>
-            <small>{chairmanNumber}</small>
+          <div className="kta-card-signatures">
+            <div className="kta-card-signature">
+              <span>{settings.chairman_title}</span>
+              <Image
+                src="/images/ttd-ketua-hpdki.png"
+                alt="Tanda tangan Ketua PAC HPDKI Kecamatan Dramaga"
+                width={180}
+                height={72}
+                className="kta-card-signature-image"
+              />
+              <strong>{settings.chairman_name}</strong>
+            </div>
+
+            <div className="kta-card-signature">
+              <span>{settings.vice_chairman_title}</span>
+              <div className="kta-card-signature-placeholder" />
+              <strong>{settings.vice_chairman_name}</strong>
+            </div>
           </div>
         </div>
       </article>
@@ -129,26 +150,9 @@ export default function HpdkiMemberCard({
         </header>
 
         <ul className="kta-card-terms">
-          <li>
-            Kartu Tanda Anggota (KTA) ini adalah milik PAC HPDKI Kecamatan
-            Dramaga.
-          </li>
-          <li>
-            Kartu ini berlaku selama anggota terdaftar dan masih aktif dalam
-            organisasi.
-          </li>
-          <li>
-            Kartu ini berlaku selama 5 (lima) tahun terhitung sejak tanggal
-            diterbitkan.
-          </li>
-          <li>
-            Anggota wajib mematuhi AD/ART, peraturan, dan keputusan organisasi.
-          </li>
-          <li>Kartu ini tidak dapat dipindahtangankan kepada pihak lain.</li>
-          <li>
-            Jika kartu hilang atau rusak, harap segera menghubungi Sekretariat
-            PAC HPDKI Kecamatan Dramaga.
-          </li>
+          {terms.map((term) => (
+            <li key={term}>{term}</li>
+          ))}
         </ul>
 
         <div className="kta-card-back-identity">
@@ -170,14 +174,11 @@ export default function HpdkiMemberCard({
         <footer className="kta-card-back-footer">
           <div>
             <strong>Sekretariat:</strong>
-            <span>
-              Kp. Sukabakti, Sukawening, Dramaga, Kabupaten Bogor
-            </span>
+            <span>{settings.secretariat_address || "-"}</span>
           </div>
 
           <div>
-            <span>☎ 0812 1025 001</span>
-            <span>✉ sekretariat.dramaga@hpdki.or.id</span>
+            <span>{settings.secretariat_contact || "-"}</span>
           </div>
         </footer>
       </article>

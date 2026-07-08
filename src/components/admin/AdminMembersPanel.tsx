@@ -3,6 +3,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import HpdkiMemberCard from "@/components/admin/HpdkiMemberCard";
+import {
+  defaultHpdkiKtaSettings,
+  getHpdkiKtaSettings,
+  type HpdkiKtaSettingsRecord,
+} from "@/lib/appwrite/kta-settings";
 
 import {
   deactivateHpdkiMember,
@@ -243,6 +248,8 @@ export default function AdminMembersPanel() {
   const [actionLoadingNumber, setActionLoadingNumber] = useState("");
   const [selectedKtaMember, setSelectedKtaMember] =
     useState<PublicHpdkiMemberRecord | null>(null);
+  const [ktaSettings, setKtaSettings] =
+    useState<HpdkiKtaSettingsRecord>(defaultHpdkiKtaSettings);
   const [editingMember, setEditingMember] =
     useState<PublicHpdkiMemberRecord | null>(null);
   const [memberEditForm, setMemberEditForm] =
@@ -263,8 +270,13 @@ export default function AdminMembersPanel() {
     setErrorMessage("");
 
     try {
-      const rows = await listHpdkiMembers();
+      const [rows, settings] = await Promise.all([
+        listHpdkiMembers(),
+        getHpdkiKtaSettings(),
+      ]);
+
       setMembers(rows);
+      setKtaSettings(settings);
     } catch (error) {
       console.error("Gagal memuat data anggota:", error);
       setErrorMessage(
@@ -1054,6 +1066,7 @@ export default function AdminMembersPanel() {
             <div className="admin-kta-preview-modal" ref={ktaPreviewRef}>
               <HpdkiMemberCard
                 member={selectedKtaMember}
+                settings={ktaSettings}
                 verificationUrl={getAbsoluteVerificationUrl(
                   selectedKtaMember.member_number,
                 )}

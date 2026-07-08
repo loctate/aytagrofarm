@@ -8,6 +8,8 @@ export const appwriteConfig = {
     process.env.NEXT_PUBLIC_APPWRITE_MEMBERS_TABLE_ID ?? "",
   knowledgeTableId:
     process.env.NEXT_PUBLIC_APPWRITE_KNOWLEDGE_TABLE_ID ?? "",
+  ktaSettingsTableId:
+    process.env.NEXT_PUBLIC_APPWRITE_KTA_SETTINGS_TABLE_ID ?? "",
 } as const;
 
 export function validateAppwriteClientConfig() {
