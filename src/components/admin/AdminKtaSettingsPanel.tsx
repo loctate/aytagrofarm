@@ -241,6 +241,7 @@ export default function AdminKtaSettingsPanel() {
 
           <button
             type="button"
+            className="admin-kta-reload-button"
             onClick={() => void loadSettings()}
             disabled={loading || saving}
           >
