@@ -19,7 +19,6 @@ const organizationLineOne = "PAC HPDKI";
 const organizationLineTwo = "KECAMATAN DRAMAGA";
 const organizationLineThree = "KABUPATEN BOGOR";
 const organizationName = `${organizationLineOne} ${organizationLineTwo}`;
-const organizationRegion = organizationLineThree;
 
 function getValidUntil(value: string | null, validityYears: number) {
   const sourceDate = value ? new Date(value) : new Date();
