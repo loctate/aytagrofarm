@@ -125,18 +125,22 @@ export async function listPublicHpdkiMembers(limit = 100) {
     return [];
   }
 
-  const response = await tablesDB.listRows({
-    databaseId: appwriteConfig.databaseId,
-    tableId: appwriteConfig.membersTableId,
-    queries: [
-      Query.equal("is_public", true),
-      Query.equal("membership_status", "active"),
-      Query.orderAsc("member_number"),
-      Query.limit(limit),
-    ],
-  });
+  try {
+    const response = await tablesDB.listRows({
+      databaseId: appwriteConfig.databaseId,
+      tableId: appwriteConfig.membersTableId,
+      queries: [
+        Query.equal("is_public", true),
+        Query.equal("membership_status", "active"),
+        Query.orderAsc("member_number"),
+        Query.limit(limit),
+      ],
+    });
 
-  return response.rows as unknown as PublicHpdkiMemberRecord[];
+    return response.rows as unknown as PublicHpdkiMemberRecord[];
+  } catch {
+    return [];
+  }
 }
 
 export async function publishRegistrationAsMember(

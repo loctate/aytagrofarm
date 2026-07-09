@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import PublicBrand from "@/components/PublicBrand";
 import LayananDropdown from "@/components/LayananDropdown";
+import Link from "next/link";
 
 const whatsappNumber = "6287889124342";
 const instagramUrl = "https://www.instagram.com/ayt_farm/";
@@ -446,9 +447,9 @@ export default function Home() {
               <span>PAC HPDKI</span>
               <span>KECAMATAN DRAMAGA</span>
             </a>
-            <a href="/cerita-ayt" onClick={() => setMenuOpen(false)}>
+            <Link href="/cerita-ayt" onClick={() => setMenuOpen(false)}>
               Cerita AYT
-            </a>
+            </Link>
             <a href="#kontak" onClick={() => setMenuOpen(false)}>
               Kontak
             </a>
@@ -915,7 +916,7 @@ export default function Home() {
             <a href="/hpdki">
               PAC HPDKI KECAMATAN DRAMAGA
             </a>
-            <a href="/cerita-ayt">Cerita AYT</a>
+            <Link href="/cerita-ayt">Cerita AYT</Link>
             <a href="#kontak">Kontak</a>
           </div>
 
