@@ -239,35 +239,119 @@ export async function reactivateHpdkiMember(memberNumber: string) {
   return updateHpdkiMemberStatusByNumber(memberNumber, "active", true);
 }
 
+const BLOCKED_MEMBER_UPDATE_FIELDS = [
+  "$id",
+  "$createdAt",
+  "$updatedAt",
+  "document_id",
+  "registration_id",
+  "registration_number",
+  "member_data_number",
+  "member_number",
+  "member_year",
+  "member_sequence",
+  "approved_at",
+  "kta_status",
+  "kta_issued_at",
+  "kta_expired_at",
+  "membership_status",
+  "is_public",
+] as const;
+
+function assertNoBlockedMemberUpdateFields(data: Record<string, unknown>) {
+  const blockedFields = Object.keys(data).filter((fieldName) =>
+    (BLOCKED_MEMBER_UPDATE_FIELDS as readonly string[]).includes(fieldName),
+  );
+
+  if (blockedFields.length > 0) {
+    throw new Error(
+      `Field anggota tidak boleh diubah dari form edit: ${blockedFields.join(
+        ", ",
+      )}`,
+    );
+  }
+}
+
+function normalizeMemberUpdateText(
+  value: unknown,
+  label: string,
+  required = true,
+) {
+  const text = typeof value === "string" ? value.trim() : "";
+
+  if (required && !text) {
+    throw new Error(`${label} wajib diisi.`);
+  }
+
+  return text;
+}
+
+function normalizeMemberUpdateNumber(value: unknown, label: string) {
+  const numberValue =
+    typeof value === "number" ? value : Number.parseFloat(String(value ?? ""));
+
+  if (!Number.isFinite(numberValue) || numberValue < 0) {
+    throw new Error(`${label} harus berupa angka 0 atau lebih.`);
+  }
+
+  return numberValue;
+}
+
 export async function updateHpdkiMemberData(
   memberId: string,
   data: HpdkiMemberUpdateData,
 ) {
   validateMembersWriteConfig();
 
+  const rawData = data as unknown as Record<string, unknown>;
+  assertNoBlockedMemberUpdateFields(rawData);
+
+  const safeData = {
+    farmer_name: normalizeMemberUpdateText(data.farmer_name, "Nama peternak"),
+    farm_group_name: normalizeMemberUpdateText(
+      data.farm_group_name,
+      "Nama kandang/kelompok",
+      false,
+    ),
+    village: normalizeMemberUpdateText(data.village, "Desa"),
+    district: normalizeMemberUpdateText(data.district, "Kecamatan"),
+    regency: normalizeMemberUpdateText(data.regency, "Kabupaten"),
+    female_goats: normalizeMemberUpdateNumber(
+      data.female_goats,
+      "Kambing betina",
+    ),
+    male_goats: normalizeMemberUpdateNumber(
+      data.male_goats,
+      "Kambing jantan",
+    ),
+    female_sheep: normalizeMemberUpdateNumber(
+      data.female_sheep,
+      "Domba betina",
+    ),
+    male_sheep: normalizeMemberUpdateNumber(
+      data.male_sheep,
+      "Domba jantan",
+    ),
+    feed_type: normalizeMemberUpdateText(data.feed_type, "Jenis pakan"),
+    farm_area_m2: normalizeMemberUpdateNumber(
+      data.farm_area_m2,
+      "Luas kandang",
+    ),
+  };
+
   const totalPopulation =
-    data.female_goats +
-    data.male_goats +
-    data.female_sheep +
-    data.male_sheep;
+    safeData.female_goats +
+    safeData.male_goats +
+    safeData.female_sheep +
+    safeData.male_sheep;
 
   const updatedMember = await tablesDB.updateRow({
     databaseId: appwriteConfig.databaseId,
     tableId: appwriteConfig.membersTableId,
     rowId: memberId,
     data: {
-      farmer_name: data.farmer_name,
-      farm_group_name: data.farm_group_name,
-      village: data.village,
-      district: data.district,
-      regency: data.regency,
-      female_goats: data.female_goats,
-      male_goats: data.male_goats,
-      female_sheep: data.female_sheep,
-      male_sheep: data.male_sheep,
+      ...safeData,
       total_population: totalPopulation,
-      feed_type: data.feed_type,
-      farm_area_m2: data.farm_area_m2,
     },
   });
 
