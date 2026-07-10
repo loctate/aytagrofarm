@@ -20,6 +20,13 @@ export type ExportableHpdkiMember = {
   female_count?: number | null;
   male_count?: number | null;
   total_livestock_count?: number | null;
+  female_goats?: number | null;
+  male_goats?: number | null;
+  female_sheep?: number | null;
+  male_sheep?: number | null;
+  total_population?: number | null;
+  feed_type?: string | null;
+  farm_area_m2?: number | null;
   membership_status?: string | null;
   inactive_reason?: string | null;
   admin_notes?: string | null;
@@ -41,9 +48,15 @@ export type HpdkiMemberExportRow = {
   provinsi: string;
   alamat: string;
   jenis_ternak: string;
-  betina: number | "";
-  jantan: number | "";
+  kambing_betina: number | "";
+  kambing_jantan: number | "";
+  domba_betina: number | "";
+  domba_jantan: number | "";
+  total_betina: number | "";
+  total_jantan: number | "";
   total_ternak: number | "";
+  jenis_pakan: string;
+  luas_kandang_m2: number | "";
   status: string;
   alasan_nonaktif: string;
   tanggal_disetujui: string;
@@ -58,7 +71,7 @@ function toText(value: unknown) {
   return String(value);
 }
 
-function toNumberOrBlank(value: unknown) {
+function toNumber(value: unknown) {
   if (typeof value === "number" && Number.isFinite(value)) {
     return value;
   }
@@ -69,6 +82,40 @@ function toNumberOrBlank(value: unknown) {
     if (Number.isFinite(parsedValue)) {
       return parsedValue;
     }
+  }
+
+  return 0;
+}
+
+function toNumberOrBlank(value: unknown) {
+  const numberValue = toNumber(value);
+  return numberValue === 0 ? "" : numberValue;
+}
+
+function sumOrBlank(firstValue: unknown, secondValue: unknown) {
+  const total = toNumber(firstValue) + toNumber(secondValue);
+  return total === 0 ? "" : total;
+}
+
+function getLivestockType(member: ExportableHpdkiMember) {
+  if (member.livestock_type) {
+    return member.livestock_type;
+  }
+
+  const goatTotal = toNumber(member.female_goats) + toNumber(member.male_goats);
+  const sheepTotal =
+    toNumber(member.female_sheep) + toNumber(member.male_sheep);
+
+  if (goatTotal > 0 && sheepTotal > 0) {
+    return "Kambing & Domba";
+  }
+
+  if (goatTotal > 0) {
+    return "Kambing";
+  }
+
+  if (sheepTotal > 0) {
+    return "Domba";
   }
 
   return "";
@@ -134,10 +181,26 @@ export function buildHpdkiMemberExportRows(
       kabupaten: toText(member.regency),
       provinsi: toText(member.province),
       alamat: toText(member.address),
-      jenis_ternak: toText(member.livestock_type),
-      betina: toNumberOrBlank(member.female_count),
-      jantan: toNumberOrBlank(member.male_count),
-      total_ternak: toNumberOrBlank(member.total_livestock_count),
+      jenis_ternak: getLivestockType(member),
+      kambing_betina: toNumberOrBlank(member.female_goats),
+      kambing_jantan: toNumberOrBlank(member.male_goats),
+      domba_betina: toNumberOrBlank(member.female_sheep),
+      domba_jantan: toNumberOrBlank(member.male_sheep),
+      total_betina:
+        member.female_count ?? sumOrBlank(member.female_goats, member.female_sheep),
+      total_jantan:
+        member.male_count ?? sumOrBlank(member.male_goats, member.male_sheep),
+      total_ternak:
+        member.total_livestock_count ??
+        member.total_population ??
+        toNumberOrBlank(
+          toNumber(member.female_goats) +
+            toNumber(member.male_goats) +
+            toNumber(member.female_sheep) +
+            toNumber(member.male_sheep),
+        ),
+      jenis_pakan: toText(member.feed_type),
+      luas_kandang_m2: toNumberOrBlank(member.farm_area_m2),
       status: toText(member.membership_status),
       alasan_nonaktif: toText(member.inactive_reason),
       tanggal_disetujui: toText(member.approved_at),
@@ -163,9 +226,15 @@ export const HPDKI_MEMBER_EXPORT_HEADERS: Record<
   provinsi: "Provinsi",
   alamat: "Alamat",
   jenis_ternak: "Jenis Ternak",
-  betina: "Betina",
-  jantan: "Jantan",
+  kambing_betina: "Kambing Betina",
+  kambing_jantan: "Kambing Jantan",
+  domba_betina: "Domba Betina",
+  domba_jantan: "Domba Jantan",
+  total_betina: "Total Betina",
+  total_jantan: "Total Jantan",
   total_ternak: "Total Ternak",
+  jenis_pakan: "Jenis Pakan",
+  luas_kandang_m2: "Luas Kandang m2",
   status: "Status",
   alasan_nonaktif: "Alasan Nonaktif",
   tanggal_disetujui: "Tanggal Disetujui",
