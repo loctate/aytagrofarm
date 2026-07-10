@@ -7320,3 +7320,176 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   word-break: break-word;
   overflow-wrap: anywhere;
 }
+
+/* Admin member evaluation section */
+.admin-member-evaluation-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-member-evaluation-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-member-evaluation-header h4 {
+  margin-bottom: 0.35rem;
+}
+
+.admin-member-evaluation-header p,
+.admin-member-evaluation-list p {
+  margin: 0;
+  color: #60756b;
+  line-height: 1.55;
+}
+
+.admin-member-evaluation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.admin-member-evaluation-actions button {
+  border: 1px solid rgba(18, 60, 43, 0.16);
+  border-radius: 999px;
+  padding: 0.72rem 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #103d2b;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-member-evaluation-actions button:last-child,
+.admin-member-evaluation-actions.is-footer button {
+  border: 0;
+  background: #0f5c3a;
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(15, 92, 58, 0.16);
+}
+
+.admin-member-evaluation-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.admin-member-evaluation-message {
+  border: 1px solid rgba(15, 92, 58, 0.16);
+  border-radius: 16px;
+  padding: 0.75rem 0.85rem;
+  background: rgba(15, 92, 58, 0.08);
+  color: #0f5c3a;
+  font-weight: 800;
+}
+
+.admin-member-evaluation-form {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgba(18, 60, 43, 0.1);
+  border-radius: 20px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.admin-member-evaluation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.admin-member-evaluation-grid label {
+  display: grid;
+  gap: 0.4rem;
+  color: #163f2d;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.admin-member-evaluation-grid input,
+.admin-member-evaluation-grid textarea {
+  width: 100%;
+  border: 1px solid rgba(18, 60, 43, 0.16);
+  border-radius: 14px;
+  padding: 0.78rem 0.85rem;
+  background: rgba(255, 255, 255, 0.94);
+  color: #103d2b;
+  font: inherit;
+  outline: none;
+}
+
+.admin-member-evaluation-grid textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.admin-member-evaluation-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-member-evaluation-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-radius: 16px;
+  padding: 0.8rem 1rem;
+  background: rgba(15, 92, 58, 0.08);
+  color: #103d2b;
+}
+
+.admin-member-evaluation-total span {
+  font-weight: 850;
+}
+
+.admin-member-evaluation-total strong {
+  font-size: 1.25rem;
+}
+
+.admin-member-evaluation-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-member-evaluation-item {
+  border: 1px solid rgba(18, 60, 43, 0.1);
+  border-radius: 18px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.admin-member-evaluation-item div {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-member-evaluation-item strong {
+  color: #103d2b;
+}
+
+.admin-member-evaluation-item span,
+.admin-member-evaluation-item em {
+  color: #60756b;
+}
+
+.admin-member-evaluation-item em {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 860px) {
+  .admin-member-evaluation-header {
+    display: grid;
+  }
+
+  .admin-member-evaluation-actions {
+    justify-content: flex-start;
+  }
+
+  .admin-member-evaluation-grid {
+    grid-template-columns: 1fr;
+  }
+}
