@@ -9,6 +9,7 @@ import { getCurrentAdmin, logoutAdmin } from "@/lib/appwrite/auth";
 import AdminMembersPanel from "@/components/admin/AdminMembersPanel";
 import AdminKtaSettingsPanel from "@/components/admin/AdminKtaSettingsPanel";
 import AdminHpdkiActivitiesPanel from "@/components/admin/AdminHpdkiActivitiesPanel";
+import AdminAytActivitiesPanel from "@/components/admin/AdminAytActivitiesPanel";
 import {
   listHpdkiRegistrations,
   registrationStatuses,
@@ -30,6 +31,7 @@ type AdminMenu =
   | "pendaftaran"
   | "anggota"
   | "kegiatan-hpdki"
+  | "cerita-ayt"
   | "kta-settings";
 
 function formatDate(value: string | null) {
@@ -537,6 +539,18 @@ export default function AdminPage() {
           <button
             type="button"
             className={
+              activeMenu === "cerita-ayt"
+                ? "is-active"
+                : ""
+            }
+            onClick={() => setActiveMenu("cerita-ayt")}
+          >
+            Cerita AYT
+          </button>
+
+          <button
+            type="button"
+            className={
               activeMenu === "kta-settings"
                 ? "is-active"
                 : ""
@@ -580,6 +594,10 @@ export default function AdminPage() {
 
               {activeMenu === "kegiatan-hpdki" &&
                 "Kegiatan HPDKI"}
+
+
+              {activeMenu === "cerita-ayt" &&
+                "Cerita AYT Agro Farm"}
 
               {activeMenu === "kta-settings" &&
                 "Pengaturan KTA"}
@@ -906,6 +924,11 @@ export default function AdminPage() {
 
                 {activeMenu === "kegiatan-hpdki" && (
                   <AdminHpdkiActivitiesPanel />
+                )}
+
+
+                {activeMenu === "cerita-ayt" && (
+                  <AdminAytActivitiesPanel />
                 )}
 
                 {activeMenu === "kta-settings" && <AdminKtaSettingsPanel />}

@@ -1,72 +1,66 @@
 import Link from "next/link";
-import { getPublishedCeritaAytPosts } from "@/data/cerita-ayt";
+
+import PublicAytActivities from "@/components/ayt/PublicAytActivities";
 
 export const metadata = {
   title: "Cerita AYT | AYT Agro Farm",
   description:
-    "Dokumentasi aktivitas AYT Agro Farm, mulai dari kandang, breeding, fattening, trading, kegiatan farm, hingga produk hilir.",
+    "Dokumentasi kegiatan, aktivitas kandang, breeding, fattening, perdagangan, produk, dan perkembangan AYT Agro Farm.",
 };
 
-function formatDate(date: string) {
-  return new Intl.DateTimeFormat("id-ID", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(date));
-}
-
 export default function CeritaAytPage() {
-  const posts = getPublishedCeritaAytPosts();
-
   return (
-    <main className="cerita-page">
-      <section className="cerita-hero">
-        <p className="cerita-eyebrow">Cerita AYT</p>
+    <main className="hpdki-kegiatan-page">
+      <section className="hpdki-kegiatan-hero">
+        <p className="hpdki-kegiatan-eyebrow">
+          Cerita AYT Agro Farm
+        </p>
 
-        <h1>Dokumentasi dan Aktivitas AYT Agro Farm</h1>
+        <h1>
+          Dokumentasi dan Aktivitas AYT Agro Farm
+        </h1>
 
         <p>
-          Cerita AYT berisi dokumentasi kegiatan farm, aktivitas kandang,
-          breeding, fattening, trading, produk hilir, dan perkembangan AYT Agro
-          Farm dari waktu ke waktu.
+          Dokumentasi kegiatan farm, aktivitas kandang,
+          breeding, fattening, perdagangan, produk hilir,
+          dan perkembangan AYT Agro Farm dari waktu ke
+          waktu.
         </p>
+
+        <div className="hpdki-kegiatan-actions">
+          <Link href="/">
+            Kembali ke Beranda
+          </Link>
+
+          <Link
+            href="/produk"
+            className="secondary"
+          >
+            Lihat Produk
+          </Link>
+        </div>
       </section>
 
-      <section className="cerita-grid">
-        {posts.map((post) => (
-          <article key={post.slug} className="cerita-card">
-            <div className="cerita-card-image">
-              <span>{post.category}</span>
-              <strong>{post.imageLabel}</strong>
-            </div>
+      <PublicAytActivities />
 
-            <div className="cerita-card-body">
-              <div className="cerita-meta">
-                <span>{formatDate(post.date)}</span>
-                <span>{post.category}</span>
-              </div>
-
-              <h2>{post.title}</h2>
-
-              <p>{post.excerpt}</p>
-
-              <Link href={`/cerita-ayt/${post.slug}`}>Baca Cerita</Link>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section className="cerita-cta">
+      <section className="hpdki-kegiatan-cta">
         <div>
           <p>Dokumentasi AYT</p>
-          <h2>Kegiatan farm akan terus diperbarui</h2>
+
+          <h2>
+            Perjalanan dan aktivitas AYT Agro Farm
+          </h2>
+
           <span>
-            Ke depan, halaman ini dapat dihubungkan ke admin agar tim AYT bisa
-            menambahkan cerita, foto, dan dokumentasi kegiatan secara mandiri.
+            Dokumentasi ini menampilkan aktivitas
+            peternakan, pengembangan ternak, kegiatan
+            kandang, dan pelayanan AYT Agro Farm.
           </span>
         </div>
 
-        <Link href="/produk">Lihat Produk AYT</Link>
+        <Link href="/produk">
+          Lihat Produk AYT
+        </Link>
       </section>
     </main>
   );
