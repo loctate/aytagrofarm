@@ -6924,3 +6924,399 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
   background: #0b4f31;
   transform: translateY(-1px);
 }
+
+
+/* Admin KTA settings form only */
+.admin-kta-settings-panel > .admin-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 1.35rem;
+}
+
+.admin-kta-settings-panel > .admin-card-heading h2 {
+  margin: 0 0 0.45rem;
+  color: #103d2b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.admin-kta-settings-panel > .admin-card-heading p {
+  max-width: 680px;
+  margin: 0;
+  color: #64776e;
+  line-height: 1.65;
+}
+
+.admin-kta-settings-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.admin-kta-sample-button,
+.admin-kta-reload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.78rem 1.05rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-kta-sample-button {
+  border: 0;
+  background: #0f5c3a;
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(15, 92, 58, 0.18);
+}
+
+.admin-kta-reload-button {
+  border: 1px solid rgba(18, 60, 43, 0.16);
+  background: rgba(255, 255, 255, 0.9);
+  color: #103d2b;
+}
+
+.admin-kta-settings-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-kta-settings-form .admin-member-edit-section {
+  border: 1px solid rgba(18, 60, 43, 0.1);
+  border-radius: 24px;
+  padding: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 250, 238, 0.82));
+  box-shadow: 0 18px 42px rgba(20, 53, 36, 0.07);
+}
+
+.admin-kta-settings-form .admin-member-edit-section h4 {
+  margin: 0 0 1rem;
+  color: #103d2b;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.admin-kta-settings-form .admin-member-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.admin-kta-settings-form label {
+  display: grid;
+  gap: 0.45rem;
+  color: #163f2d;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.admin-kta-settings-form input,
+.admin-kta-settings-form textarea {
+  width: 100%;
+  border: 1px solid rgba(18, 60, 43, 0.16);
+  border-radius: 16px;
+  padding: 0.85rem 0.95rem;
+  background: rgba(255, 255, 255, 0.94);
+  color: #103d2b;
+  font: inherit;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.admin-kta-settings-form textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.admin-kta-settings-form input:focus,
+.admin-kta-settings-form textarea:focus {
+  border-color: rgba(15, 92, 58, 0.5);
+  box-shadow: 0 0 0 4px rgba(15, 92, 58, 0.09);
+  background: #ffffff;
+}
+
+.admin-kta-settings-wide,
+.admin-kta-settings-textarea-label {
+  grid-column: 1 / -1;
+}
+
+.admin-kta-settings-preview {
+  margin-top: 1rem;
+  border: 1px dashed rgba(18, 60, 43, 0.18);
+  border-radius: 18px;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.admin-kta-settings-preview strong {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #103d2b;
+}
+
+.admin-kta-settings-preview ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #405b50;
+  line-height: 1.65;
+}
+
+.admin-kta-settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.admin-kta-settings-actions button[type="submit"] {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.9rem 1.25rem;
+  background: #0f5c3a;
+  color: #ffffff;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(15, 92, 58, 0.18);
+}
+
+.admin-kta-settings-success {
+  margin-bottom: 1rem;
+  border: 1px solid rgba(15, 92, 58, 0.16);
+  border-radius: 18px;
+  padding: 0.85rem 1rem;
+  background: rgba(15, 92, 58, 0.08);
+  color: #0f5c3a;
+  font-weight: 850;
+}
+
+@media (max-width: 900px) {
+  .admin-kta-settings-panel > .admin-card-heading {
+    display: grid;
+  }
+
+  .admin-kta-settings-heading-actions,
+  .admin-kta-settings-actions {
+    justify-content: flex-start;
+  }
+
+  .admin-kta-settings-form .admin-member-edit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* KTA sample preview modal safe layout */
+.admin-kta-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(7, 27, 20, 0.72);
+  backdrop-filter: blur(8px);
+  overflow: auto;
+}
+
+.admin-kta-sample-modal {
+  width: min(1120px, calc(100vw - 3rem));
+  max-height: calc(100vh - 3rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #fffaf0;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+}
+
+.admin-kta-modal-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(18, 60, 43, 0.1);
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 250, 240, 0.96);
+}
+
+.admin-kta-modal-header h3 {
+  margin: 0.25rem 0 0.25rem;
+  color: #103d2b;
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+
+.admin-kta-modal-header p {
+  margin: 0;
+  color: #60756b;
+}
+
+.admin-kta-modal-header button {
+  flex: 0 0 auto;
+  border: 1px solid rgba(18, 60, 43, 0.16);
+  border-radius: 999px;
+  padding: 0.75rem 1.05rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: #103d2b;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-kta-sample-preview-wrap {
+  flex: 1 1 auto;
+  overflow: auto;
+  padding: 1.25rem;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(205, 166, 74, 0.12), transparent 24rem),
+    #fffaf0;
+}
+
+.admin-kta-sample-preview-scale {
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 760px) {
+  .admin-kta-modal-backdrop {
+    padding: 1rem;
+  }
+
+  .admin-kta-sample-modal {
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+  }
+
+  .admin-kta-modal-header {
+    display: grid;
+  }
+}
+
+
+/* KTA sample preview vertical precise layout */
+.admin-kta-sample-preview-wrap .kta-preview-canvas {
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-design {
+  flex: 0 0 auto;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front,
+.admin-kta-sample-preview-wrap .kta-card-back {
+  max-width: 100%;
+}
+
+.admin-kta-sample-preview-wrap .kta-print-size-note {
+  width: 100%;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+
+/* KTA sample preview front polish */
+.admin-kta-sample-preview-wrap .kta-card-front {
+  align-items: stretch;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-light-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.85rem 0.95rem;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-name-plate {
+  padding: 0.42rem 0.7rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.3rem;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-name-plate strong {
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-data-list {
+  display: grid;
+  gap: 0.32rem;
+  margin: 0;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-data-list > div {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 0.45rem;
+  align-items: start;
+  padding: 0.22rem 0;
+  border-bottom: 1px solid rgba(25, 53, 45, 0.12);
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-data-list dt {
+  font-size: 0.68rem;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-data-list dd {
+  font-size: 0.8rem;
+  line-height: 1.25;
+  margin: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-signatures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+  align-items: end;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-signature {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-signature span {
+  font-size: 0.56rem;
+  line-height: 1.15;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-signature-image {
+  width: 92px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.admin-kta-sample-preview-wrap .kta-card-front .kta-card-signature strong {
+  font-size: 0.68rem;
+  line-height: 1.15;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
