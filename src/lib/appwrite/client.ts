@@ -1,4 +1,4 @@
-import { Account, Client, TablesDB } from "appwrite";
+import { Account, Client, Storage, TablesDB } from "appwrite";
 import {
   appwriteConfig,
   validateAppwriteClientConfig,
@@ -12,3 +12,4 @@ export const appwriteClient = new Client()
 
 export const account = new Account(appwriteClient);
 export const tablesDB = new TablesDB(appwriteClient);
+export const storage = new Storage(appwriteClient);
