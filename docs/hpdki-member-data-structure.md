@@ -142,3 +142,37 @@ Tahap berikutnya adalah menghubungkan helper ini ke admin dashboard:
 3. Form edit anggota yang hanya mengirim field yang boleh diedit.
 4. Riwayat evaluasi anggota.
 5. Riwayat kunjungan anggota.
+
+## Tahap 4E — hpdki_member_evaluations
+
+Table ini dipakai untuk menyimpan riwayat evaluasi anggota. Data utama anggota tetap ada di `hpdki_members`, sedangkan setiap catatan evaluasi disimpan sebagai riwayat terpisah.
+
+### Env yang dibutuhkan
+
+```env
+NEXT_PUBLIC_APPWRITE_MEMBER_EVALUATIONS_TABLE_ID=
+Field table hpdki_member_evaluations
+Field	Type	Required	Catatan
+member_id	string	yes	ID row anggota di hpdki_members
+member_number	string	yes	Nomor anggota resmi
+farmer_name	string	yes	Nama peternak saat evaluasi
+evaluation_date	datetime/string	yes	Tanggal evaluasi
+female_goats	integer/float	yes	Kambing betina
+male_goats	integer/float	yes	Kambing jantan
+female_sheep	integer/float	yes	Domba betina
+male_sheep	integer/float	yes	Domba jantan
+total_population	integer/float	yes	Dihitung otomatis
+feed_type	string	yes	Jenis pakan
+farm_area_m2	float	yes	Luas kandang
+cage_condition	string	no	Kondisi kandang
+livestock_condition	string	no	Kondisi ternak
+health_notes	string	no	Catatan kesehatan
+feed_notes	string	no	Catatan pakan
+business_notes	string	no	Catatan usaha
+follow_up	string	no	Tindak lanjut
+admin_notes	string	no	Catatan admin
+created_by	string	no	Nama admin/pengurus
+Index yang disarankan
+member_number
+evaluation_date
+member_number + evaluation_date jika tersedia
