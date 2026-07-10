@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { getCurrentAdmin, logoutAdmin } from "@/lib/appwrite/auth";
 import AdminMembersPanel from "@/components/admin/AdminMembersPanel";
 import AdminKtaSettingsPanel from "@/components/admin/AdminKtaSettingsPanel";
+import AdminHpdkiActivitiesPanel from "@/components/admin/AdminHpdkiActivitiesPanel";
 import {
   listHpdkiRegistrations,
   registrationStatuses,
@@ -28,6 +29,7 @@ type AdminMenu =
   | "pengetahuan"
   | "pendaftaran"
   | "anggota"
+  | "kegiatan-hpdki"
   | "kta-settings";
 
 function formatDate(value: string | null) {
@@ -523,6 +525,18 @@ export default function AdminPage() {
           <button
             type="button"
             className={
+              activeMenu === "kegiatan-hpdki"
+                ? "is-active"
+                : ""
+            }
+            onClick={() => setActiveMenu("kegiatan-hpdki")}
+          >
+            Kegiatan HPDKI
+          </button>
+
+          <button
+            type="button"
+            className={
               activeMenu === "kta-settings"
                 ? "is-active"
                 : ""
@@ -563,6 +577,9 @@ export default function AdminPage() {
 
               {activeMenu === "anggota" &&
                 "Data Anggota"}
+
+              {activeMenu === "kegiatan-hpdki" &&
+                "Kegiatan HPDKI"}
 
               {activeMenu === "kta-settings" &&
                 "Pengaturan KTA"}
@@ -886,6 +903,10 @@ export default function AdminPage() {
         )}
 
                 {activeMenu === "anggota" && <AdminMembersPanel />}
+
+                {activeMenu === "kegiatan-hpdki" && (
+                  <AdminHpdkiActivitiesPanel />
+                )}
 
                 {activeMenu === "kta-settings" && <AdminKtaSettingsPanel />}
       </section>

@@ -163,9 +163,15 @@ export default function MemberEvaluationSection({
   }, [member.member_number]);
 
   useEffect(() => {
-    setForm(getInitialEvaluationForm(member));
-    setShowForm(false);
-    void loadEvaluations();
+    const timer = window.setTimeout(() => {
+      setForm(getInitialEvaluationForm(member));
+      setShowForm(false);
+      void loadEvaluations();
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
   }, [loadEvaluations, member]);
 
   const saveEvaluation = async () => {
