@@ -520,14 +520,14 @@ export default function Home() {
                 <Icon name="arrow" size={18} />
               </a>
 
-              <a
+              <Link
                 className="button button-outline"
-                href={consultationWhatsappUrl}
+                href="/produk"
                 target="_blank"
                 rel="noreferrer"
               >
                 Lihat Produk Lainnya
-              </a>
+              </Link>
             </div>
 
             <div className="trust-strip" aria-label="Informasi layanan">
