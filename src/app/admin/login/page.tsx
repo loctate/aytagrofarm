@@ -51,8 +51,7 @@ export default function AdminLoginPage() {
     try {
       await loginAdmin(email, password);
       router.replace("/admin");
-    } catch (error) {
-      console.error("Login admin gagal:", error);
+    } catch {
 
       setErrorMessage(
         "Email atau password tidak sesuai. Silakan periksa dan coba kembali."
