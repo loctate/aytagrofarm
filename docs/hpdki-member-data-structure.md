@@ -106,3 +106,39 @@ Contoh urutan:
 3. HPDKI-PAC-DRAMAGA-2026-003
 
 Jika ada data tanpa nomor anggota, data tersebut ditempatkan setelah data bernomor resmi.
+
+## Helper kode yang sudah disiapkan
+
+### src/lib/hpdki/member-data-structure.ts
+
+Berisi:
+- Konstanta nama tabel.
+- Daftar field terkunci.
+- Daftar field yang boleh diedit admin.
+- Helper membuat nomor anggota.
+- Helper membaca tahun dan urutan dari nomor anggota.
+- Helper sanitasi payload update anggota.
+
+### src/lib/hpdki/member-export-helpers.ts
+
+Berisi:
+- Helper sort anggota berdasarkan nomor anggota resmi.
+- Helper membentuk baris export.
+- Header export yang nanti dipakai untuk Excel.
+
+### src/lib/hpdki/member-update-helpers.ts
+
+Berisi:
+- Helper payload aman untuk update anggota.
+- Deteksi field yang ditolak.
+- Proteksi field terkunci seperti member_number, member_sequence, approved_at, dan document_id.
+
+## Tahap berikutnya
+
+Tahap berikutnya adalah menghubungkan helper ini ke admin dashboard:
+
+1. Tombol Export Excel Anggota Aktif.
+2. Tombol Export Excel Semua Anggota.
+3. Form edit anggota yang hanya mengirim field yang boleh diedit.
+4. Riwayat evaluasi anggota.
+5. Riwayat kunjungan anggota.

@@ -2,6 +2,7 @@ import { Query } from "appwrite";
 
 import { tablesDB } from "./client";
 import { appwriteConfig } from "./config";
+import { sortHpdkiMembersByOfficialNumber } from "@/lib/hpdki/member-export-helpers";
 import {
   type HpdkiRegistrationRecord,
   updateHpdkiRegistration,
@@ -137,7 +138,7 @@ export async function listPublicHpdkiMembers(limit = 100) {
       ],
     });
 
-    return response.rows as unknown as PublicHpdkiMemberRecord[];
+    return sortHpdkiMembersByOfficialNumber(response.rows as unknown as PublicHpdkiMemberRecord[]);
   } catch {
     return [];
   }
