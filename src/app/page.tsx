@@ -18,9 +18,6 @@ const livestockWhatsappUrl = whatsappUrl(
   "Halo AYT Agro Farm, saya sedang mencari kambing atau domba. Mohon bantu informasikan ternak yang sesuai dengan kebutuhan saya."
 );
 
-const consultationWhatsappUrl = whatsappUrl(
-  "Halo AYT Agro Farm, saya ingin berkonsultasi mengenai kebutuhan kambing atau domba."
-);
 
 type IconName =
   | "arrow"
