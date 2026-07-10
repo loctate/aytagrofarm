@@ -158,6 +158,7 @@ export default function AdminKtaSettingsPanel() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadSettings();
   }, [loadSettings]);
 
@@ -442,11 +443,13 @@ export default function AdminKtaSettingsPanel() {
             </div>
 
             <div className="admin-kta-sample-preview-wrap">
-              <HpdkiMemberCard
-                member={sampleKtaMember}
-                settings={previewSettings}
-                verificationUrl={sampleVerificationUrl}
-              />
+              <div className="admin-kta-sample-preview-scale">
+                <HpdkiMemberCard
+                  member={sampleKtaMember}
+                  settings={previewSettings}
+                  verificationUrl={sampleVerificationUrl}
+                />
+              </div>
             </div>
           </div>
         </div>

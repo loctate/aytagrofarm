@@ -1,55 +1,68 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Kegiatan PAC HPDKI Dramaga",
+import PublicHpdkiActivities from "@/components/hpdki/PublicHpdkiActivities";
+
+export const metadata = {
+  title:
+    "Kegiatan HPDKI | PAC HPDKI Kecamatan Dramaga",
   description:
-    "Dokumentasi kegiatan PAC HPDKI Kecamatan Dramaga Kabupaten Bogor.",
-  alternates: {
-    canonical: "/hpdki/kegiatan",
-  },
+    "Dokumentasi kegiatan PAC HPDKI Kecamatan Dramaga, termasuk pendataan anggota, kunjungan kandang, edukasi peternak, dan silaturahmi.",
 };
 
-const activityPlans = [
-  "Dokumentasi pendataan anggota",
-  "Pertemuan dan koordinasi pengurus",
-  "Edukasi peternakan dan kesehatan ternak",
-  "Kegiatan lapangan bersama anggota",
-];
-
-export default function HpdkiActivitiesPage() {
+export default function HpdkiKegiatanPage() {
   return (
-    <main className="hpdki-hub-page">
-      <section className="hpdki-hub-hero hpdki-activities-hero">
-        <div className="container">
-          <div className="hpdki-hub-section-heading">
-            <Link href="/hpdki" className="hpdki-hub-back-link">
-              ← Kembali ke halaman HPDKI
-            </Link>
+    <main className="hpdki-kegiatan-page">
+      <section className="hpdki-kegiatan-hero">
+        <p className="hpdki-kegiatan-eyebrow">
+          PAC HPDKI Kecamatan Dramaga
+        </p>
 
-            <p className="eyebrow">Kegiatan HPDKI</p>
+        <h1>
+          Kegiatan dan Dokumentasi HPDKI Dramaga
+        </h1>
 
-            <h1 className="hpdki-activities-title">
-              Dokumentasi kegiatan PAC HPDKI Dramaga.
-            </h1>
+        <p>
+          Dokumentasi kegiatan PAC HPDKI Kecamatan
+          Dramaga, mulai dari pendataan anggota,
+          silaturahmi peternak, kunjungan kandang,
+          edukasi, hingga aktivitas organisasi lainnya.
+        </p>
 
-            <p>
-              Halaman ini disiapkan untuk menampilkan kegiatan yang sudah
-              terlaksana. Konten kegiatan bisa ditambahkan bertahap setelah
-              struktur admin siap.
-            </p>
-          </div>
+        <div className="hpdki-kegiatan-actions">
+          <Link href="/hpdki">
+            Kembali ke HPDKI
+          </Link>
 
-          <div className="hpdki-activities-placeholder">
-            {activityPlans.map((item, index) => (
-              <article key={item}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <h2>{item}</h2>
-                <p>Konten kegiatan akan ditambahkan pada tahap berikutnya.</p>
-              </article>
-            ))}
-          </div>
+          <Link
+            href="/hpdki/daftar"
+            className="secondary"
+          >
+            Daftar Anggota
+          </Link>
         </div>
+      </section>
+
+      <PublicHpdkiActivities />
+
+      <section className="hpdki-kegiatan-cta">
+        <div>
+          <p>Dokumentasi HPDKI</p>
+
+          <h2>
+            Aktivitas dan kebersamaan peternak Dramaga
+          </h2>
+
+          <span>
+            Dokumentasi ini menjadi bagian dari
+            transparansi kegiatan, pembinaan anggota,
+            dan pengembangan organisasi peternak di
+            Kecamatan Dramaga.
+          </span>
+        </div>
+
+        <Link href="/hpdki/daftar">
+          Daftar Anggota Peternak
+        </Link>
       </section>
     </main>
   );

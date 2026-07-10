@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import PublicBrand from "@/components/PublicBrand";
+import LayananDropdown from "@/components/LayananDropdown";
+import Link from "next/link";
 
 const whatsappNumber = "6287889124342";
 const instagramUrl = "https://www.instagram.com/ayt_farm/";
@@ -16,9 +18,6 @@ const livestockWhatsappUrl = whatsappUrl(
   "Halo AYT Agro Farm, saya sedang mencari kambing atau domba. Mohon bantu informasikan ternak yang sesuai dengan kebutuhan saya."
 );
 
-const consultationWhatsappUrl = whatsappUrl(
-  "Halo AYT Agro Farm, saya ingin berkonsultasi mengenai kebutuhan kambing atau domba."
-);
 
 type IconName =
   | "arrow"
@@ -436,9 +435,7 @@ export default function Home() {
             <a href="#tentang" onClick={() => setMenuOpen(false)}>
               Tentang
             </a>
-            <a href="#pengetahuan" onClick={() => setMenuOpen(false)}>
-              Pengetahuan
-            </a>
+            <LayananDropdown />
             <a
               className="nav-hpdki-link"
               href="/hpdki"
@@ -447,9 +444,9 @@ export default function Home() {
               <span>PAC HPDKI</span>
               <span>KECAMATAN DRAMAGA</span>
             </a>
-            <a href="#galeri" onClick={() => setMenuOpen(false)}>
-              Galeri
-            </a>
+            <Link href="/cerita-ayt" onClick={() => setMenuOpen(false)}>
+              Cerita AYT
+            </Link>
             <a href="#kontak" onClick={() => setMenuOpen(false)}>
               Kontak
             </a>
@@ -520,14 +517,14 @@ export default function Home() {
                 <Icon name="arrow" size={18} />
               </a>
 
-              <a
+              <Link
                 className="button button-outline"
-                href={consultationWhatsappUrl}
+                href="/produk"
                 target="_blank"
                 rel="noreferrer"
               >
-                Konsultasi via WhatsApp
-              </a>
+                Lihat Produk Lainnya
+              </Link>
             </div>
 
             <div className="trust-strip" aria-label="Informasi layanan">
@@ -697,7 +694,7 @@ export default function Home() {
                 Dokumentasi
               </span>
 
-              <h2>Galeri &amp; Aktivitas</h2>
+              <h2>Cerita AYT &amp; Aktivitas</h2>
 
               <p>
                 Dokumentasi kegiatan, lingkungan peternakan, ternak, kandang,
@@ -912,11 +909,11 @@ export default function Home() {
           <div className="footer-column">
             <h3>Menu</h3>
             <a href="#tentang">Tentang</a>
-            <a href="#pengetahuan">Pengetahuan</a>
+            <LayananDropdown onNavigate={() => setMenuOpen(false)} />
             <a href="/hpdki">
               PAC HPDKI KECAMATAN DRAMAGA
             </a>
-            <a href="#galeri">Galeri</a>
+            <Link href="/cerita-ayt">Cerita AYT</Link>
             <a href="#kontak">Kontak</a>
           </div>
 

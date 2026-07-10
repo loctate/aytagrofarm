@@ -18,6 +18,7 @@ import {
   type HpdkiMembershipStatus,
   type PublicHpdkiMemberRecord,
 } from "@/lib/appwrite/members";
+import { downloadHpdkiMembersCsv } from "@/lib/hpdki/member-excel-download";
 
 type MemberStatusFilter = "all" | HpdkiMembershipStatus;
 
@@ -326,6 +327,28 @@ export default function AdminMembersPanel() {
   const inactiveCount = members.filter(
     (member) => member.membership_status === "inactive",
   ).length;
+
+  const exportAllMembers = () => {
+    downloadHpdkiMembersCsv(members, {
+      filename: "anggota-hpdki-pac-dramaga-semua.csv",
+    });
+  };
+
+  const exportActiveMembers = () => {
+    const activeMembers = members.filter(
+      (member) => member.membership_status === "active",
+    );
+
+    downloadHpdkiMembersCsv(activeMembers, {
+      filename: "anggota-hpdki-pac-dramaga-aktif.csv",
+    });
+  };
+
+  const exportFilteredMembers = () => {
+    downloadHpdkiMembersCsv(filteredMembers, {
+      filename: "anggota-hpdki-pac-dramaga-filter.csv",
+    });
+  };
 
   const memberEditTotalPopulation = useMemo(
     () =>
@@ -647,6 +670,22 @@ export default function AdminMembersPanel() {
           >
             {loading ? "Memuat..." : "Muat Ulang"}
           </button>
+
+        <button
+          type="button"
+          onClick={exportActiveMembers}
+          disabled={loading || activeCount === 0}
+        >
+          Export Aktif
+        </button>
+
+        <button
+          type="button"
+          onClick={exportAllMembers}
+          disabled={loading || members.length === 0}
+        >
+          Export Semua
+        </button>
         </div>
       </div>
 
@@ -689,6 +728,15 @@ export default function AdminMembersPanel() {
           <option value="suspended">Dibekukan</option>
           <option value="expired">Kedaluwarsa</option>
         </select>
+
+        <button
+          type="button"
+          className="admin-members-export-filtered"
+          onClick={exportFilteredMembers}
+          disabled={loading || filteredMembers.length === 0}
+        >
+          Export Hasil Filter
+        </button>
       </div>
 
       {errorMessage && (

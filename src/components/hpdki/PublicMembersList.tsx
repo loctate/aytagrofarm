@@ -61,17 +61,14 @@ export default function PublicMembersList({
         }
 
         setMembers(rows);
-      } catch (error) {
-        console.error("Gagal memuat daftar anggota HPDKI:", error);
+      } catch {
+      if (!active) {
+        return;
+      }
 
-        if (!active) {
-          return;
-        }
-
-        setErrorMessage(
-          "Daftar anggota publik belum dapat dimuat. Pastikan tabel anggota dan permission Appwrite sudah dikonfigurasi.",
-        );
-      } finally {
+      setMembers([]);
+      setErrorMessage("Daftar anggota publik belum dapat dimuat sementara.");
+    } finally {
         if (active) {
           setLoading(false);
         }
