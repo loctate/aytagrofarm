@@ -10113,3 +10113,8 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     object-position: 58% center;
   }
 }
+
+.admin-production-status-active {
+  color: #166534;
+  font-weight: 800;
+}

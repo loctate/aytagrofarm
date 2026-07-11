@@ -91,33 +91,33 @@ export default function HpdkiRegistrationPage() {
             <h1>Pendaftaran Calon Anggota Peternak PAC HPDKI KEC. DRAMAGA KAB BOGOR</h1>
 
             <p>
-              Pendaftaran anggota PAC HPDKI Kecamatan Dramaga untuk sementara
-              belum dibuka karena sistem sedang dipersiapkan untuk data
-              production dan proses serah terima kepada pengelola.
+              Pendaftaran calon anggota PAC HPDKI Kecamatan Dramaga telah
+              dibuka. Silakan isi data peternak dan kondisi peternakan dengan
+              lengkap dan benar untuk proses pemeriksaan oleh pengelola.
             </p>
 
             <div className="registration-process">
               <article>
                 <span>01</span>
                 <div>
-                  <strong>Persiapan Sistem</strong>
-                  <p>Database production disiapkan dalam kondisi kosong.</p>
+                  <strong>Isi Formulir</strong>
+                  <p>Lengkapi data pribadi dan informasi peternakan.</p>
                 </div>
               </article>
 
               <article>
                 <span>02</span>
                 <div>
-                  <strong>Serah Terima</strong>
-                  <p>Sistem akan diserahkan kepada pengelola terlebih dahulu.</p>
+                  <strong>Pemeriksaan Data</strong>
+                  <p>Admin akan memeriksa kelengkapan dan kebenaran data.</p>
                 </div>
               </article>
 
               <article>
                 <span>03</span>
                 <div>
-                  <strong>Pendaftaran Dibuka</strong>
-                  <p>Form akan dibuka kembali setelah admin siap menerima data.</p>
+                  <strong>Persetujuan Anggota</strong>
+                  <p>Data yang memenuhi persyaratan dapat diterbitkan sebagai anggota.</p>
                 </div>
               </article>
             </div>
@@ -125,8 +125,8 @@ export default function HpdkiRegistrationPage() {
             <div className="registration-contact-note">
               <strong>Butuh informasi?</strong>
               <p>
-                Hubungi AYT Agro Farm apabila membutuhkan informasi mengenai
-                pendaftaran anggota PAC HPDKI Kecamatan Dramaga.
+                Hubungi AYT Agro Farm apabila membutuhkan bantuan dalam
+                pengisian atau proses pendaftaran anggota PAC HPDKI Kecamatan Dramaga.
               </p>
               <a
                 href={temporaryWhatsappUrl}

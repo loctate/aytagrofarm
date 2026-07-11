@@ -654,23 +654,23 @@ export default function AdminPage() {
                 <h2>Backend AYT Agro Farm sudah terhubung</h2>
 
                 <p>
-                  Sistem saat ini memakai Appwrite self-hosted production.
-                  Pendaftaran publik masih dikunci sampai proses serah terima
-                  ke pengelola selesai.
+                  Sistem production telah terhubung dan siap digunakan oleh
+                  pengelola. Pendaftaran publik HPDKI sudah dapat menerima data
+                  calon anggota.
                 </p>
               </div>
 
               <dl className="admin-production-status-grid">
                 <div>
                   <dt>Pendaftaran HPDKI</dt>
-                  <dd className="admin-production-status-locked">
-                    Terkunci
+                  <dd className="admin-production-status-active">
+                    Dibuka
                   </dd>
                 </div>
 
                 <div>
-                  <dt>Data anggota production</dt>
-                  <dd>Kosong</dd>
+                  <dt>Data anggota</dt>
+                  <dd>Dikelola melalui dashboard admin</dd>
                 </div>
 
                 <div>
