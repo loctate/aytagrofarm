@@ -21,6 +21,12 @@ const navItems = [
     icon: "▤",
   },
   {
+    title: "Struktur Pengurus",
+    description: "Susunan pengurus 2025–2030",
+    href: "/hpdki/pengurus",
+    icon: "♜",
+  },
+  {
     title: "Anggota",
     description: "Daftar anggota terverifikasi",
     href: "/hpdki/anggota",
@@ -39,8 +45,8 @@ const navItems = [
     icon: "▣",
   },
   {
-    title: "Kegiatan",
-    description: "Dokumentasi kegiatan",
+    title: "Dokumentasi Kegiatan",
+    description: "",
     href: "/hpdki/kegiatan",
     icon: "▦",
   },
@@ -111,12 +117,7 @@ export default function HpdkiPage() {
             <nav className="hpdki-locked-nav" aria-label="Menu HPDKI">
               {navItems.map((item) => (
                 <Link key={item.title} href={item.href}>
-                  <span className="hpdki-locked-nav-icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-
-                  <strong>{item.title}</strong>
-                  <small>{item.description}</small>
+<strong>{item.title}</strong>
                 </Link>
               ))}
             </nav>
@@ -219,7 +220,7 @@ export default function HpdkiPage() {
               </p>
             </div>
 
-            <Link href="/hpdki/anggota" className="hpdki-locked-secondary">
+          <Link href="/hpdki/anggota" className="hpdki-locked-secondary">
               Lihat Semua Anggota
             </Link>
           </div>
