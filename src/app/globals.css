@@ -10101,3 +10101,15 @@ footer { padding: 105px 0 24px; background: linear-gradient(135deg, #0a2b20, #0f
     grid-template-columns: 1fr;
   }
 }
+
+/* Natural AYT Agro Farm homepage hero */
+.ayt-home-hero-photo {
+  object-fit: cover;
+  object-position: center center;
+}
+
+@media (max-width: 760px) {
+  .ayt-home-hero-photo {
+    object-position: 58% center;
+  }
+}

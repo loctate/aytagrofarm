@@ -238,7 +238,7 @@ const benefits = [
 
 const knowledgePosts = [
   {
-    image: "/images/ayt-home-logo-generated.png",
+    image: "/images/ayt-hero-natural-farm.png",
     category: "Tips Peternakan",
     title: "Tips Memilih Kambing dan Domba yang Sehat",
     summary:
@@ -252,7 +252,7 @@ const knowledgePosts = [
       "Pemilihan bakalan yang tepat membantu proses penggemukan berjalan lebih terarah dan sesuai target usaha.",
   },
   {
-    image: "/images/ayt-home-logo-generated.png",
+    image: "/images/ayt-hero-natural-farm.png",
     category: "Perawatan",
     title: "Menjaga Kandang Tetap Bersih dan Nyaman",
     summary:
@@ -563,12 +563,16 @@ export default function Home() {
           <div className="hero-media">
             <div className="hero-image-frame">
               <Image
-                src="/images/ayt-home-logo-generated.png"
+                src="/images/ayt-hero-natural-farm.png"
                 alt="AYT Agro Farm dengan kandang, kambing, dan domba"
                 fill
                 priority
                 sizes="(max-width: 980px) 100vw, 56vw"
-              />
+              style={{
+    objectFit: "cover",
+    objectPosition: "24% center",
+  }}
+/>
               <div className="hero-image-shade" />
             </div>
           </div>
