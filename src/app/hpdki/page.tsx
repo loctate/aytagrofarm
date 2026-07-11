@@ -197,8 +197,8 @@ export default function HpdkiPage() {
 
           <div className="hpdki-locked-panel">
             <h3>Ruang Kegiatan HPDKI</h3>
-            <p>Dokumentasi kegiatan akan ditampilkan secara bertahap setelah
-              dipublikasikan melalui dashboard admin.</p>
+            <p>Dokumentasi kegiatan organisasi ditampilkan setelah
+              dipublikasikan oleh pengelola.</p>
 
             <ul className="hpdki-locked-list">
               {activityItems.map((item) => (

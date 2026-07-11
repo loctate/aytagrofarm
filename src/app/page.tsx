@@ -680,7 +680,7 @@ export default function Home() {
                   <h3>{post.title}</h3>
                   <p>{post.summary}</p>
                   <span className="knowledge-coming">
-                    Artikel lengkap segera tersedia
+                    Informasi ringkas untuk peternak
                   </span>
                 </div>
               </article>

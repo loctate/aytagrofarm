@@ -108,7 +108,7 @@ export default function AdminAytActivitiesPanel() {
     } catch (error) {
       console.error("Gagal memuat kegiatan:", error);
       setErrorMessage(
-        "Data kegiatan belum dapat dimuat. Periksa table, index, dan permission Appwrite.",
+        "Data kegiatan belum dapat dimuat. Periksa koneksi lalu coba kembali.",
       );
     } finally {
       setLoading(false);

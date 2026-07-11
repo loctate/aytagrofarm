@@ -28,7 +28,7 @@ const productCategories = [
   {
     title: "Produk Hilir & Frozen",
     description:
-      "Rencana pengembangan produk turunan kambing dan domba, termasuk daging segar, frozen, dan produk olahan lainnya.",
+      "Produk turunan kambing dan domba tersedia berdasarkan permintaan dan konfirmasi ketersediaan, termasuk daging segar, frozen, dan produk olahan lainnya.",
     items: ["Daging segar", "Frozen", "Olahan", "Paket kebutuhan"],
   },
   {

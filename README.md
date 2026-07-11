@@ -8,7 +8,7 @@ Landing page statis untuk AYT Agro Farm dengan fokus bisnis breeding, fattening,
 - React 19
 - TypeScript
 - Static export (`output: "export"`)
-- Siap di-deploy ke Cloudflare Pages
+- Siap di-deploy ke Vercel
 
 ## Menjalankan secara lokal
 
@@ -36,15 +36,15 @@ Salin `.env.example` menjadi `.env.local` bila ingin menguji canonical URL dan s
 cp .env.example .env.local
 ```
 
-Sebelum deployment, set `NEXT_PUBLIC_SITE_URL` ke URL Cloudflare Pages atau domain final, tanpa garis miring di akhir.
+Sebelum deployment, set `NEXT_PUBLIC_SITE_URL` ke URL Vercel atau domain final, tanpa garis miring di akhir.
 
 Contoh:
 
 ```text
-NEXT_PUBLIC_SITE_URL=https://aytagrofarm.pages.dev
+NEXT_PUBLIC_SITE_URL=https://aytagrofarm.com
 ```
 
-## Konfigurasi Cloudflare Pages
+## Konfigurasi Vercel
 
 - Framework preset: `Next.js (Static HTML Export)`
 - Build command: `npm run build`

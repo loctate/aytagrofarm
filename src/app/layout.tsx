@@ -3,7 +3,7 @@ import "./globals.css";
 
 const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ??
-  "https://aytagrofarm.pages.dev"
+  "https://aytagrofarm.com"
 ).replace(/\/$/, "");
 
 const siteName = "AYT Agro Farm";

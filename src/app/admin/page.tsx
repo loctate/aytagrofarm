@@ -27,7 +27,7 @@ import {
 
 type AdminMenu =
   | "ringkasan"
-  | "pengetahuan"
+
   | "pendaftaran"
   | "anggota"
   | "kegiatan-hpdki"
@@ -161,7 +161,7 @@ export default function AdminPage() {
 
       setDataError(
         "Data pendaftaran belum dapat dimuat. " +
-          "Periksa koneksi dan permission Appwrite."
+          "Periksa koneksi internet lalu coba kembali."
       );
     } finally {
       setLoadingData(false);
@@ -367,7 +367,7 @@ export default function AdminPage() {
     } catch (error) {
       console.error("Gagal menerbitkan anggota:", error);
       setModalError(
-        "Anggota belum berhasil diterbitkan. Pastikan table members, permission Create, kolom, dan unique index Appwrite sudah benar.",
+        "Anggota belum berhasil diterbitkan. Silakan coba kembali. Apabila masalah berlanjut, hubungi pengelola sistem.",
       );
     } finally {
       setPublishingMember(false);
@@ -408,7 +408,7 @@ export default function AdminPage() {
     } catch (error) {
       console.error("Gagal mengubah status anggota:", error);
       setModalError(
-        "Status anggota belum berhasil diubah. Pastikan permission Update table members sudah aktif untuk Users.",
+        "Status anggota belum berhasil diubah. Silakan coba kembali. Apabila masalah berlanjut, hubungi pengelola sistem.",
       );
     } finally {
       setMemberActionLoading(false);
@@ -472,31 +472,6 @@ export default function AdminPage() {
           className="admin-menu"
           aria-label="Menu dashboard admin"
         >
-          <button
-            type="button"
-            className={
-              activeMenu === "ringkasan"
-                ? "is-active"
-                : ""
-            }
-            onClick={() => setActiveMenu("ringkasan")}
-          >
-            Ringkasan
-          </button>
-
-          <button
-            type="button"
-            className={
-              activeMenu === "pengetahuan"
-                ? "is-active"
-                : ""
-            }
-            onClick={() =>
-              setActiveMenu("pengetahuan")
-            }
-          >
-            Pengetahuan
-          </button>
 
           <button
             type="button"
@@ -564,7 +539,7 @@ export default function AdminPage() {
         <div className="admin-sidebar-note">
           <strong className="admin-live-indicator">
             <span />
-            Terhubung ke Appwrite
+            Sistem Terhubung
           </strong>
 
           <p>
@@ -582,9 +557,6 @@ export default function AdminPage() {
             <h1>
               {activeMenu === "ringkasan" &&
                 "Ringkasan"}
-
-              {activeMenu === "pengetahuan" &&
-                "Pengetahuan"}
 
               {activeMenu === "pendaftaran" &&
                 "Pendaftaran PAC HPDKI"}
@@ -648,10 +620,10 @@ export default function AdminPage() {
             <div className="admin-production-status-panel">
               <div>
                 <span className="admin-production-status-kicker">
-                  Status Production
+                  Status Sistem
                 </span>
 
-                <h2>Backend AYT Agro Farm sudah terhubung</h2>
+                <h2>Sistem AYT Agro Farm siap digunakan</h2>
 
                 <p>
                   Sistem production telah terhubung dan siap digunakan oleh
@@ -679,8 +651,8 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <dt>Backend</dt>
-                  <dd>Appwrite self-hosted</dd>
+                  <dt>Status layanan</dt>
+                  <dd>Aktif</dd>
                 </div>
               </dl>
             </div>
@@ -690,8 +662,8 @@ export default function AdminPage() {
                 <div>
                   <h2>Aktivitas Pendaftaran</h2>
                   <p>
-                    Statistik diambil langsung dari data
-                    Appwrite self-hosted production.
+                    Statistik diperbarui berdasarkan data pendaftaran
+                    yang tersimpan.
                   </p>
                 </div>
 
@@ -709,35 +681,6 @@ export default function AdminPage() {
               </div>
             </div>
           </>
-        )}
-
-        {activeMenu === "pengetahuan" && (
-          <div className="admin-placeholder-panel">
-            <div className="admin-panel-heading">
-              <div>
-                <h2>Artikel dan Tips Peternakan</h2>
-                <p>
-                  Modul artikel akan dihubungkan ke
-                  tabel Pengetahuan pada tahap berikutnya.
-                </p>
-              </div>
-
-              <button type="button" disabled>
-                Tambah Artikel
-              </button>
-            </div>
-
-            <div className="admin-empty-state">
-              <strong>
-                Editor artikel belum diaktifkan
-              </strong>
-
-              <p>
-                Pendaftaran PAC HPDKI diselesaikan lebih
-                dahulu sebelum modul Pengetahuan dibuat.
-              </p>
-            </div>
-          </div>
         )}
 
         {activeMenu === "pendaftaran" && (
@@ -820,8 +763,7 @@ export default function AdminPage() {
                 </strong>
 
                 <p>
-                  Dashboard sedang mengambil row dari
-                  Appwrite Cloud.
+                  Dashboard sedang memuat data pendaftaran.
                 </p>
               </div>
             )}

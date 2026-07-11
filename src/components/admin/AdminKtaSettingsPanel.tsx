@@ -150,7 +150,7 @@ export default function AdminKtaSettingsPanel() {
     } catch (error) {
       console.error("Gagal memuat pengaturan KTA:", error);
       setErrorMessage(
-        "Pengaturan KTA belum dapat dimuat. Pastikan table hpdki_kta_settings dan permission Appwrite sudah benar.",
+        "Pengaturan KTA belum dapat dimuat. Periksa koneksi lalu coba kembali.",
       );
     } finally {
       setLoading(false);
@@ -433,7 +433,7 @@ export default function AdminKtaSettingsPanel() {
                 <h3>Contoh Tampilan Kartu Anggota</h3>
                 <span>
                   Preview ini hanya contoh tampilan. Data contoh tidak
-                  disimpan ke Appwrite dan tidak mengubah data production.
+                  disimpan sebagai pengaturan KTA dan tidak mengubah data anggota.
                 </span>
               </div>
 

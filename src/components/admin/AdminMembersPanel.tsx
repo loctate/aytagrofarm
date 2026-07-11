@@ -281,7 +281,7 @@ export default function AdminMembersPanel() {
     } catch (error) {
       console.error("Gagal memuat data anggota:", error);
       setErrorMessage(
-        "Data anggota belum dapat dimuat. Pastikan table members dan permission Appwrite sudah benar.",
+        "Data anggota belum dapat dimuat. Periksa koneksi lalu coba kembali.",
       );
     } finally {
       setLoading(false);
@@ -417,7 +417,7 @@ export default function AdminMembersPanel() {
       setErrorMessage(
         error instanceof Error
           ? error.message
-          : "Data anggota belum berhasil disimpan. Pastikan permission Update table members sudah aktif untuk Users.",
+          : "Data anggota belum berhasil disimpan. Silakan coba kembali.",
       );
     } finally {
       setMemberEditSaving(false);
@@ -460,7 +460,7 @@ export default function AdminMembersPanel() {
     } catch (error) {
       console.error("Gagal mengubah status anggota:", error);
       setErrorMessage(
-        "Status anggota belum berhasil diubah. Pastikan permission Update table members sudah aktif untuk Users.",
+        "Status anggota belum berhasil diubah. Silakan coba kembali.",
       );
     } finally {
       setActionLoadingNumber("");
@@ -645,7 +645,7 @@ export default function AdminMembersPanel() {
         <div>
           <h2>Database Anggota</h2>
           <p>
-            Menampilkan data dari table members. Anggota aktif tampil di halaman
+            Menampilkan data anggota. Anggota aktif tampil di halaman
             publik, sedangkan anggota nonaktif tetap tersimpan sebagai arsip.
           </p>
         </div>
@@ -748,7 +748,7 @@ export default function AdminMembersPanel() {
       {loading && (
         <div className="admin-empty-state">
           <strong>Memuat data anggota...</strong>
-          <p>Dashboard sedang mengambil data dari table members.</p>
+          <p>Dashboard sedang memuat data anggota.</p>
         </div>
       )}
 

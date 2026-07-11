@@ -67,7 +67,7 @@ export default function PublicMembersList({
       }
 
       setMembers([]);
-      setErrorMessage("Daftar anggota publik belum dapat dimuat sementara.");
+      setErrorMessage("Daftar anggota belum dapat dimuat. Silakan coba kembali.");
     } finally {
         if (active) {
           setLoading(false);

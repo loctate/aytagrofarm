@@ -155,7 +155,7 @@ export default function MemberEvaluationSection({
     } catch (error) {
       console.error("Gagal memuat riwayat evaluasi anggota:", error);
       setMessage(
-        "Riwayat evaluasi belum dapat dimuat. Pastikan table hpdki_member_evaluations dan permission Appwrite sudah benar.",
+        "Riwayat evaluasi belum dapat dimuat. Periksa koneksi lalu coba kembali.",
       );
     } finally {
       setLoading(false);

@@ -8,14 +8,11 @@ import PublicMembersList from "@/components/hpdki/PublicMembersList";
 
 const whatsappNumber = "6287889124342";
 
-const temporaryWhatsappUrl =
+const whatsappRegistrationUrl =
   `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    "Halo AYT Agro Farm, saya ingin mendapatkan informasi mengenai pendaftaran anggota PAC HPDKI KEC. DRAMAGA KAB. BOGOR."
+    "Halo AYT Agro Farm, saya ingin mendapatkan informasi mengenai pendaftaran anggota PAC HPDKI Kecamatan Dramaga."
   )}`;
 
-const isHpdkiRegistrationOpen =
-  process.env.HPDKI_REGISTRATION_OPEN === "true" ||
-  process.env.NEXT_PUBLIC_HPDKI_REGISTRATION_OPEN === "true";
 
 export const metadata: Metadata = {
   title: "Pendaftaran Anggota Peternak PAC HPDKI Dramaga",
@@ -25,48 +22,6 @@ export const metadata: Metadata = {
     canonical: "/hpdki/daftar",
   },
 };
-
-function RegistrationLockedNotice() {
-  return (
-    <>
-      <div className="registration-form-heading">
-        <span>Pendaftaran Belum Dibuka</span>
-        <h2>Pendaftaran Anggota HPDKI Untuk Sementara Dikunci</h2>
-        <p>
-          Saat ini sistem pendaftaran anggota PAC HPDKI Kecamatan Dramaga
-          sedang dalam tahap persiapan data production dan serah terima kepada
-          pengelola.
-        </p>
-      </div>
-
-      <div className="registration-locked-card">
-        <div className="registration-locked-icon" aria-hidden="true">
-          🔒
-        </div>
-
-        <div>
-          <h3>Formulir pendaftaran belum dapat digunakan</h3>
-
-          <p>
-            Data anggota production masih dikosongkan terlebih dahulu untuk
-            menghindari salah input sebelum proses serah terima resmi kepada
-            klien. Form pendaftaran akan dibuka kembali setelah proses ini
-            selesai.
-          </p>
-
-          <a
-            href={temporaryWhatsappUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="registration-locked-whatsapp"
-          >
-            Tanya melalui WhatsApp
-          </a>
-        </div>
-      </div>
-    </>
-  );
-}
 
 export default function HpdkiRegistrationPage() {
   return (
@@ -129,7 +84,7 @@ export default function HpdkiRegistrationPage() {
                 pengisian atau proses pendaftaran anggota PAC HPDKI Kecamatan Dramaga.
               </p>
               <a
-                href={temporaryWhatsappUrl}
+                href={whatsappRegistrationUrl}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -139,8 +94,6 @@ export default function HpdkiRegistrationPage() {
           </div>
 
           <div className="registration-form-shell">
-            {isHpdkiRegistrationOpen ? (
-              <>
                 <div className="registration-form-heading">
                   <span>Formulir Pendaftaran</span>
                   <h2>Data Calon Anggota Peternak</h2>
@@ -153,10 +106,6 @@ export default function HpdkiRegistrationPage() {
                 <RegistrationForm />
 
                 <PublicMembersList variant="compact" limit={6} />
-              </>
-            ) : (
-              <RegistrationLockedNotice />
-            )}
           </div>
         </div>
       </section>
