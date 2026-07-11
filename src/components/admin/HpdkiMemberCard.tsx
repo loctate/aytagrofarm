@@ -38,18 +38,18 @@ function getAddress(member: PublicHpdkiMemberRecord) {
     .join(", ");
 }
 
-
 export default function HpdkiMemberCard({
   member,
   verificationUrl,
   settings = defaultHpdkiKtaSettings,
 }: HpdkiMemberCardProps) {
   const address = getAddress(member);
-  const validUntil = getValidUntil(
-    member.approved_at,
-    settings.validity_years,
-  );
-  const terms = (settings.card_terms || defaultHpdkiKtaSettings.card_terms || "")
+  const validUntil = getValidUntil(member.approved_at, settings.validity_years);
+  const terms = (
+    settings.card_terms ||
+    defaultHpdkiKtaSettings.card_terms ||
+    ""
+  )
     .split("\n")
     .map((term) => term.trim())
     .filter(Boolean);
@@ -120,7 +120,11 @@ export default function HpdkiMemberCard({
 
           <div className="kta-card-signatures">
             <div className="kta-card-signature">
-              <span>{settings.chairman_title}</span>
+              <span>
+                KETUA PAC HPDKI
+                <br />
+                KEC DRAMAGA
+              </span>
               <Image
                 src="/images/ttd-ketua-hpdki.png"
                 alt="Tanda tangan Ketua PAC HPDKI Kecamatan Dramaga"
@@ -132,7 +136,11 @@ export default function HpdkiMemberCard({
             </div>
 
             <div className="kta-card-signature">
-              <span>{settings.vice_chairman_title}</span>
+              <span>
+                WAKIL KETUA PAC HPDKI
+                <br />
+                KEC DRAMAGA
+              </span>
               <Image
                 src="/images/ttd-wakil-ketua-hpdki.png"
                 alt="Tanda tangan Wakil Ketua PAC HPDKI Kecamatan Dramaga"
