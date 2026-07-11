@@ -71,9 +71,9 @@ const focusItems = [
 ];
 
 const activityItems = [
-  "Pendataan anggota peternak",
-  "Silaturahmi dan koordinasi pengurus",
-  "Edukasi pakan, kandang, dan kesehatan ternak",
+  "Pendataan dan pelayanan anggota",
+  "Silaturahmi dan koordinasi organisasi",
+  "Edukasi peternakan dan kegiatan lapangan",
 ];
 
 export default function HpdkiPage() {
@@ -185,19 +185,20 @@ export default function HpdkiPage() {
             <p className="hpdki-locked-small-badge">Kegiatan HPDKI</p>
             <h2>Dokumentasi kegiatan PAC HPDKI Dramaga.</h2>
             <p>
-              Bagian ini disiapkan untuk menampilkan kegiatan yang sudah
-              terlaksana, seperti pendataan anggota, pertemuan, edukasi, dan
-              kegiatan lapangan.
+              Temukan berbagai kegiatan PAC HPDKI Kecamatan Dramaga, mulai
+              dari pendataan anggota, pertemuan pengurus, edukasi peternakan,
+              hingga kegiatan lapangan.
             </p>
 
             <Link href="/hpdki/kegiatan" className="hpdki-locked-secondary">
-              Lihat Kegiatan
+              Lihat Dokumentasi Kegiatan
             </Link>
           </div>
 
           <div className="hpdki-locked-panel">
-            <h3>Coming Soon</h3>
-            <p>Konten kegiatan bisa ditambahkan bertahap dari dashboard admin.</p>
+            <h3>Ruang Kegiatan HPDKI</h3>
+            <p>Dokumentasi kegiatan akan ditampilkan secara bertahap setelah
+              dipublikasikan melalui dashboard admin.</p>
 
             <ul className="hpdki-locked-list">
               {activityItems.map((item) => (
