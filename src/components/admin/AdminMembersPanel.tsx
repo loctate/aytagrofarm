@@ -243,6 +243,13 @@ function buildMemberEditPayload(form: MemberEditForm): HpdkiMemberUpdateData {
   };
 }
 
+// KTA_FIXED_EXPORT_2026
+const KTA_EXPORT_CARD_WIDTH = 540;
+const KTA_EXPORT_CARD_HEIGHT = 341;
+const KTA_EXPORT_GAP = 32;
+const KTA_EXPORT_TOTAL_WIDTH =
+  KTA_EXPORT_CARD_WIDTH * 2 + KTA_EXPORT_GAP;
+
 export default function AdminMembersPanel() {
   const [members, setMembers] = useState<PublicHpdkiMemberRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -260,7 +267,7 @@ export default function AdminMembersPanel() {
   const [ktaExportLoading, setKtaExportLoading] =
     useState<"" | "png" | "pdf">("");
   const [membersExportLoading, setMembersExportLoading] = useState(false);
-  const ktaPreviewRef = useRef<HTMLDivElement | null>(null);
+  const ktaExportRef = useRef<HTMLDivElement | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] =
@@ -532,14 +539,66 @@ export default function AdminMembersPanel() {
   };
 
 
-  const getKtaPreviewNode = () => {
-    const node = ktaPreviewRef.current;
+  const getKtaExportNode = () => {
+    const node = ktaExportRef.current;
 
     if (!node) {
-      throw new Error("Preview KTA belum tersedia.");
+      throw new Error("Canvas export KTA belum tersedia.");
     }
 
     return node;
+  };
+
+  const getKtaExportCards = () => {
+    const node = getKtaExportNode();
+    const cards = node.querySelectorAll<HTMLElement>(".kta-card-design");
+
+    const front = cards.item(0);
+    const back = cards.item(1);
+
+    if (!front || !back) {
+      throw new Error("Sisi depan atau belakang KTA belum tersedia.");
+    }
+
+    return { front, back };
+  };
+
+  const waitForKtaAssets = async () => {
+    const node = getKtaExportNode();
+
+    if ("fonts" in document) {
+      await document.fonts.ready;
+    }
+
+    const images = Array.from(node.querySelectorAll("img"));
+
+    await Promise.all(
+      images.map(
+        (image) =>
+          new Promise<void>((resolve) => {
+            if (image.complete) {
+              resolve();
+              return;
+            }
+
+            const timeout = window.setTimeout(resolve, 4000);
+
+            const finish = () => {
+              window.clearTimeout(timeout);
+              resolve();
+            };
+
+            image.addEventListener("load", finish, { once: true });
+            image.addEventListener("error", finish, { once: true });
+          }),
+      ),
+    );
+
+    await new Promise<void>((resolve) => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => resolve());
+      });
+    });
   };
 
   const downloadKtaPng = async () => {
@@ -552,10 +611,22 @@ export default function AdminMembersPanel() {
 
     try {
       const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(getKtaPreviewNode(), {
+
+      await waitForKtaAssets();
+
+      const dataUrl = await toPng(getKtaExportNode(), {
         backgroundColor: "#fffaf0",
         cacheBust: true,
-        pixelRatio: 2,
+        pixelRatio: 3,
+        width: KTA_EXPORT_TOTAL_WIDTH,
+        height: KTA_EXPORT_CARD_HEIGHT,
+        style: {
+          width: `${KTA_EXPORT_TOTAL_WIDTH}px`,
+          height: `${KTA_EXPORT_CARD_HEIGHT}px`,
+          maxWidth: "none",
+          margin: "0",
+          padding: "0",
+        },
       });
 
       const link = document.createElement("a");
@@ -565,22 +636,12 @@ export default function AdminMembersPanel() {
     } catch (error) {
       console.error("Gagal download PNG KTA:", error);
       setErrorMessage(
-        "PNG KTA belum berhasil dibuat. Pastikan preview KTA sudah tampil sempurna.",
+        "PNG KTA belum berhasil dibuat. Pastikan logo dan tanda tangan sudah termuat.",
       );
     } finally {
       setKtaExportLoading("");
     }
   };
-
-  const loadImage = (dataUrl: string) =>
-    new Promise<HTMLImageElement>((resolve, reject) => {
-      const image = new window.Image();
-
-      image.onload = () => resolve(image);
-      image.onerror = () =>
-        reject(new Error("Gambar preview KTA gagal dimuat."));
-      image.src = dataUrl;
-    });
 
   const downloadKtaPdf = async () => {
     if (!selectedKtaMember) {
@@ -596,13 +657,31 @@ export default function AdminMembersPanel() {
         import("jspdf"),
       ]);
 
-      const dataUrl = await toPng(getKtaPreviewNode(), {
+      await waitForKtaAssets();
+
+      const { front, back } = getKtaExportCards();
+
+      const cardOptions = {
         backgroundColor: "#fffaf0",
         cacheBust: true,
-        pixelRatio: 2,
-      });
+        pixelRatio: 3,
+        width: KTA_EXPORT_CARD_WIDTH,
+        height: KTA_EXPORT_CARD_HEIGHT,
+        style: {
+          width: `${KTA_EXPORT_CARD_WIDTH}px`,
+          height: `${KTA_EXPORT_CARD_HEIGHT}px`,
+          minWidth: `${KTA_EXPORT_CARD_WIDTH}px`,
+          maxWidth: "none",
+          boxShadow: "none",
+          margin: "0",
+        },
+      };
 
-      const image = await loadImage(dataUrl);
+      const [frontDataUrl, backDataUrl] = await Promise.all([
+        toPng(front, cardOptions),
+        toPng(back, cardOptions),
+      ]);
+
       const pdf = new jsPDF({
         orientation: "landscape",
         unit: "mm",
@@ -611,28 +690,38 @@ export default function AdminMembersPanel() {
 
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-      const margin = 10;
-      const maxWidth = pageWidth - margin * 2;
-      const maxHeight = pageHeight - margin * 2;
-      const imageRatio = image.naturalWidth / image.naturalHeight;
 
-      let renderWidth = maxWidth;
-      let renderHeight = renderWidth / imageRatio;
+      const cardWidth = 85.6;
+      const cardHeight = 54;
+      const cardGap = 8;
+      const totalWidth = cardWidth * 2 + cardGap;
 
-      if (renderHeight > maxHeight) {
-        renderHeight = maxHeight;
-        renderWidth = renderHeight * imageRatio;
-      }
+      const startX = (pageWidth - totalWidth) / 2;
+      const startY = (pageHeight - cardHeight) / 2;
 
-      const x = (pageWidth - renderWidth) / 2;
-      const y = (pageHeight - renderHeight) / 2;
+      pdf.addImage(
+        frontDataUrl,
+        "PNG",
+        startX,
+        startY,
+        cardWidth,
+        cardHeight,
+      );
 
-      pdf.addImage(dataUrl, "PNG", x, y, renderWidth, renderHeight);
+      pdf.addImage(
+        backDataUrl,
+        "PNG",
+        startX + cardWidth + cardGap,
+        startY,
+        cardWidth,
+        cardHeight,
+      );
+
       pdf.save(`${selectedKtaMember.member_number}-kta.pdf`);
     } catch (error) {
       console.error("Gagal download PDF KTA:", error);
       setErrorMessage(
-        "PDF KTA belum berhasil dibuat. Pastikan preview KTA sudah tampil sempurna.",
+        "PDF KTA belum berhasil dibuat. Pastikan logo dan tanda tangan sudah termuat.",
       );
     } finally {
       setKtaExportLoading("");
@@ -1098,7 +1187,7 @@ export default function AdminMembersPanel() {
           aria-modal="true"
           aria-label={`Preview KTA ${selectedKtaMember.member_number}`}
         >
-          <div className="admin-kta-modal">
+          <div className="admin-kta-modal admin-kta-member-modal">
             <div className="admin-kta-modal-header">
               <div>
                 <p className="eyebrow">Preview KTA</p>
@@ -1111,7 +1200,7 @@ export default function AdminMembersPanel() {
               </button>
             </div>
 
-            <div className="admin-kta-preview-modal" ref={ktaPreviewRef}>
+            <div className="admin-kta-preview-modal admin-kta-member-preview">
               <HpdkiMemberCard
                 member={selectedKtaMember}
                 settings={ktaSettings}
@@ -1119,6 +1208,21 @@ export default function AdminMembersPanel() {
                   selectedKtaMember.member_number,
                 )}
               />
+            </div>
+
+            <div className="kta-export-stage" aria-hidden="true">
+              <div
+                className="admin-kta-sample-preview-wrap kta-export-canvas"
+                ref={ktaExportRef}
+              >
+                <HpdkiMemberCard
+                  member={selectedKtaMember}
+                  settings={ktaSettings}
+                  verificationUrl={getAbsoluteVerificationUrl(
+                    selectedKtaMember.member_number,
+                  )}
+                />
+              </div>
             </div>
 
             <div className="admin-kta-modal-actions">

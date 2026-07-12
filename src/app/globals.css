@@ -11125,3 +11125,410 @@ footer {
 .kta-card-front .kta-card-signature strong {
   margin-top: -0.08rem;
 }
+
+/* =========================================================
+   KTA MOBILE PREVIEW AND FIXED EXPORT 2026
+   ========================================================= */
+
+.admin-kta-member-modal {
+  display: flex;
+  width: min(1120px, calc(100vw - 3rem));
+  max-height: calc(100dvh - 3rem);
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.admin-kta-member-modal .admin-kta-modal-header {
+  flex: 0 0 auto;
+}
+
+.admin-kta-member-preview {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.admin-kta-member-preview .kta-preview-canvas {
+  display: grid !important;
+  width: 100% !important;
+  max-width: none !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 1rem;
+  align-items: start;
+  justify-items: center;
+}
+
+.admin-kta-member-preview .kta-card-design {
+  width: 100%;
+  min-width: 0;
+  max-width: 540px;
+}
+
+.admin-kta-member-preview .kta-print-size-note {
+  grid-column: 1 / -1;
+}
+
+.admin-kta-member-modal .admin-kta-modal-actions {
+  flex: 0 0 auto;
+  margin: 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(18, 59, 45, 0.1);
+  background: rgba(255, 250, 240, 0.98);
+}
+
+@media (max-width: 860px) {
+  .admin-kta-member-preview .kta-preview-canvas {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-kta-modal-backdrop {
+    padding: 0.5rem;
+  }
+
+  .admin-kta-member-modal,
+  .admin-kta-sample-modal {
+    width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 1rem);
+    border-radius: 1.1rem;
+  }
+
+  .admin-kta-member-modal .admin-kta-modal-header,
+  .admin-kta-sample-modal .admin-kta-modal-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.7rem;
+    align-items: start;
+    padding: 0.85rem;
+  }
+
+  .admin-kta-member-modal .admin-kta-modal-header h3,
+  .admin-kta-member-modal .admin-kta-modal-header span {
+    overflow-wrap: anywhere;
+  }
+
+  .admin-kta-member-preview,
+  .admin-kta-sample-preview-wrap {
+    padding: 0.75rem;
+  }
+
+  .admin-kta-member-modal .admin-kta-modal-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem;
+    padding: 0.75rem;
+  }
+
+  .admin-kta-member-modal .admin-kta-modal-actions button,
+  .admin-kta-member-modal .admin-kta-modal-actions a {
+    width: 100%;
+    min-width: 0;
+    padding-inline: 0.55rem;
+    text-align: center;
+  }
+}
+
+/*
+ * Kartu tetap menggunakan ukuran desain desktop 540 x 341.
+ * Seluruh kartu diperkecil bersama-sama agar teks, QR, logo,
+ * dan tanda tangan tidak terpotong pada layar mobile.
+ */
+@media (max-width: 560px) {
+  .admin-kta-member-modal,
+  .admin-kta-sample-modal {
+    --kta-mobile-scale: 0.95;
+  }
+
+  .admin-kta-member-preview .kta-preview-canvas,
+  .admin-kta-sample-preview-wrap:not(.kta-export-canvas) .kta-preview-canvas {
+    display: flex !important;
+    width: 100% !important;
+    max-width: none !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1rem;
+  }
+
+  .admin-kta-member-preview .kta-card-design,
+  .admin-kta-sample-preview-wrap:not(.kta-export-canvas) .kta-card-design {
+    width: 540px !important;
+    height: 341px !important;
+    min-width: 540px !important;
+    max-width: none !important;
+    aspect-ratio: auto !important;
+    zoom: var(--kta-mobile-scale);
+  }
+
+  .admin-kta-member-preview .kta-card-front,
+  .admin-kta-member-preview .kta-card-back,
+  .admin-kta-sample-preview-wrap:not(.kta-export-canvas) .kta-card-front,
+  .admin-kta-sample-preview-wrap:not(.kta-export-canvas) .kta-card-back {
+    max-width: none !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .admin-kta-member-modal,
+  .admin-kta-sample-modal {
+    --kta-mobile-scale: 0.84;
+  }
+}
+
+@media (max-width: 440px) {
+  .admin-kta-member-modal,
+  .admin-kta-sample-modal {
+    --kta-mobile-scale: 0.73;
+  }
+
+  .admin-kta-member-modal .admin-kta-modal-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 390px) {
+  .admin-kta-member-modal,
+  .admin-kta-sample-modal {
+    --kta-mobile-scale: 0.64;
+  }
+}
+
+@media (max-width: 360px) {
+  .admin-kta-member-modal,
+  .admin-kta-sample-modal {
+    --kta-mobile-scale: 0.58;
+  }
+}
+
+@media (max-width: 320px) {
+  .admin-kta-member-modal,
+  .admin-kta-sample-modal {
+    --kta-mobile-scale: 0.5;
+  }
+}
+
+/*
+ * Canvas export dirender di luar layar, bukan display:none.
+ * Karena ukurannya selalu tetap, CSS mobile tidak memengaruhi PNG/PDF.
+ */
+.kta-export-stage {
+  position: fixed !important;
+  top: 0 !important;
+  left: -10000px !important;
+  z-index: -1 !important;
+  display: block !important;
+  width: 1112px !important;
+  height: 341px !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+}
+
+.kta-export-canvas {
+  display: block !important;
+  width: 1112px !important;
+  height: 341px !important;
+  min-width: 1112px !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: #fffaf0 !important;
+}
+
+.kta-export-canvas .kta-preview-canvas {
+  display: grid !important;
+  width: 1112px !important;
+  height: 341px !important;
+  min-width: 1112px !important;
+  max-width: none !important;
+  grid-template-columns: 540px 540px !important;
+  grid-template-rows: 341px !important;
+  gap: 32px !important;
+  align-items: start !important;
+  justify-items: start !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.kta-export-canvas .kta-card-design {
+  width: 540px !important;
+  height: 341px !important;
+  min-width: 540px !important;
+  max-width: none !important;
+  aspect-ratio: auto !important;
+  zoom: 1 !important;
+  box-shadow: none !important;
+}
+
+.kta-export-canvas .kta-card-front,
+.kta-export-canvas .kta-card-back {
+  width: 540px !important;
+  height: 341px !important;
+  min-width: 540px !important;
+  max-width: none !important;
+}
+
+.kta-export-canvas .kta-print-size-note {
+  display: none !important;
+}
+
+@media print {
+  .kta-export-stage {
+    display: none !important;
+  }
+
+  .admin-kta-member-preview .kta-preview-canvas {
+    display: grid !important;
+    width: auto !important;
+    grid-template-columns: 85.6mm 85.6mm !important;
+    gap: 8mm !important;
+  }
+
+  .admin-kta-member-preview .kta-card-design {
+    width: 85.6mm !important;
+    height: 54mm !important;
+    min-width: 85.6mm !important;
+    max-width: none !important;
+    aspect-ratio: auto !important;
+    zoom: 1 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE PUBLIC LAYOUT FIX 2026
+   - Mobile menu Layanan tidak menyisakan ruang kosong
+   - Navigasi HPDKI lebih ringkas
+   - Cover kegiatan memenuhi lebar kartu
+   ========================================================= */
+
+/*
+ * Foto cover kegiatan memenuhi bidang gambar.
+ * Sebelumnya object-fit: contain membuat ruang kosong
+ * di sisi kiri dan kanan foto.
+ */
+.hpdki-kegiatan-simple-image img {
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+}
+
+/*
+ * Mobile navigation.
+ */
+@media (max-width: 900px) {
+  /*
+   * Submenu benar-benar dikeluarkan dari layout ketika tertutup.
+   * Visibility hidden saja masih menyisakan tinggi elemen.
+   */
+  .layanan-dropdown-menu {
+    display: none !important;
+    margin-top: 0;
+  }
+
+  .layanan-dropdown-menu.is-open {
+    display: grid !important;
+    margin-top: 0.25rem;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/*
+ * HPDKI mobile navigation dibuat lebih ringkas,
+ * tanpa mengubah tampilan desktop.
+ */
+@media (max-width: 520px) {
+  .hpdki-locked-nav {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .hpdki-locked-nav a {
+    display: flex;
+    min-height: 58px;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 2.5rem 0.8rem 1rem;
+    border-radius: 14px;
+  }
+
+  .hpdki-locked-nav a::before {
+    height: 3px;
+  }
+
+  .hpdki-locked-nav a::after {
+    right: 1rem;
+  }
+
+  .hpdki-locked-nav strong {
+    align-self: auto;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    text-align: center;
+  }
+
+  /*
+   * Foto kegiatan dibuat lebih tinggi pada mobile
+   * agar tetap terlihat jelas setelah memakai cover.
+   */
+  .hpdki-kegiatan-simple-image {
+    aspect-ratio: 4 / 3;
+  }
+
+  .hpdki-kegiatan-simple-body {
+    gap: 0.8rem;
+    padding: 1rem 1rem 1.15rem;
+  }
+
+  .hpdki-kegiatan-simple-body h2 {
+    font-size: 1.1rem;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE LAYANAN DROPDOWN INTERACTION 2026
+   Mobile memakai status klik, bukan status hover.
+   ========================================================= */
+
+@media (max-width: 900px) {
+  /*
+   * Jangan izinkan :hover / :focus-within desktop
+   * membuka dropdown pada perangkat sentuh.
+   */
+  .layanan-dropdown:hover .layanan-dropdown-menu:not(.is-open),
+  .layanan-dropdown:focus-within .layanan-dropdown-menu:not(.is-open) {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .layanan-dropdown-menu.is-open {
+    display: grid !important;
+    position: static !important;
+    width: 100% !important;
+    margin-top: 0.35rem !important;
+    padding: 0.35rem 0 !important;
+    transform: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .layanan-dropdown-menu.is-open a {
+    display: grid;
+    min-height: 52px;
+    margin-top: 0.3rem;
+    padding: 0.65rem 0.8rem;
+    background: rgba(23, 80, 54, 0.055);
+  }
+
+  .layanan-dropdown.is-open .layanan-dropdown-button {
+    background: rgba(21, 96, 61, 0.07);
+    color: #0f633e;
+  }
+}
