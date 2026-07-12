@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 type LayananDropdownProps = {
   onNavigate?: () => void;
@@ -15,17 +15,17 @@ export default function LayananDropdown({ onNavigate }: LayananDropdownProps) {
   const closeTimerRef = useRef<number | null>(null);
   const menuId = useId();
 
-  const clearCloseTimer = () => {
+  const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current !== null) {
       window.clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
     }
-  };
+  }, []);
 
-  const closeDropdown = () => {
+  const closeDropdown = useCallback(() => {
     clearCloseTimer();
     setIsOpen(false);
-  };
+  }, [clearCloseTimer]);
 
   const handleNavigate = () => {
     closeDropdown();
@@ -42,6 +42,7 @@ export default function LayananDropdown({ onNavigate }: LayananDropdownProps) {
     };
 
     updatePointerMode();
+
     desktopPointerQuery.addEventListener("change", updatePointerMode);
 
     return () => {
@@ -76,7 +77,7 @@ export default function LayananDropdown({ onNavigate }: LayananDropdownProps) {
       document.removeEventListener("keydown", handleKeyDown);
       clearCloseTimer();
     };
-  }, []);
+  }, [clearCloseTimer, closeDropdown]);
 
   const handleMouseEnter = () => {
     if (!isDesktopPointer) {
