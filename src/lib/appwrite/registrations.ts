@@ -1,4 +1,4 @@
-import { ID, Query } from "appwrite";
+import { Query } from "appwrite";
 import { tablesDB } from "./client";
 import { appwriteConfig } from "./config";
 
@@ -12,8 +12,7 @@ export const registrationStatuses = [
   "Ditolak",
 ] as const;
 
-export type RegistrationStatus =
-  (typeof registrationStatuses)[number];
+export type RegistrationStatus = (typeof registrationStatuses)[number];
 
 export type HpdkiRegistrationInput = {
   registration_number: string;
@@ -81,27 +80,25 @@ export type HpdkiRegistrationUpdate = {
 
 function validateRegistrationConfig() {
   if (!appwriteConfig.databaseId) {
-    throw new Error(
-      "NEXT_PUBLIC_APPWRITE_DATABASE_ID belum dikonfigurasi."
-    );
+    throw new Error("NEXT_PUBLIC_APPWRITE_DATABASE_ID belum dikonfigurasi.");
   }
 
   if (!appwriteConfig.registrationsTableId) {
     throw new Error(
-      "NEXT_PUBLIC_APPWRITE_REGISTRATIONS_TABLE_ID belum dikonfigurasi."
+      "NEXT_PUBLIC_APPWRITE_REGISTRATIONS_TABLE_ID belum dikonfigurasi.",
     );
   }
 }
 
-export async function createHpdkiRegistration(
-  data: HpdkiRegistrationInput
-) {
+export async function createHpdkiRegistration(data: HpdkiRegistrationInput) {
   validateRegistrationConfig();
 
   return tablesDB.createRow({
     databaseId: appwriteConfig.databaseId,
     tableId: appwriteConfig.registrationsTableId,
-    rowId: ID.unique(),
+    // Nomor pendaftaran menjadi Row ID agar retry
+    // tidak membuat data ganda.
+    rowId: data.registration_number,
     data,
   });
 }
@@ -112,10 +109,7 @@ export async function listHpdkiRegistrations() {
   const response = await tablesDB.listRows({
     databaseId: appwriteConfig.databaseId,
     tableId: appwriteConfig.registrationsTableId,
-    queries: [
-      Query.orderDesc("registered_at"),
-      Query.limit(100),
-    ],
+    queries: [Query.orderDesc("registered_at"), Query.limit(100)],
   });
 
   return response.rows as unknown as HpdkiRegistrationRecord[];
@@ -123,7 +117,7 @@ export async function listHpdkiRegistrations() {
 
 export async function updateHpdkiRegistration(
   rowId: string,
-  data: HpdkiRegistrationUpdate
+  data: HpdkiRegistrationUpdate,
 ) {
   validateRegistrationConfig();
 

@@ -1,13 +1,13 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useMemo, useRef, useState } from "react";
 import { createHpdkiRegistration } from "@/lib/appwrite/registrations";
 
 type Population = {
-  femaleGoats: number;
-  maleGoats: number;
-  femaleSheep: number;
-  maleSheep: number;
+  femaleGoats: string;
+  maleGoats: string;
+  femaleSheep: string;
+  maleSheep: string;
 };
 
 type SubmissionResult = {
@@ -16,10 +16,10 @@ type SubmissionResult = {
 };
 
 const initialPopulation: Population = {
-  femaleGoats: 0,
-  maleGoats: 0,
-  femaleSheep: 0,
-  maleSheep: 0,
+  femaleGoats: "",
+  maleGoats: "",
+  femaleSheep: "",
+  maleSheep: "",
 };
 
 function normalizeWhatsapp(value: string) {
@@ -48,75 +48,219 @@ function generateRegistrationNumber() {
   return `AYT-HPDKI-${year}-${timestamp}${random}`;
 }
 
+type AppwriteErrorLike = {
+  code?: number;
+  type?: string;
+  message?: string;
+};
+
+// HPDKI_REGISTRATION_HOTFIX_2026
+function normalizePopulationInput(rawValue: string) {
+  if (rawValue === "") {
+    return "";
+  }
+
+  const parsedValue = Number.parseInt(rawValue, 10);
+
+  if (!Number.isFinite(parsedValue)) {
+    return "";
+  }
+
+  return String(Math.max(0, parsedValue));
+}
+
+function toPopulationNumber(value: string) {
+  if (!value.trim()) {
+    return 0;
+  }
+
+  const parsedValue = Number.parseInt(value, 10);
+
+  if (!Number.isFinite(parsedValue)) {
+    return 0;
+  }
+
+  return Math.max(0, parsedValue);
+}
+
+function getErrorDetails(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return {
+      code: 0,
+      type: "",
+      message: error instanceof Error ? error.message : String(error ?? ""),
+    };
+  }
+
+  const candidate = error as AppwriteErrorLike;
+
+  return {
+    code: typeof candidate.code === "number" ? candidate.code : 0,
+    type: typeof candidate.type === "string" ? candidate.type : "",
+    message: typeof candidate.message === "string" ? candidate.message : "",
+  };
+}
+
+function getRegistrationErrorMessage(error: unknown) {
+  const details = getErrorDetails(error);
+  const message = details.message.toLowerCase();
+
+  if (
+    details.code === 400 ||
+    details.type.includes("invalid") ||
+    message.includes("invalid document") ||
+    message.includes("invalid row")
+  ) {
+    return (
+      "Ada data yang belum sesuai format. " +
+      "Periksa kembali seluruh kolom lalu coba lagi."
+    );
+  }
+
+  if (details.code === 401 || details.code === 403) {
+    return (
+      "Layanan pendaftaran sedang tidak dapat menerima data. " +
+      "Silakan hubungi admin AYT Agro Farm."
+    );
+  }
+
+  if (details.code === 404) {
+    return (
+      "Layanan penyimpanan pendaftaran belum tersedia. " +
+      "Silakan hubungi admin AYT Agro Farm."
+    );
+  }
+
+  if (details.code === 429) {
+    return (
+      "Terlalu banyak percobaan dalam waktu singkat. " +
+      "Tunggu beberapa saat lalu coba kembali."
+    );
+  }
+
+  if (details.code >= 500) {
+    return (
+      "Server pendaftaran sedang mengalami gangguan sementara. " +
+      "Tunggu beberapa saat lalu coba kembali."
+    );
+  }
+
+  if (
+    error instanceof TypeError ||
+    message.includes("fetch") ||
+    message.includes("network") ||
+    message.includes("cors")
+  ) {
+    return (
+      "Tidak dapat terhubung ke layanan pendaftaran. " +
+      "Pastikan internet aktif lalu coba kembali."
+    );
+  }
+
+  return (
+    "Pendaftaran belum berhasil dikirim. " +
+    "Periksa kembali data yang diisi atau hubungi admin."
+  );
+}
+
+function buildSubmissionResult(registrationNumber: string): SubmissionResult {
+  const confirmationMessage = encodeURIComponent(
+    `Halo Admin AYT Agro Farm, saya telah mengirim ` +
+      `pendaftaran anggota HPDKI dengan nomor ` +
+      `${registrationNumber}.`,
+  );
+
+  return {
+    registrationNumber,
+    whatsappUrl: `https://wa.me/6287889124342` + `?text=${confirmationMessage}`,
+  };
+}
+
 export default function RegistrationForm() {
-  const [population, setPopulation] =
-    useState<Population>(initialPopulation);
+  const [population, setPopulation] = useState<Population>(initialPopulation);
 
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [submissionResult, setSubmissionResult] =
     useState<SubmissionResult | null>(null);
 
+  const submittingRef = useRef(false);
+  const pendingRegistrationNumberRef = useRef<string | null>(null);
+
   const totalPopulation = useMemo(
     () =>
-      population.femaleGoats +
-      population.maleGoats +
-      population.femaleSheep +
-      population.maleSheep,
-    [population]
+      toPopulationNumber(population.femaleGoats) +
+      toPopulationNumber(population.maleGoats) +
+      toPopulationNumber(population.femaleSheep) +
+      toPopulationNumber(population.maleSheep),
+    [population],
   );
 
-  const updatePopulation = (
-    key: keyof Population,
-    rawValue: string
-  ) => {
-    const value = Math.max(0, Number.parseInt(rawValue || "0", 10));
-
+  const updatePopulation = (key: keyof Population, rawValue: string) => {
     setPopulation((current) => ({
       ...current,
-      [key]: Number.isFinite(value) ? value : 0,
+      [key]: normalizePopulationInput(rawValue),
     }));
   };
 
-  const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (submittingRef.current) {
+      return;
+    }
 
     const form = event.currentTarget;
     const formData = new FormData(form);
 
     setErrorMessage("");
 
-    const whatsapp = normalizeWhatsapp(
-      String(formData.get("whatsapp") ?? "")
-    );
+    const whatsapp = normalizeWhatsapp(String(formData.get("whatsapp") ?? ""));
 
     if (!/^62\d{8,13}$/.test(whatsapp)) {
       setErrorMessage(
-        "Nomor WhatsApp belum valid. Gunakan nomor Indonesia yang aktif."
+        "Nomor WhatsApp belum valid. Gunakan nomor Indonesia yang aktif.",
       );
       return;
     }
 
-    if (totalPopulation <= 0) {
-      setErrorMessage(
-        "Masukkan minimal satu ekor kambing atau domba."
-      );
+    const safePopulation = {
+      femaleGoats: toPopulationNumber(population.femaleGoats),
+      maleGoats: toPopulationNumber(population.maleGoats),
+      femaleSheep: toPopulationNumber(population.femaleSheep),
+      maleSheep: toPopulationNumber(population.maleSheep),
+    };
+
+    const safeTotalPopulation =
+      safePopulation.femaleGoats +
+      safePopulation.maleGoats +
+      safePopulation.femaleSheep +
+      safePopulation.maleSheep;
+
+    if (safeTotalPopulation <= 0) {
+      setErrorMessage("Masukkan minimal satu ekor kambing atau domba.");
       return;
     }
 
     const farmArea = Number(formData.get("farm_area_m2"));
 
     if (!Number.isFinite(farmArea) || farmArea <= 0) {
+      setErrorMessage("Luas kandang harus lebih besar dari 0 m².");
+      return;
+    }
+
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
       setErrorMessage(
-        "Luas kandang harus lebih besar dari 0 m²."
+        "Perangkat sedang offline. Aktifkan koneksi internet lalu coba kembali.",
       );
       return;
     }
 
-    const registrationNumber = generateRegistrationNumber();
+    const registrationNumber =
+      pendingRegistrationNumberRef.current ?? generateRegistrationNumber();
 
+    pendingRegistrationNumberRef.current = registrationNumber;
+    submittingRef.current = true;
     setSubmitting(true);
 
     try {
@@ -124,47 +268,57 @@ export default function RegistrationForm() {
         registration_number: registrationNumber,
         farmer_name: String(formData.get("farmer_name") ?? "").trim(),
         whatsapp,
-        farm_group_name: String(
-          formData.get("farm_group_name") ?? ""
-        ).trim(),
-        farm_address: String(
-          formData.get("farm_address") ?? ""
-        ).trim(),
+        farm_group_name: String(formData.get("farm_group_name") ?? "").trim(),
+        farm_address: String(formData.get("farm_address") ?? "").trim(),
         village: String(formData.get("village") ?? "").trim(),
         district: String(formData.get("district") ?? "").trim(),
         regency: String(formData.get("regency") ?? "").trim(),
-        female_goats: population.femaleGoats,
-        male_goats: population.maleGoats,
-        female_sheep: population.femaleSheep,
-        male_sheep: population.maleSheep,
+        female_goats: safePopulation.femaleGoats,
+        male_goats: safePopulation.maleGoats,
+        female_sheep: safePopulation.femaleSheep,
+        male_sheep: safePopulation.maleSheep,
         feed_type: String(formData.get("feed_type") ?? "").trim(),
         farm_area_m2: farmArea,
-        total_population: totalPopulation,
+        total_population: safeTotalPopulation,
         notes: String(formData.get("notes") ?? "").trim(),
         status: "Pendaftaran Baru",
         registered_at: new Date().toISOString(),
         agreement_accepted: true,
       });
 
-      const confirmationMessage = encodeURIComponent(
-        `Halo Admin AYT Agro Farm, saya telah mengirim pendaftaran anggota HPDKI dengan nomor ${registrationNumber}.`
-      );
-
-      setSubmissionResult({
-        registrationNumber,
-        whatsappUrl:
-          `https://wa.me/6287889124342?text=${confirmationMessage}`,
-      });
+      setSubmissionResult(buildSubmissionResult(registrationNumber));
 
       form.reset();
       setPopulation(initialPopulation);
+      pendingRegistrationNumberRef.current = null;
     } catch (error) {
-      console.error("Gagal mengirim pendaftaran:", error);
+      const details = getErrorDetails(error);
 
-      setErrorMessage(
-        "Pendaftaran belum berhasil dikirim. Periksa koneksi lalu coba kembali."
-      );
+      console.error("Gagal mengirim pendaftaran HPDKI:", {
+        registrationNumber,
+        code: details.code,
+        type: details.type,
+        message: details.message,
+        originalError: error,
+      });
+
+      /*
+       * Row ID memakai nomor pendaftaran.
+       * Konflik 409 saat retry berarti data sebelumnya
+       * kemungkinan sudah berhasil disimpan.
+       */
+      if (details.code === 409) {
+        setSubmissionResult(buildSubmissionResult(registrationNumber));
+
+        form.reset();
+        setPopulation(initialPopulation);
+        pendingRegistrationNumberRef.current = null;
+        return;
+      }
+
+      setErrorMessage(getRegistrationErrorMessage(error));
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   };
@@ -177,8 +331,7 @@ export default function RegistrationForm() {
         <h3>Pendaftaran Berhasil Dikirim</h3>
 
         <p>
-          Data Anda sudah masuk dan akan diperiksa oleh admin
-          AYT Agro Farm.
+          Data Anda sudah masuk dan akan diperiksa oleh admin AYT Agro Farm.
         </p>
 
         <div className="registration-number-box">
@@ -241,15 +394,11 @@ export default function RegistrationForm() {
               required
               maxLength={30}
             />
-            <small>
-              Nomor ini digunakan untuk proses pemeriksaan.
-            </small>
+            <small>Nomor ini digunakan untuk proses pemeriksaan.</small>
           </label>
 
           <label className="registration-field registration-field-full">
-            <span>
-              Nama kelompok ternak, kandang, atau padepokan
-            </span>
+            <span>Nama kelompok ternak, kandang, atau padepokan</span>
             <input
               type="text"
               name="farm_group_name"
@@ -321,9 +470,7 @@ export default function RegistrationForm() {
           <span>03</span>
           <div>
             <h3>Populasi Ternak</h3>
-            <p>
-              Isi jumlah kambing dan domba berdasarkan jenis kelamin.
-            </p>
+            <p>Isi jumlah kambing dan domba berdasarkan jenis kelamin.</p>
           </div>
         </div>
 
@@ -338,14 +485,11 @@ export default function RegistrationForm() {
                   type="number"
                   min="0"
                   step="1"
+                  placeholder="0"
                   value={population.femaleGoats}
                   onChange={(event) =>
-                    updatePopulation(
-                      "femaleGoats",
-                      event.target.value
-                    )
+                    updatePopulation("femaleGoats", event.target.value)
                   }
-                  required
                 />
               </label>
 
@@ -355,14 +499,11 @@ export default function RegistrationForm() {
                   type="number"
                   min="0"
                   step="1"
+                  placeholder="0"
                   value={population.maleGoats}
                   onChange={(event) =>
-                    updatePopulation(
-                      "maleGoats",
-                      event.target.value
-                    )
+                    updatePopulation("maleGoats", event.target.value)
                   }
-                  required
                 />
               </label>
             </div>
@@ -378,14 +519,11 @@ export default function RegistrationForm() {
                   type="number"
                   min="0"
                   step="1"
+                  placeholder="0"
                   value={population.femaleSheep}
                   onChange={(event) =>
-                    updatePopulation(
-                      "femaleSheep",
-                      event.target.value
-                    )
+                    updatePopulation("femaleSheep", event.target.value)
                   }
-                  required
                 />
               </label>
 
@@ -395,14 +533,11 @@ export default function RegistrationForm() {
                   type="number"
                   min="0"
                   step="1"
+                  placeholder="0"
                   value={population.maleSheep}
                   onChange={(event) =>
-                    updatePopulation(
-                      "maleSheep",
-                      event.target.value
-                    )
+                    updatePopulation("maleSheep", event.target.value)
                   }
-                  required
                 />
               </label>
             </div>
@@ -470,9 +605,8 @@ export default function RegistrationForm() {
       <label className="registration-agreement">
         <input type="checkbox" name="agreement" required />
         <span>
-          Saya menyatakan bahwa data yang diberikan benar dan
-          bersedia dihubungi melalui WhatsApp untuk proses
-          pemeriksaan keanggotaan.
+          Saya menyatakan bahwa data yang diberikan benar dan bersedia dihubungi
+          melalui WhatsApp untuk proses pemeriksaan keanggotaan.
         </span>
       </label>
 
@@ -487,9 +621,7 @@ export default function RegistrationForm() {
         type="submit"
         disabled={submitting}
       >
-        {submitting
-          ? "Mengirim Pendaftaran..."
-          : "Kirim Pendaftaran"}
+        {submitting ? "Mengirim Pendaftaran..." : "Kirim Pendaftaran"}
       </button>
 
       <p className="registration-data-note">
