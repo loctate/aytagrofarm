@@ -1,4 +1,4 @@
-import { Query } from "appwrite";
+import { Permission, Query, Role } from "appwrite";
 
 import { tablesDB } from "./client";
 import { appwriteConfig } from "./config";
@@ -70,6 +70,15 @@ function validateMembersWriteConfig() {
   if (!appwriteConfig.membersTableId) {
     throw new Error("NEXT_PUBLIC_APPWRITE_MEMBERS_TABLE_ID belum dikonfigurasi.");
   }
+}
+
+function getPublicMemberPermissions(
+  membershipStatus: HpdkiMembershipStatus,
+  isPublic: boolean,
+) {
+  return membershipStatus === "active" && isPublic
+    ? [Permission.read(Role.any())]
+    : [];
 }
 
 export function formatHpdkiMemberNumber(year: number, sequence: number) {
@@ -187,6 +196,7 @@ export async function publishRegistrationAsMember(
       feed_type: registration.feed_type || "",
       farm_area_m2: registration.farm_area_m2 ?? 0,
     },
+      permissions: getPublicMemberPermissions("active", true),
   });
 
   const updatedRegistration = await updateHpdkiRegistration(registration.$id, {
@@ -228,6 +238,10 @@ export async function updateHpdkiMemberStatusByNumber(
       membership_status: membershipStatus,
       is_public: isPublic,
     },
+      permissions: getPublicMemberPermissions(
+        membershipStatus,
+        isPublic,
+      ),
   });
 }
 
