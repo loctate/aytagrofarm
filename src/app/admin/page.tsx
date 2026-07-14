@@ -10,6 +10,7 @@ import AdminMembersPanel from "@/components/admin/AdminMembersPanel";
 import AdminKtaSettingsPanel from "@/components/admin/AdminKtaSettingsPanel";
 import AdminHpdkiActivitiesPanel from "@/components/admin/AdminHpdkiActivitiesPanel";
 import AdminAytActivitiesPanel from "@/components/admin/AdminAytActivitiesPanel";
+import AdminProductsPanel from "@/components/admin/AdminProductsPanel";
 import {
   listHpdkiRegistrations,
   registrationStatuses,
@@ -32,7 +33,8 @@ type AdminMenu =
   | "anggota"
   | "kegiatan-hpdki"
   | "cerita-ayt"
-  | "kta-settings";
+  | "produk"
+    | "kta-settings";
 
 function formatDate(value: string | null) {
   if (!value) {
@@ -534,6 +536,20 @@ export default function AdminPage() {
           >
             Pengaturan KTA
           </button>
+
+          <button
+            type="button"
+            className={
+              activeMenu === "produk"
+                ? "is-active"
+                : ""
+            }
+            onClick={() =>
+              setActiveMenu("produk")
+            }
+          >
+            Produk
+          </button>
         </nav>
 
         <div className="admin-sidebar-note">
@@ -573,7 +589,10 @@ export default function AdminPage() {
 
               {activeMenu === "kta-settings" &&
                 "Pengaturan KTA"}
-            </h1>
+
+
+              {activeMenu === "produk" &&
+                "Produk"}</h1>
           </div>
 
           <div className="admin-topbar-actions">
@@ -873,8 +892,14 @@ export default function AdminPage() {
                   <AdminAytActivitiesPanel />
                 )}
 
-                {activeMenu === "kta-settings" && <AdminKtaSettingsPanel />}
-      </section>
+                {activeMenu === "kta-settings" && (
+                  <AdminKtaSettingsPanel />
+                )}
+
+                {activeMenu === "produk" && (
+                  <AdminProductsPanel />
+                )}
+              </section>
 
       {selectedRegistration && (
         <div
