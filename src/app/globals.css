@@ -12641,43 +12641,39 @@ span {
 }
 /* End HPDKI logo transparent surface final */
 
-/* HPDKI KTA horizontal logo final 2026 */
+/* HPDKI KTA circular logo final 2026 */
 
 /*
- * Logo depan KTA.
- * Bingkai lama berbentuk lingkaran 4.8rem.
- * Logo HPDKI baru berbentuk horizontal.
+ * Logo resmi HPDKI kembali berbentuk lingkaran.
+ * Ukuran dan posisi kartu tetap mengikuti desain KTA yang sudah dikunci.
  */
+
 .kta-card-logo-frame {
   position: relative !important;
   z-index: 1 !important;
   display: grid !important;
-  width: 7rem !important;
-  height: 3.75rem !important;
-  aspect-ratio: auto !important;
+  width: 4.8rem !important;
+  height: 4.8rem !important;
+  aspect-ratio: 1 / 1 !important;
   place-items: center !important;
   overflow: hidden !important;
   box-sizing: border-box !important;
-  padding: 0.3rem 0.42rem !important;
+  padding: 0.12rem !important;
   border: 1px solid rgba(214, 180, 108, 0.38) !important;
-  border-radius: 0.55rem !important;
-  background: rgba(255, 250, 240, 0.97) !important;
-  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.22) !important;
+  border-radius: 50% !important;
+  background: rgba(255, 250, 240, 0.98) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22) !important;
 }
 
-/*
- * Gambar logo depan harus memenuhi bingkai
- * tanpa dipotong atau dijadikan lingkaran.
- */
 .kta-card-logo-frame .kta-card-logo,
 .kta-card-logo {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   object-fit: contain !important;
   object-position: center !important;
@@ -12685,31 +12681,24 @@ span {
   transform: none !important;
 }
 
-/*
- * Identitas organisasi pada sisi belakang.
- */
 .kta-card-back-identity {
   display: flex !important;
   min-width: 0 !important;
   align-items: center !important;
-  gap: 0.55rem !important;
+  gap: 0.6rem !important;
 }
 
-/*
- * Logo belakang dibuat horizontal dan cukup besar,
- * tetapi tetap menyisakan ruang untuk teks organisasi.
- */
 .kta-card-back-identity .kta-card-back-logo,
 .kta-card-back-logo {
   display: block !important;
-  width: 5.25rem !important;
+  width: 2.8rem !important;
   height: 2.8rem !important;
-  min-width: 5.25rem !important;
-  max-width: 5.25rem !important;
+  min-width: 2.8rem !important;
+  max-width: 2.8rem !important;
   max-height: 2.8rem !important;
-  flex: 0 0 5.25rem !important;
+  flex: 0 0 2.8rem !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   object-fit: contain !important;
   object-position: center !important;
@@ -12717,61 +12706,41 @@ span {
   transform: none !important;
 }
 
-/*
- * Teks identitas belakang tidak boleh mendorong
- * lebar kartu atau keluar dari area cetak.
- */
 .kta-card-back-identity > div {
   min-width: 0 !important;
 }
 
-/*
- * Sedikit penyesuaian pada preview layar kecil.
- * Ukuran desain KTA tetap sama; container yang melakukan scaling.
- */
-@media (max-width: 640px) {
-  .kta-card-logo-frame {
-    width: 6.6rem !important;
-    height: 3.5rem !important;
-  }
-
-  .kta-card-back-identity .kta-card-back-logo,
-  .kta-card-back-logo {
-    width: 4.8rem !important;
-    height: 2.55rem !important;
-    min-width: 4.8rem !important;
-    max-width: 4.8rem !important;
-    flex-basis: 4.8rem !important;
-  }
-}
-
-/*
- * Pengamanan khusus hasil cetak.
- * Tetap horizontal pada ukuran kartu 85.6 × 54 mm.
- */
 @media print {
   .kta-card-logo-frame {
-    width: 7rem !important;
-    height: 3.75rem !important;
+    width: 4.8rem !important;
+    height: 4.8rem !important;
   }
 
   .kta-card-back-identity .kta-card-back-logo,
   .kta-card-back-logo {
-    width: 5.25rem !important;
+    width: 2.8rem !important;
     height: 2.8rem !important;
-    min-width: 5.25rem !important;
-    max-width: 5.25rem !important;
-    flex-basis: 5.25rem !important;
+    min-width: 2.8rem !important;
+    max-width: 2.8rem !important;
+    flex-basis: 2.8rem !important;
   }
 }
 
-/* End HPDKI KTA horizontal logo final 2026 */
+/* End HPDKI KTA circular logo final 2026 */
 
-/* Global HPDKI horizontal logo alignment 2026 */
+/* Global HPDKI circular logo alignment 2026 */
 
-/* ======================================================
-   HEADER PUBLIK HALAMAN UTAMA
-   ====================================================== */
+/*
+ * Satu aset logo dipakai bersama pada halaman publik,
+ * halaman HPDKI, halaman produk, admin, dan KTA.
+ */
+
+img[src="/images/hpdki-pac-logo.png"] {
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* Header publik */
 
 .public-brand-logos {
   display: flex !important;
@@ -12783,14 +12752,14 @@ span {
 
 .public-brand-logo-hpdki {
   display: block !important;
-  width: 84px !important;
-  height: 44px !important;
-  min-width: 84px !important;
-  max-width: 84px !important;
-  flex: 0 0 84px !important;
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+  max-width: 46px !important;
+  flex: 0 0 46px !important;
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   box-shadow: none !important;
   object-fit: contain !important;
@@ -12812,33 +12781,35 @@ span {
   object-fit: contain !important;
 }
 
-/* ======================================================
-   BAGIAN HPDKI PADA HOMEPAGE
-   ====================================================== */
+/* Identitas HPDKI pada homepage dan halaman HPDKI */
 
 .hpdki-identity-logo {
   display: grid !important;
-  width: min(320px, 100%) !important;
-  height: auto !important;
-  min-height: 0 !important;
+  width: 8.75rem !important;
+  height: 8.75rem !important;
+  min-width: 8.75rem !important;
+  min-height: 8.75rem !important;
+  flex: 0 0 8.75rem !important;
+  aspect-ratio: 1 / 1 !important;
   place-items: center !important;
   overflow: visible !important;
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   box-shadow: none !important;
 }
 
 .hpdki-identity-logo-image {
   display: block !important;
-  width: min(320px, 100%) !important;
-  height: auto !important;
+  width: 100% !important;
+  height: 100% !important;
   max-width: 100% !important;
-  max-height: 170px !important;
+  max-height: 100% !important;
+  aspect-ratio: 1 / 1 !important;
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   box-shadow: none !important;
   object-fit: contain !important;
@@ -12847,9 +12818,7 @@ span {
   clip-path: none !important;
 }
 
-/* ======================================================
-   HEADER /PRODUK DAN /HPDKI/PRODUK
-   ====================================================== */
+/* Header halaman Produk */
 
 .locked-products-brand-logos {
   display: flex !important;
@@ -12859,28 +12828,17 @@ span {
   overflow: visible !important;
 }
 
-.locked-products-brand-logo-ayt {
+.locked-products-brand-logo-ayt,
+.locked-products-brand-logo-hpdki {
   display: block !important;
   width: 58px !important;
   height: 58px !important;
   min-width: 58px !important;
   max-width: 58px !important;
   flex: 0 0 58px !important;
-  border-radius: 50% !important;
-  background: transparent !important;
-  object-fit: contain !important;
-}
-
-.locked-products-brand-logo-hpdki {
-  display: block !important;
-  width: 96px !important;
-  height: 51px !important;
-  min-width: 96px !important;
-  max-width: 96px !important;
-  flex: 0 0 96px !important;
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   box-shadow: none !important;
   object-fit: contain !important;
@@ -12888,9 +12846,7 @@ span {
   overflow: visible !important;
 }
 
-/* ======================================================
-   HALAMAN STRUKTUR PENGURUS
-   ====================================================== */
+/* Halaman struktur pengurus */
 
 .hpdki-pengurus-hero-brand {
   align-items: center !important;
@@ -12899,14 +12855,16 @@ span {
 
 .hpdki-pengurus-logo {
   display: block !important;
-  width: min(240px, 30vw) !important;
-  height: auto !important;
-  max-width: 240px !important;
-  max-height: 127px !important;
-  flex: 0 0 min(240px, 30vw) !important;
+  width: 150px !important;
+  height: 150px !important;
+  min-width: 150px !important;
+  max-width: 150px !important;
+  max-height: 150px !important;
+  flex: 0 0 150px !important;
+  aspect-ratio: 1 / 1 !important;
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   box-shadow: none !important;
   object-fit: contain !important;
@@ -12914,22 +12872,20 @@ span {
   overflow: visible !important;
 }
 
-/* ======================================================
-   ADMIN DASHBOARD DAN LOGIN
-   ====================================================== */
+/* Admin dashboard dan login */
 
 .admin-hpdki-brand-logo {
   display: grid !important;
-  width: 78px !important;
-  height: 42px !important;
-  min-width: 78px !important;
-  max-width: 78px !important;
-  flex: 0 0 78px !important;
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  max-width: 56px !important;
+  flex: 0 0 56px !important;
   place-items: center !important;
   overflow: hidden !important;
-  padding: 0.2rem 0.3rem !important;
+  padding: 0.12rem !important;
   border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 0.45rem !important;
+  border-radius: 50% !important;
   background: rgba(255, 255, 255, 0.96) !important;
   box-sizing: border-box !important;
 }
@@ -12940,11 +12896,11 @@ span {
   display: block !important;
   width: 100% !important;
   height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
   padding: 0 !important;
   border: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 50% !important;
   background: transparent !important;
   box-shadow: none !important;
   object-fit: contain !important;
@@ -12953,26 +12909,17 @@ span {
 }
 
 .admin-login-brand .admin-hpdki-brand-logo {
-  width: 90px !important;
-  height: 48px !important;
-  min-width: 90px !important;
-  max-width: 90px !important;
-  flex-basis: 90px !important;
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  max-width: 64px !important;
+  flex-basis: 64px !important;
 }
 
-/* ======================================================
-   RESPONSIVE TABLET
-   ====================================================== */
+/* Tablet */
 
 @media (max-width: 760px) {
-  .public-brand-logo-hpdki {
-    width: 68px !important;
-    height: 36px !important;
-    min-width: 68px !important;
-    max-width: 68px !important;
-    flex-basis: 68px !important;
-  }
-
+  .public-brand-logo-hpdki,
   .public-brand-logo-ayt {
     width: 40px !important;
     height: 40px !important;
@@ -12981,7 +12928,8 @@ span {
     flex-basis: 40px !important;
   }
 
-  .locked-products-brand-logo-ayt {
+  .locked-products-brand-logo-ayt,
+  .locked-products-brand-logo-hpdki {
     width: 50px !important;
     height: 50px !important;
     min-width: 50px !important;
@@ -12989,56 +12937,40 @@ span {
     flex-basis: 50px !important;
   }
 
-  .locked-products-brand-logo-hpdki {
-    width: 80px !important;
-    height: 42px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-    flex-basis: 80px !important;
-  }
-
-  .hpdki-identity-logo,
-  .hpdki-identity-logo-image {
-    width: min(250px, 100%) !important;
-  }
-
-  .hpdki-identity-logo-image {
-    max-height: 132px !important;
+  .hpdki-identity-logo {
+    width: 7.5rem !important;
+    height: 7.5rem !important;
+    min-width: 7.5rem !important;
+    min-height: 7.5rem !important;
+    flex-basis: 7.5rem !important;
   }
 
   .hpdki-pengurus-logo {
-    width: min(190px, 42vw) !important;
-    max-width: 190px !important;
-    max-height: 101px !important;
-    flex-basis: min(190px, 42vw) !important;
+    width: 130px !important;
+    height: 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    max-height: 130px !important;
+    flex-basis: 130px !important;
   }
 
   .admin-hpdki-brand-logo {
-    width: 68px !important;
-    height: 36px !important;
-    min-width: 68px !important;
-    max-width: 68px !important;
-    flex-basis: 68px !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    flex-basis: 48px !important;
   }
 }
 
-/* ======================================================
-   RESPONSIVE MOBILE
-   ====================================================== */
+/* Mobile */
 
 @media (max-width: 520px) {
   .public-brand-logos {
     gap: 0.35rem !important;
   }
 
-  .public-brand-logo-hpdki {
-    width: 58px !important;
-    height: 31px !important;
-    min-width: 58px !important;
-    max-width: 58px !important;
-    flex-basis: 58px !important;
-  }
-
+  .public-brand-logo-hpdki,
   .public-brand-logo-ayt {
     width: 37px !important;
     height: 37px !important;
@@ -13047,7 +12979,8 @@ span {
     flex-basis: 37px !important;
   }
 
-  .locked-products-brand-logo-ayt {
+  .locked-products-brand-logo-ayt,
+  .locked-products-brand-logo-hpdki {
     width: 46px !important;
     height: 46px !important;
     min-width: 46px !important;
@@ -13055,12 +12988,12 @@ span {
     flex-basis: 46px !important;
   }
 
-  .locked-products-brand-logo-hpdki {
-    width: 70px !important;
-    height: 37px !important;
-    min-width: 70px !important;
-    max-width: 70px !important;
-    flex-basis: 70px !important;
+  .hpdki-identity-logo {
+    width: 6.5rem !important;
+    height: 6.5rem !important;
+    min-width: 6.5rem !important;
+    min-height: 6.5rem !important;
+    flex-basis: 6.5rem !important;
   }
 
   .hpdki-pengurus-hero-brand {
@@ -13069,28 +13002,24 @@ span {
   }
 
   .hpdki-pengurus-logo {
-    width: min(210px, 76vw) !important;
-    max-width: 210px !important;
-    max-height: 111px !important;
+    width: 140px !important;
+    height: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    max-height: 140px !important;
     flex-basis: auto !important;
   }
 
   .admin-login-brand .admin-hpdki-brand-logo {
-    width: 74px !important;
-    height: 39px !important;
-    min-width: 74px !important;
-    max-width: 74px !important;
-    flex-basis: 74px !important;
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    flex-basis: 56px !important;
   }
 }
 
-/*
- * Penting:
- * Tidak ada selector .kta-* pada blok ini.
- * Tampilan KTA yang sudah dikunci tidak berubah.
- */
-
-/* End Global HPDKI horizontal logo alignment 2026 */
+/* End Global HPDKI circular logo alignment 2026 */
 
 /* Homepage navbar and footer service polish 2026 */
 
