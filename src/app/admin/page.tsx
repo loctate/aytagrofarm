@@ -457,9 +457,9 @@ export default function AdminPage() {
             <Image
               src="/images/hpdki-pac-logo.png"
               alt="Logo Himpunan Peternak Domba Kambing Indonesia PAC Dramaga"
-              width={96}
-              height={96}
-              sizes="(max-width: 640px) 44px, 56px"
+              width={100}
+              height={53}
+              sizes="(max-width: 640px) 68px, 78px"
               className="admin-hpdki-brand-logo-image"
             />
           </span>

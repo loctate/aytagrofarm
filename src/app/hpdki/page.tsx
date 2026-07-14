@@ -33,10 +33,10 @@ const navItems = [
     icon: "♙",
   },
   {
-    title: "Pendaftaran",
-    description: "Formulir calon anggota",
-    href: "/hpdki/daftar",
-    icon: "☑",
+    title: "Produk",
+    description: "Katalog produk peternakan",
+    href: "/hpdki/produk",
+    icon: "◆",
   },
   {
     title: "Verifikasi KTA",
@@ -89,8 +89,8 @@ export default function HpdkiPage() {
             <Image
               src="/images/hpdki-pac-logo.png"
               alt="Logo HPDKI PAC Dramaga"
-              width={220}
-              height={220}
+              width={360}
+              height={190}
               priority
               className="hpdki-locked-logo"
             />

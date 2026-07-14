@@ -19,8 +19,8 @@ export default function PublicBrand({
           className="public-brand-logo public-brand-logo-hpdki"
           src="/images/hpdki-pac-logo.png"
           alt=""
-          width={48}
-          height={48}
+          width={88}
+          height={46}
           priority
         />
 

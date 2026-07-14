@@ -759,9 +759,9 @@ export default function Home() {
               <Image
                 src="/images/hpdki-pac-logo.png"
                 alt="Logo Himpunan Peternak Domba Kambing Indonesia PAC Dramaga"
-                width={160}
-                height={160}
-                sizes="(max-width: 560px) 68px, (max-width: 900px) 104px, 144px"
+                width={320}
+                height={169}
+                sizes="(max-width: 560px) 190px, (max-width: 900px) 250px, 320px"
                 className="hpdki-identity-logo-image"
               />
             </div>

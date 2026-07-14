@@ -99,10 +99,11 @@ export default function HpdkiPengurusPage() {
 
         <div className="hpdki-pengurus-hero-brand">
           <Image
+            className="hpdki-pengurus-logo"
             src="/images/hpdki-pac-logo.png"
             alt="Logo PAC HPDKI Kecamatan Dramaga"
-            width={132}
-            height={132}
+            width={240}
+            height={127}
             priority
           />
 

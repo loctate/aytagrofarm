@@ -182,18 +182,20 @@ export default function PublicProductsCatalog() {
           >
             <div className="locked-products-brand-logos">
               <Image
+                className="locked-products-brand-logo-ayt"
                 src="/images/ayt-logo-2026.png"
                 alt="Logo AYT Agro Farm"
-                width={62}
-                height={62}
+                width={58}
+                height={58}
                 priority
               />
 
               <Image
+                className="locked-products-brand-logo-hpdki"
                 src="/images/hpdki-pac-logo.png"
                 alt="Logo PAC HPDKI Kecamatan Dramaga"
-                width={62}
-                height={62}
+                width={96}
+                height={51}
                 priority
               />
             </div>
