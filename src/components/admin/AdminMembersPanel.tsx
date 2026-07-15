@@ -1212,7 +1212,7 @@ export default function AdminMembersPanel() {
 
             <div className="kta-export-stage" aria-hidden="true">
               <div
-                className="admin-kta-sample-preview-wrap kta-export-canvas"
+                className="kta-export-canvas"
                 ref={ktaExportRef}
               >
                 <HpdkiMemberCard
